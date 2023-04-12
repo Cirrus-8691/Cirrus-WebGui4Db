@@ -2,7 +2,7 @@
 
 WebGui for Database: 
 
-    - Mongodb.
+- Mongodb.
 
 # Deploy Developpement environment on Minikube
 
