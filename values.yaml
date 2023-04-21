@@ -1,0 +1,29 @@
+# Default values for cirrus-webgui4db
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# See: Cirrus-WebGui4Db/networking/charts/cirrus-webgui4db/values.yaml
+# to know all variables
+#
+webApp:
+
+  ingress:
+    hosts:
+      - host: localhost
+      #- host: myDomain.com
+        paths:
+          # Warning: path must be same as:
+          #  * in file package.json "homepage" 
+          #  * in file Dockerfile line COPY build/ /usr/share/nginx/html/cirrus-webgui4db
+          - path: /cirrus-webgui4db/
+            pathType: Prefix
+
+serviceMongoDb:
+
+   ingress:
+    hosts:
+      - host: localhost
+      # - host: myDomain.com
+        paths:
+          - path: /cirrus-service-mongodb(/|$)(.*)
+            pathType: Prefix

@@ -1,0 +1,25 @@
+FROM node:18-alpine as tsc-builder
+WORKDIR /usr/app
+
+# Install and build in tmp image: tsc-builder
+COPY . .
+RUN npm install && npm run build
+
+FROM node:18-alpine as runtime-container
+WORKDIR /usr/app
+
+# Copy build result & package.json in final  image: runtime-container
+COPY --from=tsc-builder /usr/app/build ./build
+COPY --from=tsc-builder ["/usr/app/package.json", "/usr/app/package-lock.json", "./"]
+
+# Add production dependencies
+RUN npm install --production --silent
+
+# SET environment variables
+ENV NODE_ENV=production
+ENV SERVICE_HOST="0.0.0.0"
+ENV SERVICE_PORT=3000
+
+EXPOSE 3000
+
+CMD ["node", "./build/Main.js"]

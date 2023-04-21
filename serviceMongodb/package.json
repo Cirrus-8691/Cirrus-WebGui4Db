@@ -1,0 +1,42 @@
+{
+  "name": "cirrus-service-mongodb",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Cirrus service MongoDb for cirrus-webgui4db",
+  "author": "Cirrus-8691",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cirrus-8691/Cirrus-WebGui4Db.git"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./src/Main.ts",
+    "lint": "eslint ./src --ext .ts",
+    "test": "mocha --require ts-node/register --extensions ts,tsx --timeout 20000 ./src/Tests/_runTests.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "chai": "^4.3.7",
+    "eslint": "^8.37.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "mocha": "^10.2.0",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.2.1",
+    "fastify": "^4.15.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.2.0"
+  }
+}

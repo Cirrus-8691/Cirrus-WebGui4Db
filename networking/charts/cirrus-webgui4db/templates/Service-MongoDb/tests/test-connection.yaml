@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cirrus-service-mongodb.fullname" . }}-test-connection"
+  labels:
+    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "cirrus-service-mongodb.fullname" . }}:{{ .Values.serviceMongoDb.service.port }}']
+  restartPolicy: Never

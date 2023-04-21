@@ -1,4 +1,30 @@
 # Cirrus-WebGui4Db
+<p>
+  <a href="./LICENSE">
+      <img
+        alt="license:MIT"
+        src="https://img.shields.io/badge/License-MIT-blue"
+      />
+  </a>
+  <img
+      alt="Language:TypeScript"
+      src="https://img.shields.io/badge/Language-TypeScript-purple"
+  />
+</p>
+<p>
+  <a href="https://www.fastify.io/">
+    <img
+        alt="Server:Fastify"
+        src="https://img.shields.io/badge/Server-Fastify-45d298"
+    />
+  </a>
+  <a href="https://mochajs.org/">
+    <img
+        alt="unitTests:mocha+chai"
+        src="https://img.shields.io/badge/Unit_Tests-Chai_Mocha-aa4720"
+    />
+  </a>
+</p>
 
 WebGui for Database: 
 
@@ -7,6 +33,7 @@ WebGui for Database:
 # Deploy Developpement environment on Minikube
 
 ## Start kubernetes Minikube
+On Ubuntu, Linux Mint and other Debian distib:
 
 ```bash
 # Start minikube as sudo to use service type: LoadBalancer
@@ -23,8 +50,13 @@ sudo minikube dashboard
 sudo minikube addons open logviewer
 
 ```
-TODO create minikube addons
-https://minikube.sigs.k8s.io/docs/contrib/addons/
+
+⚠️ Warning: As minikube is started with the option: 
+```
+--driver=none
+```
+to use linux Docker instance and have Kubernetes LoadBalancer services actives, use "sudo" befor each command.
+
 
 ## Install MongoDb
 ```bash
@@ -68,15 +100,17 @@ sudo helm repo add cirrus-webgui4db \
 ```
 
 ```bash
-# Install WebGui-For-Mongodb in namespace mongodb
-sudo ./install.sh mongodb "0.1.1"
+# Install WebGui-For-Mongodb in namespace "mongodb", creating a Docker image version "0.1.1" on the fly.
+# see "values.yaml" for hosting website
+sudo ./install.sh mongodb 0.1.1
 
 ```
 
 # Update Cirrus-WebGui4Db with Helm
 
 ```bash
-# Install WebGui-For-Mongodb in namespace mongodb
-sudo ./update.sh -n mongodb -f "" "0.1.1"
+# Update WebGui-For-Mongodb in namespace mongodb, creating a Docker image version "0.1.1" on the fly.
+# see "values.yaml" for hosting website
+sudo ./update.sh mongodb 0.1.1
 
 ```

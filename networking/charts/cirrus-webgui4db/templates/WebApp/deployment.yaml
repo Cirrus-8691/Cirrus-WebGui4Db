@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cirrus-webgui4db.fullname" . }}
+  labels:
+    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.webApp.autoscaling.enabled }}
+  replicas: {{ .Values.webApp.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "cirrus-webgui4db.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.webApp.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cirrus-webgui4db.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.webApp.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cirrus-webgui4db.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.webApp.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.webApp.securityContext | nindent 12 }}
+          image: "{{ .Values.webApp.image.repository }}:{{ .Values.webApp.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.webApp.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          resources:
+            {{- toYaml .Values.webApp.resources | nindent 12 }}
+      {{- with .Values.webApp.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webApp.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webApp.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
