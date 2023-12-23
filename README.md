@@ -98,6 +98,7 @@ Sample:
 ```
 REACT_APP_MONGO_HOST=mongodb.cirrus-project-mongodb
 REACT_APP_MONGO_PORT=27017
+REACT_APP_MONGO_PATH=/fred
 ```
 
 ## Regsiter Helm Repository for "Cirrus-WebGui4Db3"
