@@ -36,7 +36,7 @@ const Operators = [
 export default function RequestInput(props: { runQuery: boolean, setRunQuery: (value: boolean) => void, setData: (data: DbDocument[]) => void }) {
 
     const mainContext = useContext(MainContext);
-    const [currentQuery, setCurrentQuery] = useState(mainContext.mongoQuery);
+    const [currentQuery, setCurrentQuery] = useState(mainContext.databaseQuery);
     const [loading, setLoading] = useState(false);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(DefaultLinesPerPages);
@@ -48,7 +48,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
         setLoading(true);
         try {
             const parameters: QueryFindParameters = {
-                collection: mainContext.mongoCollection,
+                collection: mainContext.databaseRepository,
                 what: currentQuery,
                 skip,
                 limit

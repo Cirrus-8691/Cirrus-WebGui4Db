@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import PageMain from './PageMain';
-import AppContext, { DefaultMongoConnection, DefaultDbCollection, DefaultDbQuery } from './AppContext';
+import AppContext, { DefaultDatabaseConnection, DefaultDbRepository, DefaultDbQuery } from './AppContext';
 import { ValidateConnection } from './Controllers/TestConnection';
 import PageLogin from './PageLogin';
 import { Auth, EmptyAuth } from './Controllers/Auth';
@@ -12,15 +12,15 @@ export default function App() {
 
   const [error, setError] = useState<unknown>(undefined);
   const [auth, setAuth] = useState<Auth>(EmptyAuth);
-  const [mongoCollections, setMongoCollections] = useState<string[]>([DefaultDbCollection]);
-  const [mongoCollection, setMongoCollection] = useState<string>(DefaultDbCollection);
+  const [mongoCollections, setMongoCollections] = useState<string[]>([DefaultDbRepository]);
+  const [mongoCollection, setMongoCollection] = useState<string>(DefaultDbRepository);
   const [mongoQuery, setMongoQuery] = useState<string>(DefaultDbQuery);
 
   useEffect(() => {
     const chkConnexion = async () => {
       setError(undefined);
       try {
-        const collections = await ValidateConnection(DefaultMongoConnection, setAuth);
+        const collections = await ValidateConnection(DefaultDatabaseConnection, setAuth);
         setMongoCollections(collections);
 
         const previousCollection = localStorage.getItem("Cirrus-WebGui4Db-MongoCollection");
@@ -33,7 +33,7 @@ export default function App() {
         setError(error);
       }
     }
-    if (DefaultMongoConnection.username && DefaultMongoConnection.password) {
+    if (DefaultDatabaseConnection.username && DefaultDatabaseConnection.password) {
       chkConnexion();
     }
   }, []);
@@ -43,9 +43,9 @@ export default function App() {
       <MainContext.Provider value={{
         error, setError,
         auth, setAuth,
-        mongoCollections, setMongoCollections,
-        mongoCollection, setMongoCollection,
-        mongoQuery, setMongoQuery
+        databaseRepositories: mongoCollections, setDatabaseRepositories: setMongoCollections,
+        databaseRepository: mongoCollection, setDatabaseRepository: setMongoCollection,
+        databaseQuery: mongoQuery, setDatabaseQuery: setMongoQuery
       }}>
         {
           auth.accessToken

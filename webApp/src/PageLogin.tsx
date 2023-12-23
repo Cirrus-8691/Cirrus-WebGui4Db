@@ -6,13 +6,13 @@ import GetErrorMessage from "./Domain/GetErrorMessage";
 import MongoDbUrl from "./Domain/MongoDbUrl";
 import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
-import { DefaultMongoConnection } from "./AppContext";
+import { DefaultDatabaseConnection } from "./AppContext";
 
 export default function PageLogin() {
 
     const mainContext = useContext(MainContext);
-    const [username, setUsername] = useState(DefaultMongoConnection.username);
-    const [password, setPassword] = useState(DefaultMongoConnection.password);
+    const [username, setUsername] = useState(DefaultDatabaseConnection.username);
+    const [password, setPassword] = useState(DefaultDatabaseConnection.password);
     const [error, setError] = useState<unknown>(undefined);
     const [info, setInfo] = useState("ℹ️ Using MongoDb authentication Mechanism: DEFAULT");
     const [loading, setLoading] = useState(false);
@@ -26,12 +26,12 @@ export default function PageLogin() {
             const newUrl = new MongoDbUrl(MongoDbUrl.BuildUrl({
                 username,
                 password,
-                hostname: DefaultMongoConnection.hostname,
-                port: DefaultMongoConnection.port,
-                pathname: DefaultMongoConnection.pathname
+                hostname: DefaultDatabaseConnection.hostname,
+                port: DefaultDatabaseConnection.port,
+                database: DefaultDatabaseConnection.pathname
             }));
             const collections = await ValidateConnection(newUrl, mainContext.setAuth);
-            mainContext.setMongoCollections(collections);
+            mainContext.setDatabaseRepositories(collections);
             setInfo("");
             setLoading(false);
         }
@@ -58,7 +58,7 @@ export default function PageLogin() {
                                     <Form.Group>
                                         <Form.Label>Connect to:</Form.Label>
                                         <Form.Select disabled>
-                                            <option>🌿 {DefaultMongoConnection.toString()}</option>
+                                            <option>🌿 {DefaultDatabaseConnection.toString()}</option>
                                         </Form.Select>
                                         <br />
                                         <Form.Label>UserName:</Form.Label>

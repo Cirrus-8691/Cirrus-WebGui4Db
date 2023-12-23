@@ -42,7 +42,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
             checked.forEach(async (value: boolean, index: number) => {
                 if (value) {
                     const parameters: QueryDeleteParameters = {
-                        collection: mainContext.mongoCollection,
+                        collection: mainContext.databaseRepository,
                         _id: props.data[index]._id
                     }
                     await RunQueryDelete(parameters, mainContext.auth);

@@ -9,7 +9,7 @@ export default function ShowMongoCollection() {
     const [showInputCollections, setShowInputCollections] = useState(false);
 
     const onSelectCollection = (collectionName: string) => {
-        mainContext.setMongoCollection(collectionName);
+        mainContext.setDatabaseRepository(collectionName);
         localStorage.setItem("Cirrus-WebGui4Db-MongoCollection", collectionName);
         setShowInputCollections(false);
     }
@@ -20,13 +20,13 @@ export default function ShowMongoCollection() {
         <DialogOffCanvas titleDialog="🗃️ Collections"
             open={showInputCollections}
             setOpen={setShowInputCollections}
-            titleButton={"🗃️ Collection: " + mainContext.mongoCollection.toString()}>
+            titleButton={"🗃️ Collection: " + mainContext.databaseRepository.toString()}>
 
             <Stack gap={2}>
                 {
-                    mainContext.mongoCollections.map((collectionName : string, index : number) =>
+                    mainContext.databaseRepositories.map((collectionName : string, index : number) =>
                         <Button key={index} onClick={() => onSelectCollection(collectionName)}
-                            variant={collectionName === mainContext.mongoCollection ? "primary" : "secondary"}>
+                            variant={collectionName === mainContext.databaseRepository ? "primary" : "secondary"}>
                             {collectionName}
                         </Button>
                     )

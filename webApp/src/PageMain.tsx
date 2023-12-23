@@ -10,7 +10,7 @@ import DbDocument from "./Domain/DbDocument";
 import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
 import RequestResultColumns, { DrawGrid } from "./Components/RequestResultColumns";
-import { DefaultMongoConnection } from "./AppContext";
+import { DefaultDatabaseConnection } from "./AppContext";
 
 export const Application = {
     name: process.env.REACT_APP_NAME,
@@ -63,7 +63,7 @@ export default function PageMain() {
                         <NavDropdown.Header>Connection:</NavDropdown.Header>
                         <NavDropdown.Item
                             onClick={() => setShowInputConnection("connection")}
-                        >🌿{DefaultMongoConnection.protocol}</NavDropdown.Item>
+                        >🌿{DefaultDatabaseConnection.protocol}</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item
                             onClick={() => setShowAbout(true)}>

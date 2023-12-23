@@ -1,4 +1,4 @@
-import MongoDbUrl from "../Domain/MongoDbUrl";
+import MongoDbUrl from "../Domain/DbUrl/MongoDbUrl";
 import ApiGateway from "./ApiGateway";
 import { Auth } from "./Auth";
 

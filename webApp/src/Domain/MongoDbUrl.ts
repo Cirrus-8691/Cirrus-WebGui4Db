@@ -1,16 +1,18 @@
+import { DbUrl } from "./DbUrl";
+
 export const MongoDbProtocol = "mongodb:";
 const OtherProtocol = "mongodb+srv:";
 /**
  * https://www.mongodb.com/docs/manual/reference/connection-string/
  */
-export default class MongoDbUrl {
+export default class MongoDbUrl implements DbUrl {
 
     public static BuildUrl(params: {
         username?: string
         password?: string
         hostname?: string
         port?: string
-        pathname?: string
+        database?: string
     }): string {
         const userPassword = params.username
             ? `${params.username}${params.password
@@ -20,7 +22,11 @@ export default class MongoDbUrl {
         const port = params.port
             ? `:${params.port}`
             : "";
-        const path = params.pathname??"";
+        const path = (params.database && params.database !== "")
+            ? params.database?.startsWith("/")
+                ? params.database
+                : `/${params.database}`
+            : "";
         return `${MongoDbProtocol}//${userPassword}@${params.hostname}${port}${path}`;
     }
 
@@ -31,7 +37,7 @@ export default class MongoDbUrl {
             password: "Flin*123",
             hostname: "192.168.232.133",
             port: "27017",
-            pathname: "/Histo"
+            database: "/Histo"
         }));
 
     private readonly origProtocol: string;

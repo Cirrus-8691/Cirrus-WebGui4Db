@@ -19,7 +19,7 @@ export default function DialogDbDocument(props: { document: DbDocument, hide: ()
         setLoading(true);
         try {
             const parameters: QueryDeleteParameters = {
-                collection: mainContext.mongoCollection,
+                collection: mainContext.databaseRepository,
                 _id: props.document._id
             }
             await RunQueryDelete(parameters, mainContext.auth);
@@ -37,7 +37,7 @@ export default function DialogDbDocument(props: { document: DbDocument, hide: ()
         setLoading(true);
         try {
             const parameters: QueryDocumentParameters = {
-                collection: mainContext.mongoCollection,
+                collection: mainContext.databaseRepository,
                 document: JSON.parse(doc)
             }
             if (parameters.document._id) {

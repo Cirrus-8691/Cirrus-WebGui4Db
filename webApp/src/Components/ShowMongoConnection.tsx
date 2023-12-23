@@ -4,7 +4,7 @@ import { Alert, Button, Form, Offcanvas, Spinner, Stack } from "react-bootstrap"
 import MongoDbUrl from "../Domain/MongoDbUrl";
 import GetErrorMessage from "../Domain/GetErrorMessage";
 import TestConnection, { ValidateConnection } from "../Controllers/TestConnection";
-import { DefaultMongoConnection } from "../AppContext";
+import { DefaultDatabaseConnection } from "../AppContext";
 
 export type ShowConnectionInfo = "" | "user" | "database" | "connection";
 
@@ -13,9 +13,9 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
     const mainContext = useContext(MainContext);
     const [username, setUsername] = useState(mainContext.auth.userName);
     const [password, setPassword] = useState("");
-    const [hostname, setHostname] = useState(DefaultMongoConnection.hostname);
-    const [port, setPort] = useState(DefaultMongoConnection.port);
-    const [pathname, setPathname] = useState(DefaultMongoConnection.pathname);
+    const [hostname, setHostname] = useState(DefaultDatabaseConnection.hostname);
+    const [port, setPort] = useState(DefaultDatabaseConnection.port);
+    const [pathname, setPathname] = useState(DefaultDatabaseConnection.pathname);
     const [error, setError] = useState<unknown>(undefined);
     const [info, setInfo] = useState("");
     const [loading, setLoading] = useState(false);
@@ -31,11 +31,11 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
                 password,
                 hostname,
                 port,
-                pathname
+                database: pathname
             }));
             const collections = await ValidateConnection(newUrl, mainContext.setAuth);
-            mainContext.setMongoCollections(collections);
-            mainContext.setMongoCollection(collections[0]);
+            mainContext.setDatabaseRepositories(collections);
+            mainContext.setDatabaseRepository(collections[0]);
             localStorage.setItem("Cirrus-WebGui4Db-MongoCollection", collections[0]);
             localStorage.setItem("Cirrus-WebGui4Db-MongoDb-Connection", newUrl.toSave());
             setPassword("");
@@ -52,11 +52,11 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
 
     const onCancel = () => {
         props.setShow("");
-        setUsername(DefaultMongoConnection.username);
-        setPassword(DefaultMongoConnection.password);
-        setHostname(DefaultMongoConnection.hostname);
-        setPort(DefaultMongoConnection.port);
-        setPathname(DefaultMongoConnection.pathname);
+        setUsername(DefaultDatabaseConnection.username);
+        setPassword(DefaultDatabaseConnection.password);
+        setHostname(DefaultDatabaseConnection.hostname);
+        setPort(DefaultDatabaseConnection.port);
+        setPathname(DefaultDatabaseConnection.pathname);
         setError(undefined);
     }
 
@@ -70,7 +70,7 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
                 password,
                 hostname,
                 port,
-                pathname
+                database: pathname
             }));
             await TestConnection(newUrl);
             setInfo(`✅ Connection test: Ok`);
@@ -97,7 +97,7 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
                                 ? <>
                                     <Form.Label>Protocol:</Form.Label>
                                     <Form.Control type="text" disabled
-                                        value={DefaultMongoConnection.protocol} />
+                                        value={DefaultDatabaseConnection.protocol} />
                                     <br />
                                     <Form.Label>👤 User name:</Form.Label>
                                     <Form.Control type="text"
