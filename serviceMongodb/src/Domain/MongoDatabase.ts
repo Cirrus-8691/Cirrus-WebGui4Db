@@ -1,7 +1,7 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
 import Database from "./Database";
 import DbDocument from "./DbDocument";
-import { QueryFindParameters, BodyDocumentParameters, QueryDocumentParameters } from "./QueryParameters";
+import { QueryFindParameters, QueryDocumentParameters } from "./QueryParameters";
 
 export default class MongoDatabase implements Database {
 
