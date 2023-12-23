@@ -120,30 +120,36 @@ Customise "values.yaml" with your host, active the tls section, if you want http
 webApp:
   ingress:
     annotations:
-    #  cert-manager.io/issuer: "letsencrypt-prod"
+      cert-manager.io/issuer: "letsencrypt-prod"
     hosts:
-      - host: localhost
-      #- host: myDomain.com
-    # tls:
-    #  - secretName: cirrus-tls
-    #    hosts:
-    #      - myDomain.com
+      #- host: localhost
+      - host: myDomain.com
+        paths:
+          - path: /cirrus-webgui4db/
+            pathType: Prefix
+     tls:
+      - secretName: cirrus-tls
+        hosts:
+          - myDomain.com
 
 serviceMongoDb:
   ingress:
     hosts:
-      - host: localhost
-      # - host: myDomain.com
-    # tls:
-    #  - secretName: cirrus-tls
-    #    hosts:
-    #      - myDomain.com
+      #- host: localhost
+       - host: myDomain.com
+        paths:
+          - path: /cirrus-service-mongodb(/|$)(.*)
+            pathType: Prefix
+     tls:
+      - secretName: cirrus-tls
+        hosts:
+          - myDomain.com
 ```
 
 Customise file networking/tls/letsencrypt-issuer.yaml
 ```yaml
     # Email address used for ACME registration
-    email: your.email@your-company.com
+    email: your.email@yourCompany.com
 ```
 
 ## 4 - Install using https or http
