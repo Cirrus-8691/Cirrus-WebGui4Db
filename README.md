@@ -119,11 +119,13 @@ Customise "values.yaml" with your host, active the tls section, if you want http
 ```yaml
 webApp:
   ingress:
+    annotations:
+    #  cert-manager.io/issuer: "letsencrypt-prod"
     hosts:
       - host: localhost
       #- host: myDomain.com
     # tls:
-    #  - secretName: letsencrypt-tls
+    #  - secretName: cirrus-tls
     #    hosts:
     #      - myDomain.com
 
@@ -133,7 +135,7 @@ serviceMongoDb:
       - host: localhost
       # - host: myDomain.com
     # tls:
-    #  - secretName: letsencrypt-tls
+    #  - secretName: cirrus-tls
     #    hosts:
     #      - myDomain.com
 ```
