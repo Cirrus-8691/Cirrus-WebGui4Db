@@ -36,7 +36,7 @@ else
     fi
 fi
 
-ISSUER_FILE=tls/letsencrypt-issuer.yaml
+ISSUER_FILE=networking/tls/letsencrypt-issuer.yaml
 echo ""
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "┃ 🔵 Creating letsencrypt Issuer"
