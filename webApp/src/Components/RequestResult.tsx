@@ -169,7 +169,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
                     </Table >
                     : props.data.length > 0
                         ? <Alert variant="warning">{props.data.length} data found. But no columns displayed.</Alert>
-                        : <Alert variant="secondary">No data found</Alert>
+                        : <Alert variant="secondary">No data found <Button onClick={() => setDocSelected({})}>📄 New document</Button></Alert>
             }
         </Container >
     );
