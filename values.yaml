@@ -18,12 +18,22 @@ webApp:
           - path: /cirrus-webgui4db/
             pathType: Prefix
 
+    # tls:
+    #  - secretName: letsencrypt-tls
+    #    hosts:
+    #      - myDomain.com
+
 serviceMongoDb:
 
-   ingress:
+  ingress:
     hosts:
       - host: localhost
       # - host: myDomain.com
         paths:
           - path: /cirrus-service-mongodb(/|$)(.*)
             pathType: Prefix
+
+    # tls:
+    #  - secretName: letsencrypt-tls
+    #    hosts:
+    #      - myDomain.com
