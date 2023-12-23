@@ -91,7 +91,16 @@ Expose mongodb service to localhost port 27017
 
 # Install Cirrus-WebGui4Db with Helm
 
-## Customise MongoDb host and post
+## 1-Regsiter Helm Repository for "Cirrus-WebGui4Db3"
+This should only be done once.
+```bash
+# sudo helm repo remove cirrus-webgui4db
+sudo helm repo add cirrus-webgui4db \
+"https://raw.githubusercontent.com/Cirrus-8691/Cirrus-WebGui4Db/main/networking/repository"
+
+```
+
+## 2-Customise MongoDb host and post
 Edit file ".env.production" and customise "External endpoint" of Kubernetes **Service** Mongodb, and the default collection.
 
 Sample:
@@ -102,27 +111,60 @@ REACT_APP_MONGO_PATH=/fred
 REACT_APP_MONGO_COLLECTION=Tests
 ```
 
-## Regsiter Helm Repository for "Cirrus-WebGui4Db3"
-This should only be done once.
-```bash
-# sudo helm repo remove cirrus-webgui4db
-sudo helm repo add cirrus-webgui4db \
-"https://raw.githubusercontent.com/Cirrus-8691/Cirrus-WebGui4Db/main/networking/repository"
+## 3-Customise "values.yaml" for hosting website
+By default host is localhost and web site avaiable at http://localhost/cirrus-webgui4db/
 
+Customise "values.yaml" with your host, active the tls section, if you want https.
+
+```yaml
+webApp:
+  ingress:
+    hosts:
+      - host: localhost
+      #- host: myDomain.com
+    # tls:
+    #  - secretName: letsencrypt-tls
+    #    hosts:
+    #      - myDomain.com
+
+serviceMongoDb:
+  ingress:
+    hosts:
+      - host: localhost
+      # - host: myDomain.com
+    # tls:
+    #  - secretName: letsencrypt-tls
+    #    hosts:
+    #      - myDomain.com
 ```
 
+Customise file networking/tls/letsencrypt-issuer.yaml
+```yaml
+    # Email address used for ACME registration
+    email: your.email@your-company.com
+```
+
+## 4 - Install using https or http
+To add a tls certificate to your host use this script:
+
 ```bash
-# Install WebGui-For-Mongodb in namespace "mongodb", creating a Docker image version "0.1.1" on the fly.
-# see "values.yaml" for hosting website
-sudo ./install.sh mongodb 0.1.1
+# Install WebGui-For-Mongodb in namespace "cirrus-webgui4db", creating a Docker image on the fly.
+sudo ./https.sh cirrus-webgui4db
+```
+
+Use the install script to deploy de app
+
+```bash
+# Install WebGui-For-Mongodb in namespace "cirrus-webgui4db", creating a Docker image on the fly.
+sudo ./install.sh cirrus-webgui4db
 
 ```
 
 # Update Cirrus-WebGui4Db with Helm
 
 ```bash
-# Update WebGui-For-Mongodb in namespace mongodb, creating a Docker image version "0.1.1" on the fly.
+# Update WebGui-For-Mongodb in namespace cirrus-webgui4db, creating a Docker image on the fly.
 # see "values.yaml" for hosting website
-sudo ./update.sh mongodb 0.1.1
+sudo ./update.sh cirrus-webgui4db
 
 ```

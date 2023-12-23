@@ -1,18 +1,21 @@
 #!/bin/bash
-if [ $# -eq 1 ]; then
-  export PARAMETERES=""
-elif [ $# -eq 2 ]; then
-  export PARAMETERES="-f $2"
-else
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-  echo "🔥FATAL ERROR: No arguments supplied for namespace, values.yaml"
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-  exit 1
-fi
 bold=$(tput bold)
 normal=$(tput sgr0)
+red=$(tput setaf 1)
+white=$(tput setaf 7)
 
-export CHART=cirrus-webgui4db
+if [ $# -eq 1 ]; then
+    PARAMETERES=""
+elif [ $# -eq 2 ]; then
+    PARAMETERES="-f $2"
+else
+    echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "┃$white 🔥FATAL ERROR: No arguments supplied for $bold namespace, values.yaml$normal"
+    echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$white"
+    exit 1
+fi
+
+CHART=cirrus-webgui4db
 echo ""
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "┃ 🐋 Install $bold $CHART $normal Helm chart"
@@ -23,9 +26,9 @@ echo "┗━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 helm repo update
 if ! [ $? -eq 0 ]; then
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-  echo "🔥FATAL ERROR: Cannot install $CHART Helm chart"
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+    echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "┃$red 🔥FATAL ERROR: Cannot update $bold repo $normal "
+    echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
   exit 1
 fi
 
@@ -35,8 +38,8 @@ helm -n $1 uninstall $CHART
 echo "✨  Install $CHART"
 helm -n $1 install $CHART cirrus-webgui4db/$CHART $PARAMETERES
 if ! [ $? -eq 0 ]; then
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-  echo "🔥FATAL ERROR: Cannot install $CHART Helm chart"
-  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+    echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "┃$red 🔥FATAL ERROR: Cannot install Helm chart $bold $CHART $normal "
+    echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
   exit 1
 fi

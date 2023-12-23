@@ -10,10 +10,10 @@ echo "┃ 🔵  Build WebGui for MongoDb"
 echo "┃ 📦  $bold Helm chart packages $normal"
 echo "┃────────────────────────────────────────────"
 if ! [ $# -eq 1 ]; then
-  export PACKAGE_VERSION=$PREVIOUS_DEFAULT_VERSION
+  PACKAGE_VERSION=$PREVIOUS_DEFAULT_VERSION
   echo "┃ 🔥 Using previous version="$PREVIOUS_DEFAULT_VERSION
 else
-  export PACKAGE_VERSION=$1
+  PACKAGE_VERSION=$1
   echo "┃ ✳️ Version="$PREVIOUS_DEFAULT_VERSION
 fi
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

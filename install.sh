@@ -1,19 +1,22 @@
 #!/bin/bash
 # Use this version if no parameter supplied
-export DEFAULT_NAMESPACE=Default
-export DEFAULT_VERSION="0.1.1"
+DEFAULT_NAMESPACE=Default
+DEFAULT_VERSION="0.1.1"
 
 if [ $# -eq 0 ]; then
-    export NAMESPACE=$DEFAULT_NAMESPACE
-    export VERSION=$DEFAULT_VERSION
+    NAMESPACE=$DEFAULT_NAMESPACE
+    VERSION=$DEFAULT_VERSION
 elif [ $# -eq 1 ]; then
-    export NAMESPACE=$1
-    export VERSION=$DEFAULT_VERSION
+    NAMESPACE=$1
+    VERSION=$DEFAULT_VERSION
 elif [ $# -eq 2 ]; then
-      export NAMESPACE=$1
-      export VERSION=$2
+      NAMESPACE=$1
+      VERSION=$2
 else
-      echo "🔥 Bad parameters 🔥"
+    echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "┃$white 🔥FATAL ERROR: to many parameters expecting: $bold NAMESPACE, VERSION$normal"
+    echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$white"
+    exit 1
 fi
 
 echo ""
@@ -23,6 +26,12 @@ echo "┃───────────────────────�
 echo "┃ ✳️ Namespace="$NAMESPACE
 echo "┃ ✳️ Chart vs ="$VERSION
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+../networking/scripts/Namespace.sh $NAMESPACE
+if ! [ $? -eq 0 ]; then
+  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+  exit 1
+fi
 
 sudo helm repo add cirrus-webgui4db \
 "https://raw.githubusercontent.com/Cirrus-8691/Cirrus-WebGui4Db/main/networking/repository"
@@ -67,3 +76,7 @@ if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1
 fi
+
+echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "┃ 🟢 Cirrus WebGui for Databases ready 😀 "
+echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
