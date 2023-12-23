@@ -18,12 +18,11 @@ echo "┃───────────────────────�
 echo "┃ 🔷  Parameters"
 echo "┃────────────────────────────────────────────"
 echo "┃ 🔹 Namespace    = "$1
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 NAMESPACE_CERT_MANAGER=$(kubectl get namespace | grep cert-manager)
 if [[ "$NAMESPACE_CERT_MANAGER" == *"cert-manager"* ]]; then
     echo "┃────────────────────────────────────────────"
     echo "┃ 🟢  cert-manager already installed"
-    echo "┃ ✳️  namespace="$NAMESPACE_CERT_MANAGER
+    echo "┃ ✅  namespace="$NAMESPACE_CERT_MANAGER
     echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 else
     echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -55,7 +54,7 @@ kubectl apply -n $1 -f $ISSUER_FILE
 
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot build Docker image $bold letsencrypt Issuer$normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot build Docker image $bold letsencrypt Issuer$normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
     exit 1
 fi
