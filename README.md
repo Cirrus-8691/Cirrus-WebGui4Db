@@ -91,6 +91,16 @@ Expose mongodb service to localhost port 27017
 
 # Install Cirrus-WebGui4Db with Helm
 
+## Customise MongoDb host and post
+Edit file ".env.production" and customise "External endpoint" of Kubernetes **Service** Mongodb.
+
+Sample:
+```
+REACT_APP_MONGO_HOST=mongodb.cirrus-project-mongodb
+REACT_APP_MONGO_PORT=27017
+```
+
+## Regsiter Helm Repository for "Cirrus-WebGui4Db3"
 This should only be done once.
 ```bash
 # sudo helm repo remove cirrus-webgui4db
