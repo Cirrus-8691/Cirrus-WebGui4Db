@@ -22,7 +22,7 @@ echo "┗━━━━━━━━━━━━━━━━━━━━━━━�
 helm package $CHART -d ../repository/ --version $1
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot build Helm chart $bold $CHART $normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot build Helm chart $bold $CHART $normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
     exit 1
 fi

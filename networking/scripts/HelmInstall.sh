@@ -27,7 +27,7 @@ echo ""
 helm repo update
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot update $bold repo $normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot update $bold repo $normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
   exit 1
 fi
@@ -39,7 +39,7 @@ echo "✨  Install $CHART"
 helm -n $1 install $CHART cirrus-webgui4db/$CHART $PARAMETERES
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot install Helm chart $bold $CHART $normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot install Helm chart $bold $CHART $normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
   exit 1
 fi

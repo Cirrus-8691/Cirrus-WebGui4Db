@@ -27,7 +27,7 @@ echo "┃ ✳️ Namespace="$NAMESPACE
 echo "┃ ✳️ Chart vs ="$VERSION
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-../networking/scripts/Namespace.sh $NAMESPACE
+networking/scripts/Namespace.sh $NAMESPACE
 if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1

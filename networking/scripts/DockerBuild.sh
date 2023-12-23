@@ -22,7 +22,7 @@ rm -r -d build/
 npm run build
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot build $bold $PACKAGE_NAME$normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot build $bold $PACKAGE_NAME$normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
     exit 1
 fi
@@ -35,7 +35,7 @@ echo "┗━━━━━━━━━━━━━━━━━━━━━━━�
 docker build --pull --rm -f "Dockerfile" -t $PACKAGE_NAME:$1 "."
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "┃$red 🔥FATAL ERROR: Cannot build Docker image $bold $PACKAGE_NAME$normal "
+    echo "┃$white 🔥FATAL ERROR: Cannot build Docker image $bold $PACKAGE_NAME$normal "
     echo "$red┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$red"
     exit 1
 fi
