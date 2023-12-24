@@ -1,6 +1,9 @@
-import MongoDatabase from "./Model/MongoDatabase";
+import HttpFastifyServer from "../../serviceGenericDatabase/src/HttpFastifyServer";
+import Database from "../../serviceGenericDatabase/src/Model/Database";
+import Service from "../../serviceGenericDatabase/src/Service";
+import MongoQueryController from "./Controller/MongoQueryController";
 import graphicArt from "./GraphicArt";
-import Service from "./Service";
+import MongoDatabase from "./Model/MongoDatabase";
 
 const exitHandler = async (serviceStarted: Service | undefined): Promise<void> => {
     console.log(`Process terminated by SIGNAL`);
@@ -42,7 +45,8 @@ const exitHandler = async (serviceStarted: Service | undefined): Promise<void> =
             serviceStarted = new Service(
                 url,
                 true,
-                new MongoDatabase());
+                new MongoDatabase(),
+                (server: HttpFastifyServer, db : Database) => (new MongoQueryController(server, db )));
             console.log("🚀 Starting: " + serviceStarted.toString());
             console.log("────────────────────────────────────────────");
             await serviceStarted.start();

@@ -1,6 +1,7 @@
 import fastify, { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import fastifyCors from '@fastify/cors';
-import { HttpHeadersAuthStartWith } from './Domain/JwToken';
+
+export const HttpHeadersAuthStartWith = "Bearer ";
 
 export default class HttpFastifyServer {
 

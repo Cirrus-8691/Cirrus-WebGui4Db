@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import StubDatabase from "./StubDatabase";
+import StubDatabase from "../Domain/StubDatabase";
 import { TestLocalMongoDbUrl } from "./TestMongoDb";
 
 export default async function TestStubDb() {

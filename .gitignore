@@ -2,10 +2,10 @@
 
 # dependencies
 /webApp/node_modules
-/serviceMongodb/node_modules
+/services/node_modules
 
 # production
-/serviceMongodb/build
+/services/build
 /webApp/build
 
 # misc

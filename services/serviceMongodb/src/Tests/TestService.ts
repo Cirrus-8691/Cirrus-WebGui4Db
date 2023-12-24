@@ -1,9 +1,9 @@
 import { assert } from "chai";
-import QueryController from "../Controller/QueryController";
-import Service from "../Service";
-import StubDatabase from "./StubDatabase";
 import { TestLocalMongoDbName, TestLocalMongoDbUrl, TestLocalMongoDbUser } from "./TestMongoDb";
 import { Auth } from "../Domain/JwToken";
+import Service from "../../../serviceGenericDatabase/src/Service";
+import StubDatabase from "../Domain/StubDatabase";
+import QueryController from "../../../serviceGenericDatabase/src/Controller/QueryController";
 
 
 export const TestServiceUrl = "http://localhost:3000/";

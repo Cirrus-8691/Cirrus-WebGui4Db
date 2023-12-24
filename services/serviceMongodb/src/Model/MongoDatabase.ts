@@ -1,7 +1,7 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
-import Database from "./Database";
-import DbEntity from "./DbEntity";
 import { QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
+import Database from "../../../serviceGenericDatabase/src/Model/Database";
+import DbEntity from "../../../serviceGenericDatabase/src/Model/DbEntity";
 
 export default class MongoDatabase implements Database {
 

@@ -1,4 +1,3 @@
-import QueryController from "./Controller/QueryController";
 import Database from "./Model/Database";
 import { PackageJson } from "./Domain/PackageJson";
 import HttpFastifyServer from "./HttpFastifyServer";
@@ -12,9 +11,9 @@ export default class Service {
     private readonly server: HttpFastifyServer;
     public get Server() : HttpFastifyServer { return this.server }
 
-    public constructor(url: URL, logger : boolean, db : Database) {
+    public constructor(url: URL, logger : boolean, db : Database, createController :(server: HttpFastifyServer, db : Database) => void) {
         this.server = new HttpFastifyServer(url, logger);
-        new QueryController(this.server, db );
+        createController(this.server, db);
     }
 
     public async start(): Promise<void> {

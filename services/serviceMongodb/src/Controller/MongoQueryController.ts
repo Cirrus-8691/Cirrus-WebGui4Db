@@ -1,29 +1,18 @@
 import { FastifyRequest } from "fastify";
-import HttpFastifyServer from "../HttpFastifyServer";
-import DbEntity from "../Model/DbEntity";
-import Database from "../Model/Database";
 import MongoDbUrl from "../Model/MongoDbUrl";
-import GetErrorMessage from "./GetErrorMessage";
-import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
+import HttpFastifyServer from "../../../serviceGenericDatabase/src/HttpFastifyServer";
+import Database from "../../../serviceGenericDatabase/src/Model/Database";
+import QueryController from "../../../serviceGenericDatabase/src/Controller/QueryController";
+import GetErrorMessage from "../../../serviceGenericDatabase/src/Controller/GetErrorMessage";
+import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../../serviceGenericDatabase/src/Domain/QueryParameters";
+import DbEntity from "../../../serviceGenericDatabase/src/Model/DbEntity";
 import { Auth, JwToken } from "../Domain/JwToken";
 
-export default class QueryController {
-
-    static RouteBeginning = "/api/v1/";
-
-    private readonly server: HttpFastifyServer;
-    private readonly db: Database;
+export default class MongoQueryController extends QueryController {
 
     public constructor(server: HttpFastifyServer, db: Database) {
+        super(server, db);
 
-        this.db = db;
-        this.server = server;
-
-        this.server.get("/"
-            , {
-                handler: this.getHealth.bind(this)
-            }
-        );
         this.server.get(QueryController.RouteBeginning
             + "mongo/connection/test"
             , {
@@ -67,16 +56,6 @@ export default class QueryController {
             }
         );
 
-    }
-
-    public async getHealth(request: FastifyRequest): Promise<string> {
-        try {
-            return "Ok at " + Date.now();
-        }
-        catch (error) {
-            request.log.error(error);
-            return Promise.reject(GetErrorMessage(error));
-        }
     }
 
     public async getTestConnection(request: FastifyRequest<{ Querystring: { url: string } }>): Promise<void> {
