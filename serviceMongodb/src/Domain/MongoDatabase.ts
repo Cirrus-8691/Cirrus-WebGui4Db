@@ -1,7 +1,7 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
 import Database from "./Database";
-import DbDocument from "./DbDocument";
-import { QueryFindParameters, QueryDocumentParameters } from "./QueryParameters";
+import DbEntity from "./DbEntity";
+import { QueryEntityParameters, QueryFindParameters } from "./QueryParameters";
 
 export default class MongoDatabase implements Database {
 
@@ -23,7 +23,7 @@ export default class MongoDatabase implements Database {
         }
     }
 
-    async getCollections(): Promise<string[]> {
+    async getRepositories(): Promise<string[]> {
         if (this.client) {
             const db = this.client.db(this.dbName);
             const collections = await db.collections();
@@ -34,7 +34,7 @@ export default class MongoDatabase implements Database {
         }
     }
 
-    private getCollection(collection: string): Collection<DbDocument> {
+    private getRepository(collection: string): Collection<DbEntity> {
         if (this.client) {
             const db = this.client.db(this.dbName);
             return db.collection(collection);
@@ -44,8 +44,8 @@ export default class MongoDatabase implements Database {
         }
     }
 
-    async findOnCollection(parameters: QueryFindParameters): Promise<DbDocument[]> {
-        const collection = this.getCollection(parameters.collection);
+    async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
+        const collection = this.getRepository(parameters.collection);
         const filter = JSON.parse(parameters.what);
         let options: FindOptions | undefined = undefined;
         if (parameters.limit && parameters.skip) {
@@ -67,16 +67,16 @@ export default class MongoDatabase implements Database {
         return await collection.find(filter, options).toArray();
     }
 
-    async insertDocument(parameters: QueryDocumentParameters, doc: DbDocument): Promise<boolean> {
-        const collection = this.getCollection(parameters.collection);
-        const result = await collection.insertOne(doc as DbDocument);
+    async insertEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
+        const collection = this.getRepository(parameters.collection);
+        const result = await collection.insertOne(doc as DbEntity);
         return result.acknowledged;
     }
 
-    async updateDocument(parameters: QueryDocumentParameters, doc: DbDocument): Promise<boolean> {
-        const collection = this.getCollection(parameters.collection);
+    async updateEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
+        const collection = this.getRepository(parameters.collection);
         const { _id, ...newDoc } = doc;
-        const filter: Filter<DbDocument> = {
+        const filter: Filter<DbEntity> = {
             _id: new ObjectId(_id)
         };
         const update = { $set: newDoc };
@@ -84,9 +84,9 @@ export default class MongoDatabase implements Database {
         return result.acknowledged && result.modifiedCount === 1;
     }
 
-    async deleteDocument(parameters: QueryDocumentParameters): Promise<boolean> {
-        const collection = this.getCollection(parameters.collection);
-        const filter: Filter<DbDocument> = {
+    async deleteEntity(parameters: QueryEntityParameters): Promise<boolean> {
+        const collection = this.getRepository(parameters.collection);
+        const filter: Filter<DbEntity> = {
             _id: new ObjectId(parameters._id)
         };
         const result = await collection.deleteOne(filter);

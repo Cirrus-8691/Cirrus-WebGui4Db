@@ -28,13 +28,13 @@ export default async function TestService(): Promise<void> {
         assert.isTrue(auth.dbName===TestLocalMongoDbName);
         assert.isTrue(auth.dbProvider!=="");
 
-        url = QueryController.RouteBeginning + "mongo/collections";
+        url = QueryController.RouteBeginning + "mongo/entites";
         response = await service.Server.injectGET(url, accessToken);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const collections = JSON.parse(response.body);
         const collectionName = collections[0];
 
-        url = QueryController.RouteBeginning + "mongo/documents"
+        url = QueryController.RouteBeginning + "mongo/entites"
             + "?from=" + encodeURIComponent(collectionName)
             + "&what=" + encodeURIComponent("{}");
         response = await service.Server.injectGET(url, accessToken);

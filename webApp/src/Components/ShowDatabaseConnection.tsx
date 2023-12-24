@@ -26,16 +26,16 @@ export default function ShowDatabaseConnection(props: { show: ShowConnectionInfo
         setLoading(true);
         setInfo("🕜 Validating connection...");
         try {
-            const newUrl = new MongoDbUrl({
+            const newUrl = mainContext.databaseConnexion.build({
                 username,
                 password,
                 hostname,
                 port,
                 database: database
             });
-            const collections = await ValidateConnection(newUrl, mainContext.setAuth);
-            mainContext.setDatabaseRepositories(collections);
-            mainContext.setDatabaseRepository(collections[0]);
+            const repositories = await ValidateConnection(newUrl, mainContext.setAuth);
+            mainContext.setDatabaseRepositories(repositories);
+            mainContext.setDatabaseRepository(repositories[0]);
             setPassword("");
             setInfo("");
             setLoading(false);
@@ -63,7 +63,7 @@ export default function ShowDatabaseConnection(props: { show: ShowConnectionInfo
         setLoading(true);
         setInfo("🕜 Testing...");
         try {
-            const newUrl = new MongoDbUrl({
+            const newUrl = mainContext.databaseConnexion.build({
                 username,
                 password,
                 hostname,

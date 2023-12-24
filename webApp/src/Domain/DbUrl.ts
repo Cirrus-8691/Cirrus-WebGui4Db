@@ -1,7 +1,11 @@
 export interface DbUrl {
+
     toString(): string;
     logo(): string;
     info(): string;
+    service(): string;
+
+    repositoriesName() :string;
 
     build(params: ConnexionDetails) : DbUrl;
 

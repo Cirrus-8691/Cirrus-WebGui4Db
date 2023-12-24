@@ -1,11 +1,11 @@
 import Database from "../Domain/Database";
-import DbDocument from "../Domain/DbDocument";
-import { QueryFindParameters, QueryDocumentParameters, BodyDocumentParameters } from "../Domain/QueryParameters";
+import DbEntity from "../Domain/DbEntity";
+import { QueryFindParameters, QueryEntityParameters, BodyEntityParameters } from "../Domain/QueryParameters";
 
 export default class StubDatabase implements Database {
 
-    static Collection1Name = "Collection-1";
-    static Document1 = {
+    static Repository1Name = "Repository-1";
+    static Entity1 = {
         id: "001-aaa",
         retailerId: "abc"
     };
@@ -19,17 +19,17 @@ export default class StubDatabase implements Database {
         // nothing todo
     }
 
-    async getCollections(): Promise<string[]> {
+    async getRepositories(): Promise<string[]> {
         return [
-            StubDatabase.Collection1Name,
-            "Collection-2"
+            StubDatabase.Repository1Name,
+            "Repository-2"
         ];
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async findOnCollection(parameters: QueryFindParameters): Promise<DbDocument[]> {
+    async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
         return [
-            StubDatabase.Document1,
+            StubDatabase.Entity1,
             {
                 id: "002-bbb",
                 retailerId: "xyz"
@@ -37,15 +37,15 @@ export default class StubDatabase implements Database {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async insertDocument(parameters: QueryDocumentParameters, doc : BodyDocumentParameters): Promise<boolean> {
+    async insertEntity(parameters: QueryEntityParameters, doc : BodyEntityParameters): Promise<boolean> {
         return true;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async updateDocument(parameters: QueryDocumentParameters, doc : BodyDocumentParameters): Promise<boolean> {
+    async updateEntity(parameters: QueryEntityParameters, doc : BodyEntityParameters): Promise<boolean> {
         return true;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async deleteDocument(parameters: QueryDocumentParameters): Promise<boolean> {
+    async deleteEntity(parameters: QueryEntityParameters): Promise<boolean> {
         return true;
     }
 

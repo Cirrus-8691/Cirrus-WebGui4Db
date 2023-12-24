@@ -1,10 +1,10 @@
 import { FastifyRequest } from "fastify";
 import HttpFastifyServer from "../HttpFastifyServer";
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import Database from "../Domain/Database";
 import MongoDbUrl from "../Domain/MongoDbUrl";
 import GetErrorMessage from "./GetErrorMessage";
-import { BodyDocumentParameters, QueryDocumentParameters, QueryFindParameters } from "../Domain/QueryParameters";
+import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
 import { Auth, JwToken } from "../Domain/JwToken";
 
 export default class QueryController {
@@ -37,33 +37,33 @@ export default class QueryController {
             }
         );
         this.server.get(QueryController.RouteBeginning
-            + "mongo/collections"
+            + "mongo/repositories"
             , {
-                handler: this.getCollections.bind(this)
+                handler: this.getRepositories.bind(this)
             }
         );
         this.server.get(QueryController.RouteBeginning
-            + "mongo/documents"
+            + "mongo/entities"
             , {
-                handler: this.getDocuments.bind(this)
+                handler: this.getEntities.bind(this)
             }
         );
         this.server.delete(QueryController.RouteBeginning
-            + "mongo/document"
+            + "mongo/entity"
             , {
-                handler: this.deleteDocument.bind(this)
+                handler: this.deleteEntity.bind(this)
             }
         );
         this.server.post(QueryController.RouteBeginning
-            + "mongo/document"
+            + "mongo/entity"
             , {
-                handler: this.updateDocument.bind(this)
+                handler: this.updateEntity.bind(this)
             }
         );
         this.server.put(QueryController.RouteBeginning
-            + "mongo/document"
+            + "mongo/entity"
             , {
-                handler: this.insertDocument.bind(this)
+                handler: this.insertEntity.bind(this)
             }
         );
 
@@ -105,11 +105,11 @@ export default class QueryController {
         }
     }
 
-    public async getCollections(request: FastifyRequest): Promise<string[]> {
+    public async getRepositories(request: FastifyRequest): Promise<string[]> {
         try {
             const mongoUrl = JwToken.connect(request);
             this.db.connect(mongoUrl.toUrl());
-            return await this.db.getCollections();
+            return await this.db.getRepositories();
         }
         catch (error) {
             request.log.error(error);
@@ -117,13 +117,13 @@ export default class QueryController {
         }
     }
 
-    public async getDocuments(request: FastifyRequest<{
+    public async getEntities(request: FastifyRequest<{
         Querystring: QueryFindParameters
-    }>): Promise<DbDocument[]> {
+    }>): Promise<DbEntity[]> {
         try {
             const mongoUrl = JwToken.connect(request);
             this.db.connect(mongoUrl.toUrl());
-            return await this.db.findOnCollection(request.query);
+            return await this.db.findOnRepository(request.query);
         }
         catch (error) {
             request.log.error(error);
@@ -131,13 +131,13 @@ export default class QueryController {
         }
     }
 
-    public async deleteDocument(request: FastifyRequest<{
-        Querystring: QueryDocumentParameters
+    public async deleteEntity(request: FastifyRequest<{
+        Querystring: QueryEntityParameters
     }>): Promise<boolean> {
         try {
             const mongoUrl = JwToken.connect(request);
             this.db.connect(mongoUrl.toUrl());
-            return await this.db.deleteDocument(request.query);
+            return await this.db.deleteEntity(request.query);
         }
         catch (error) {
             request.log.error(error);
@@ -145,14 +145,14 @@ export default class QueryController {
         }
     }
 
-    public async updateDocument(request: FastifyRequest<{
-        Querystring: QueryDocumentParameters,
-        Body : BodyDocumentParameters
+    public async updateEntity(request: FastifyRequest<{
+        Querystring: QueryEntityParameters,
+        Body : BodyEntityParameters
     }>): Promise<boolean> {
         try {
             const mongoUrl = JwToken.connect(request);
             this.db.connect(mongoUrl.toUrl());
-            return await this.db.updateDocument(request.query, request.body);
+            return await this.db.updateEntity(request.query, request.body);
         }
         catch (error) {
             request.log.error(error);
@@ -160,14 +160,14 @@ export default class QueryController {
         }
     }
 
-    public async insertDocument(request: FastifyRequest<{
-        Querystring: QueryDocumentParameters,
-        Body : BodyDocumentParameters
+    public async insertEntity(request: FastifyRequest<{
+        Querystring: QueryEntityParameters,
+        Body : BodyEntityParameters
     }>): Promise<boolean> {
         try {
             const mongoUrl = JwToken.connect(request);
             this.db.connect(mongoUrl.toUrl());
-            return await this.db.insertDocument(request.query, request.body);
+            return await this.db.insertEntity(request.query, request.body);
         }
         catch (error) {
             request.log.error(error);

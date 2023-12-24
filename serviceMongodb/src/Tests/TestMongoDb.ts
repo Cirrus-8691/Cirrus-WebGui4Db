@@ -1,7 +1,6 @@
 import { assert } from "chai";
 
 import MongoDatabase from "../Domain/MongoDatabase";
-import { json } from "stream/consumers";
 
 export const TestLocalMongoDbUser = "usr";
 export const TestLocalMongoDbName = "Histo";
@@ -14,10 +13,10 @@ export default async function TestMongoDb() {
     db.connect(new URL(url));
     await db.test();
 
-    const collections = await db.getCollections();
+    const collections = await db.getRepositories();
     assert.isTrue(collections.length > 0);
 
-    let documents = await db.findOnCollection(
+    let documents = await db.findOnRepository(
         {
             collection: collections[0],
             what: "{}",
@@ -28,13 +27,13 @@ export default async function TestMongoDb() {
 
     const docWorld = { Hello: "World" };
     const findWorld = JSON.stringify(docWorld);
-    let ok = await db.insertDocument(
+    let ok = await db.insertEntity(
         { collection: collections[0] },
         { document: docWorld }
     );
     assert.isTrue(ok);
 
-    documents = await db.findOnCollection({
+    documents = await db.findOnRepository({
         collection: collections[0],
         what: findWorld,
         skip: "0",
@@ -46,7 +45,7 @@ export default async function TestMongoDb() {
 
     const docXyz= { Hello: "Xyz" };
     const findXyz = JSON.stringify(docXyz);
-    ok = await db.updateDocument(
+    ok = await db.updateEntity(
         {
             collection: collections[0],
             _id: documents[0]._id
@@ -56,7 +55,7 @@ export default async function TestMongoDb() {
         });
     assert.isTrue(ok);
 
-    documents = await db.findOnCollection({
+    documents = await db.findOnRepository({
         collection: collections[0],
         what: findXyz,
         skip: "0",
@@ -66,13 +65,13 @@ export default async function TestMongoDb() {
     assert.equal(1, documents.length);
     assert.equal(docXyz.Hello, documents[0].Hello);
 
-    ok = await db.deleteDocument({
+    ok = await db.deleteEntity({
         collection: collections[0],
         _id: documents[0]._id
     });
     assert.isTrue(ok);
 
-    documents = await db.findOnCollection({
+    documents = await db.findOnRepository({
         collection: collections[0],
         what: findXyz,
         skip: "0",

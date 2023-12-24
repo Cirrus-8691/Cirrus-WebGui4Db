@@ -36,6 +36,14 @@ export default class PostgreSqlUrl implements DbUrl {
         return "PostgreSql connexion string";
     }
 
+    public service(): string {
+        return "postgre";
+    }
+
+    public repositoriesName() :string {
+        return "Tables";
+    }
+
     public get protocol() { return ""; }
     public get username() { return this.params.username ?? ""; }
     public get password() { return this.params.password ?? ""; }

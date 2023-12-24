@@ -22,7 +22,7 @@ export default function DialogDbDocument(props: { document: DbDocument, hide: ()
                 collection: mainContext.databaseRepository,
                 _id: props.document._id
             }
-            await RunQueryDelete(parameters, mainContext.auth);
+            await RunQueryDelete(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             setLoading(false);
             props.hide();
         }
@@ -41,10 +41,10 @@ export default function DialogDbDocument(props: { document: DbDocument, hide: ()
                 document: JSON.parse(doc)
             }
             if (parameters.document._id) {
-                await RunQueryUpdate(parameters, mainContext.auth);
+                await RunQueryUpdate(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             }
             else {
-                await RunQueryInsert(parameters, mainContext.auth);
+                await RunQueryInsert(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             }
             setLoading(false);
             props.hide();

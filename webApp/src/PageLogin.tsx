@@ -39,9 +39,9 @@ export default function PageLogin() {
                 port: DefaultDatabaseConnection.port,
                 database: DefaultDatabaseConnection.database
             });
-            const collections = await ValidateConnection(newDbUrl, mainContext.setAuth);
+            const repositories = await ValidateConnection(newDbUrl, mainContext.setAuth);
             mainContext.setDatabaseConnexion(newDbUrl);
-            mainContext.setDatabaseRepositories(collections);
+            mainContext.setDatabaseRepositories(repositories);
             setInfo("");
             setLoading(false);
         }

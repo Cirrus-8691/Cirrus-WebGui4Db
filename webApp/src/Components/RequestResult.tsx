@@ -37,7 +37,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
                         collection: mainContext.databaseRepository,
                         _id: props.data[index]._id
                     }
-                    await RunQueryDelete(parameters, mainContext.auth);
+                    await RunQueryDelete(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
                 }
             });
             props.refreshData();

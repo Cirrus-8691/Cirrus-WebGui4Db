@@ -1,5 +1,5 @@
-import DbDocument from "./DbDocument";
-import { QueryDocumentParameters, QueryFindParameters } from "./QueryParameters";
+import DbEntity from "./DbEntity";
+import { QueryEntityParameters, QueryFindParameters } from "./QueryParameters";
 
 export default interface Database {
 
@@ -7,15 +7,15 @@ export default interface Database {
 
     test(): Promise<void>;
 
-    getCollections(): Promise<string[]>;
+    getRepositories(): Promise<string[]>;
 
-    findOnCollection(parameters : QueryFindParameters): Promise<DbDocument[]>;
+    findOnRepository(parameters : QueryFindParameters): Promise<DbEntity[]>;
 
-    insertDocument(parameters: QueryDocumentParameters, doc : DbDocument): Promise<boolean>;
+    insertEntity(parameters: QueryEntityParameters, doc : DbEntity): Promise<boolean>;
 
-    updateDocument(parameters: QueryDocumentParameters, doc : DbDocument): Promise<boolean>;
+    updateEntity(parameters: QueryEntityParameters, doc : DbEntity): Promise<boolean>;
     
-    deleteDocument(parameters: QueryDocumentParameters): Promise<boolean>;
+    deleteEntity(parameters: QueryEntityParameters): Promise<boolean>;
 
     dispose(): void;
 }

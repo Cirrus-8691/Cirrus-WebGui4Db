@@ -53,7 +53,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
                 skip,
                 limit
             };
-            const data = await RunQueryFind(parameters, mainContext.auth);
+            const data = await RunQueryFind(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             props.setData(data);
             setLoading(false);
         }

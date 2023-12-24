@@ -9,10 +9,10 @@ export default async function TestStubDb() {
     stubDb.connect(new URL(url));
     await stubDb.test();
 
-    const collections = await stubDb.getCollections();
-    assert.equal(collections[0], StubDatabase.Collection1Name);
+    const collections = await stubDb.getRepositories();
+    assert.equal(collections[0], StubDatabase.Repository1Name);
 
-    const document = await stubDb.findOnCollection(
+    const document = await stubDb.findOnRepository(
         {
             collection: "",
             what: "",
@@ -20,8 +20,8 @@ export default async function TestStubDb() {
             limit : "10"
         });
     assert.isTrue(document.length>0);
-    assert.equal(document[0].id, StubDatabase.Document1.id);
-    assert.equal(document[0].retailerId, StubDatabase.Document1.retailerId);
+    assert.equal(document[0].id, StubDatabase.Entity1.id);
+    assert.equal(document[0].retailerId, StubDatabase.Entity1.retailerId);
 
     stubDb.dispose();
 }

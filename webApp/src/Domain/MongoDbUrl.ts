@@ -50,6 +50,14 @@ export default class MongoDbUrl implements DbUrl {
         return "Using MongoDb authentication Mechanism: DEFAULT";
     }
 
+    public service(): string {
+        return "mongo";
+    }
+
+    public repositoriesName() :string {
+        return "Collections";
+    }
+
     public get protocol() { return MongoDbProtocol; }
     public get username() { return this.params.username ?? ""; }
     public get password() { return this.params.password ?? ""; }

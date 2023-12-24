@@ -6,27 +6,27 @@ import { Button, Stack } from "react-bootstrap";
 export default function ShowDatabaseRepositories() {
 
     const mainContext = useContext(MainContext);
-    const [showInputCollections, setShowInputCollections] = useState(false);
+    const [showInputRepositories, setShowInputRepositories] = useState(false);
 
-    const onSelectCollection = (collectionName: string) => {
+    const onSelectRepository = (collectionName: string) => {
         mainContext.setDatabaseRepository(collectionName);
-        setShowInputCollections(false);
+        setShowInputRepositories(false);
     }
 
     //TODO: Add collection
 
     return (
-        <DialogOffCanvas titleDialog="🗃️ Collections"
-            open={showInputCollections}
-            setOpen={setShowInputCollections}
+        <DialogOffCanvas titleDialog={`🗃️ ${mainContext.databaseConnexion.repositoriesName()}`}
+            open={showInputRepositories}
+            setOpen={setShowInputRepositories}
             titleButton={"🗃️ Collection: " + mainContext.databaseRepository.toString()}>
 
             <Stack gap={2}>
                 {
-                    mainContext.databaseRepositories.map((collectionName : string, index : number) =>
-                        <Button key={index} onClick={() => onSelectCollection(collectionName)}
-                            variant={collectionName === mainContext.databaseRepository ? "primary" : "secondary"}>
-                            {collectionName}
+                    mainContext.databaseRepositories.map((repositoryName : string, index : number) =>
+                        <Button key={index} onClick={() => onSelectRepository(repositoryName)}
+                            variant={repositoryName === mainContext.databaseRepository ? "primary" : "secondary"}>
+                            {repositoryName}
                         </Button>
                     )
                 }

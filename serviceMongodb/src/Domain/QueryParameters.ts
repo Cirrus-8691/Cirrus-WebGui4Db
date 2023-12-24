@@ -1,4 +1,4 @@
-import DbDocument from "./DbDocument";
+import DbEntity from "./DbEntity";
 
 export interface QueryFindParameters
 {
@@ -7,13 +7,13 @@ export interface QueryFindParameters
     skip : string,
     limit : string
 }
-export interface QueryDocumentParameters
+export interface QueryEntityParameters
 {
     collection: string,
     _id?: string,
 }
 
-export interface BodyDocumentParameters
+export interface BodyEntityParameters
 {
-    document: DbDocument,
+    document: DbEntity,
 }
