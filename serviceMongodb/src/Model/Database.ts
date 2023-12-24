@@ -1,5 +1,5 @@
 import DbEntity from "./DbEntity";
-import { QueryEntityParameters, QueryFindParameters } from "./QueryParameters";
+import { QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
 
 export default interface Database {
 

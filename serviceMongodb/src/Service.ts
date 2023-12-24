@@ -1,5 +1,5 @@
 import QueryController from "./Controller/QueryController";
-import Database from "./Domain/Database";
+import Database from "./Model/Database";
 import { PackageJson } from "./Domain/PackageJson";
 import HttpFastifyServer from "./HttpFastifyServer";
 

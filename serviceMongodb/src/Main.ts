@@ -1,4 +1,4 @@
-import MongoDatabase from "./Domain/MongoDatabase";
+import MongoDatabase from "./Model/MongoDatabase";
 import graphicArt from "./GraphicArt";
 import Service from "./Service";
 

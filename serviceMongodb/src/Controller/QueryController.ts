@@ -1,8 +1,8 @@
 import { FastifyRequest } from "fastify";
 import HttpFastifyServer from "../HttpFastifyServer";
-import DbEntity from "../Domain/DbEntity";
-import Database from "../Domain/Database";
-import MongoDbUrl from "../Domain/MongoDbUrl";
+import DbEntity from "../Model/DbEntity";
+import Database from "../Model/Database";
+import MongoDbUrl from "../Model/MongoDbUrl";
 import GetErrorMessage from "./GetErrorMessage";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
 import { Auth, JwToken } from "../Domain/JwToken";

@@ -1,6 +1,6 @@
 import { assert } from "chai";
 
-import MongoDatabase from "../Domain/MongoDatabase";
+import MongoDatabase from "../Model/MongoDatabase";
 
 export const TestLocalMongoDbUser = "usr";
 export const TestLocalMongoDbName = "Histo";

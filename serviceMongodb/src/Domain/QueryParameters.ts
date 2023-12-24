@@ -1,4 +1,4 @@
-import DbEntity from "./DbEntity";
+import DbEntity from "../Model/DbEntity";
 
 export interface QueryFindParameters
 {

@@ -1,5 +1,5 @@
-import Database from "../Domain/Database";
-import DbEntity from "../Domain/DbEntity";
+import Database from "../Model/Database";
+import DbEntity from "../Model/DbEntity";
 import { QueryFindParameters, QueryEntityParameters, BodyEntityParameters } from "../Domain/QueryParameters";
 
 export default class StubDatabase implements Database {
