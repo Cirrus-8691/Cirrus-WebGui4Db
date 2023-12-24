@@ -1,7 +1,7 @@
 import { Auth, EmptyAuth } from "./Controllers/Auth";
 import { DbUrl } from "./Domain/DbUrl";
 import MongoDbUrl from "./Domain/MongoDbUrl";
-import { PostgreSqlUrl } from "./Domain/PostgreSqlUrl";
+import PostgreSqlUrl from "./Domain/PostgreSqlUrl";
 
 export default class AppContext {
 
@@ -13,6 +13,11 @@ export default class AppContext {
     auth: Auth = EmptyAuth;
     setAuth = (value: Auth) => {
         this.auth = value
+    };
+
+    databaseConnexion: DbUrl = DefaultDatabaseConnection;
+    setDatabaseConnexion = (value: DbUrl) => {
+        this.databaseConnexion = value
     };
 
     databaseRepositories: string[] = [DefaultDbRepository];
@@ -29,36 +34,26 @@ export default class AppContext {
     setDatabaseQuery = (value: string) => {
         this.databaseQuery = value
     };
-
 }
 export const DefaultDbRepository = process.env.REACT_APP_MONGO_COLLECTION ?? "payments";
 export const DefaultDbQuery = "{}";
 
 const defaultConnection = (): MongoDbUrl => {
-    const prevUrl = localStorage.getItem("Cirrus-WebGui4Db-MongoDb-Connection");
-    if (prevUrl) {
+    if (process.env.REACT_APP_MONGO_HOST) {
         console.log("────────────────────────────────────────────");
-        console.log(`🌟 MongoDbUrl: use localStorage`);
+        console.log(`🌟 MongoDbUrl: use REACT_APP_MONGO...`);
         console.log("────────────────────────────────────────────");
-        return new MongoDbUrl(prevUrl);
+        return new MongoDbUrl({
+            hostname: process.env.REACT_APP_MONGO_HOST,
+            port: process.env.REACT_APP_MONGO_PORT,
+            database: process.env.REACT_APP_MONGO_DATABASE
+        });
     }
     else {
-        if (process.env.REACT_APP_MONGO_HOST) {
-            console.log("────────────────────────────────────────────");
-            console.log(`🌟 MongoDbUrl: use REACT_APP_MONGO...`);
-            console.log("────────────────────────────────────────────");
-            return new MongoDbUrl(MongoDbUrl.buildUrl({
-                hostname: process.env.REACT_APP_MONGO_HOST,
-                port: process.env.REACT_APP_MONGO_PORT,
-                database: process.env.REACT_APP_MONGO_DATABASE
-            }));
-        }
-        else {
-            console.log("────────────────────────────────────────────");
-            console.log(`🌟 MongoDbUrl: Sample`);
-            console.log("────────────────────────────────────────────");
-            return MongoDbUrl.Sample;
-        }
+        console.log("────────────────────────────────────────────");
+        console.log(`🌟 MongoDbUrl: Sample`);
+        console.log("────────────────────────────────────────────");
+        return MongoDbUrl.Sample;
     }
 }
 export const DefaultDatabaseConnection = defaultConnection();
@@ -69,11 +64,11 @@ const otherConnections = (): DbUrl[] => {
         console.log("────────────────────────────────────────────");
         console.log(`🌟 PostgreSqlUrl: use REACT_APP_POSTGRE...`);
         console.log("────────────────────────────────────────────");
-        const dbUrl = new PostgreSqlUrl(PostgreSqlUrl.buildUrl({
+        const dbUrl = new PostgreSqlUrl({
             hostname: process.env.REACT_APP_POSTGRE_HOST,
             port: process.env.REACT_APP_POSTGRE_PORT,
             database: process.env.REACT_APP_POSTGRE_DATABASE
-        }));
+        });
         otherUrl.push(dbUrl);
     }
     return otherUrl;

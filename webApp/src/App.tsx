@@ -5,6 +5,7 @@ import AppContext, { DefaultDatabaseConnection, DefaultDbRepository, DefaultDbQu
 import { ValidateConnection } from './Controllers/TestConnection';
 import PageLogin from './PageLogin';
 import { Auth, EmptyAuth } from './Controllers/Auth';
+import { DbUrl } from './Domain/DbUrl';
 
 export const MainContext = React.createContext(new AppContext());
 
@@ -12,40 +13,39 @@ export default function App() {
 
   const [error, setError] = useState<unknown>(undefined);
   const [auth, setAuth] = useState<Auth>(EmptyAuth);
-  const [mongoCollections, setMongoCollections] = useState<string[]>([DefaultDbRepository]);
-  const [mongoCollection, setMongoCollection] = useState<string>(DefaultDbRepository);
-  const [mongoQuery, setMongoQuery] = useState<string>(DefaultDbQuery);
+  const [databaseConnexion, setDatabaseConnexion] = useState<DbUrl>(DefaultDatabaseConnection);
+  const [databaseRepositories, setDatabaseRepositories] = useState<string[]>([DefaultDbRepository]);
+  const [databaseRepository, setDatabaseRepository] = useState<string>(DefaultDbRepository);
+  const [databaseQuery, setDatabaseQuery] = useState<string>(DefaultDbQuery);
 
   useEffect(() => {
     const chkConnexion = async () => {
       setError(undefined);
       try {
-        const collections = await ValidateConnection(DefaultDatabaseConnection, setAuth);
-        setMongoCollections(collections);
+        const repositories = await ValidateConnection(databaseConnexion, setAuth);
+        setDatabaseRepositories(repositories);
 
-        const previousCollection = localStorage.getItem("Cirrus-WebGui4Db-MongoCollection");
-        const collection = previousCollection && collections.includes(previousCollection)
-          ? previousCollection
-          : collections[0];
-        setMongoCollection(collection);
+        const repository = repositories[0];
+        setDatabaseRepository(repository);
       }
       catch (error: unknown) {
         setError(error);
       }
     }
-    if (DefaultDatabaseConnection.username && DefaultDatabaseConnection.password) {
+    if (databaseConnexion.username && databaseConnexion.password) {
       chkConnexion();
     }
-  }, []);
+  }, [databaseConnexion]);
 
   return (
     <div className="App-main">
       <MainContext.Provider value={{
         error, setError,
         auth, setAuth,
-        databaseRepositories: mongoCollections, setDatabaseRepositories: setMongoCollections,
-        databaseRepository: mongoCollection, setDatabaseRepository: setMongoCollection,
-        databaseQuery: mongoQuery, setDatabaseQuery: setMongoQuery
+        databaseConnexion, setDatabaseConnexion,
+        databaseRepositories, setDatabaseRepositories,
+        databaseRepository, setDatabaseRepository,
+        databaseQuery, setDatabaseQuery
       }}>
         {
           auth.accessToken

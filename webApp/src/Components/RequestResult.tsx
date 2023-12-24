@@ -20,16 +20,8 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
     const [docSelected, setDocSelected] = useState<DbDocument | undefined>(undefined);
     const [selectMode, setSelectMode] = useState<boolean>(false);
     const [checked, setChecked] = useState<Map<number, boolean>>(new Map<number, boolean>());
-    const previousOrderColumn = localStorage.getItem("Cirrus-WebGui4Db-OrderColumn");
-    const previousOrderAsc = localStorage.getItem("Cirrus-WebGui4Db-OrderAsc");
-    const [orderColumn, setOrderColumn] = useState<string>(
-        previousOrderColumn
-            ? previousOrderColumn
-            : "");
-    const [orderAsc, setOrderAsc] = useState<boolean>(
-        previousOrderAsc
-            ? previousOrderAsc === "true"
-            : true);
+    const [orderColumn, setOrderColumn] = useState<string>("");
+    const [orderAsc, setOrderAsc] = useState<boolean>(true);
     const selectAll = async () => {
         const allChecked = new Map<number, boolean>();
         props.data.forEach((data: DbDocument, index: number) => allChecked.set(index, true));
@@ -63,10 +55,10 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
                 props.data.sort((a: DbDocument, b: DbDocument) =>
                     orderAsc
                         ? (
-                            a[orderColumn]!==undefined &&
+                            a[orderColumn] !== undefined &&
                             a[orderColumn].toString().localeCompare((b[orderColumn].toString())))
                         : (
-                            b[orderColumn]!==undefined &&
+                            b[orderColumn] !== undefined &&
                             b[orderColumn].toString().localeCompare((a[orderColumn].toString()))))
             }
 
@@ -116,11 +108,9 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
                                         <th key={index} onClick={() => {
                                             if (orderColumn === columnName) {
                                                 setOrderAsc(!orderAsc);
-                                                localStorage.setItem("Cirrus-WebGui4Db-OrderAsc", orderAsc.toString());
                                             }
                                             else {
                                                 setOrderColumn(columnName);
-                                                localStorage.setItem("Cirrus-WebGui4Db-OrderColumn", columnName);
                                             }
                                             props.refreshData();
                                         }}>

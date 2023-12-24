@@ -3,7 +3,6 @@ import { MainContext } from "./App";
 import DialogError from "./Components/ShowError";
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import GetErrorMessage from "./Domain/GetErrorMessage";
-import MongoDbUrl from "./Domain/MongoDbUrl";
 import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
 import { DatabaseConnections, DefaultDatabaseConnection } from "./AppContext";
@@ -13,15 +12,15 @@ export default function PageLogin() {
 
     const mainContext = useContext(MainContext);
 
-    const [dbUrl, setDbUrl] = useState<DbUrl>(DefaultDatabaseConnection);
-    const [username, setUsername] = useState(DefaultDatabaseConnection.username);
-    const [password, setPassword] = useState(DefaultDatabaseConnection.password);
-    const [info, setInfo] = useState(DefaultDatabaseConnection.info());
+    const [dbUrl, setDbUrl] = useState(mainContext.databaseConnexion);
+    const [username, setUsername] = useState(mainContext.databaseConnexion.username);
+    const [password, setPassword] = useState(mainContext.databaseConnexion.password);
+    const [info, setInfo] = useState(mainContext.databaseConnexion.info());
 
-    useEffect(()=> {
+    useEffect(() => {
         setInfo(dbUrl.info())
     },
-    [ dbUrl ]);
+        [dbUrl]);
 
     const [error, setError] = useState<unknown>(undefined);
     const [loading, setLoading] = useState(false);
@@ -38,9 +37,10 @@ export default function PageLogin() {
                 password,
                 hostname: DefaultDatabaseConnection.hostname,
                 port: DefaultDatabaseConnection.port,
-                database: DefaultDatabaseConnection.pathname
+                database: DefaultDatabaseConnection.database
             });
             const collections = await ValidateConnection(newDbUrl, mainContext.setAuth);
+            mainContext.setDatabaseConnexion(newDbUrl);
             mainContext.setDatabaseRepositories(collections);
             setInfo("");
             setLoading(false);
@@ -68,7 +68,7 @@ export default function PageLogin() {
                                     <Form.Group>
                                         <Form.Label>Connect to:</Form.Label>
                                         <Form.Select onChange={
-                                            (evnt: ChangeEvent<HTMLSelectElement>) => ( setDbUrl(DatabaseConnections[parseInt(evnt.target.value)]))}>
+                                            (evnt: ChangeEvent<HTMLSelectElement>) => (setDbUrl(DatabaseConnections[parseInt(evnt.target.value)]))}>
                                             {
                                                 DatabaseConnections.map((dbUrl: DbUrl, index: number) => (
                                                     <option key={index} value={index}>

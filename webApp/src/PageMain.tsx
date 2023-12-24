@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { MainContext } from "./App";
-import ShowMongoConnection, { ShowConnectionInfo } from "./Components/ShowMongoConnection";
+import ShowDatabaseConnection, { ShowConnectionInfo } from "./Components/ShowDatabaseConnection";
 import RequestInput from "./Components/RequestInput";
 import RequestResult from "./Components/RequestResult";
 import ShowError from "./Components/ShowError";
 import { NavDropdown, Navbar, Stack } from "react-bootstrap";
-import ShowMongoCollection from "./Components/ShowMongoCollection";
+import ShowDatabaseRepositories from "./Components/ShowDatabaseRepositories";
 import DbDocument from "./Domain/DbDocument";
 import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
@@ -35,9 +35,9 @@ export default function PageMain() {
     };
     const [showInputConnection, setShowInputConnection] = useState<ShowConnectionInfo>("");
     const [drawGrid, setDrawGrid] = useState<DrawGrid>({
-        columnsViewed: localStorage.getItem("Cirrus-WebGui4Db-ColumnsViewed")?.split(","),
-        columnsDate: localStorage.getItem("Cirrus-WebGui4Db-ColumnsDate")?.split(","),
-        columnsOrder: localStorage.getItem("Cirrus-WebGui4Db-ColumnsOrder")?.split(",")
+        columnsViewed: undefined,
+        columnsDate: undefined,
+        columnsOrder: undefined
     });
 
     return (
@@ -46,7 +46,7 @@ export default function PageMain() {
                 <Navbar.Toggle />
                 <Navbar.Brand className="justify-center">{"🐻 " + Application.name}</Navbar.Brand>
                 <Navbar.Collapse >
-                    <ShowMongoCollection />
+                    <ShowDatabaseRepositories />
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                     <NavDropdown drop='start' title={
@@ -73,7 +73,7 @@ export default function PageMain() {
                     </NavDropdown>
                 </Navbar.Collapse>
             </Navbar>
-            <ShowMongoConnection show={showInputConnection} setShow={setShowInputConnection} />
+            <ShowDatabaseConnection show={showInputConnection} setShow={setShowInputConnection} />
             <DialogAbout show={showAbout} setShow={setShowAbout} />
             {
                 mainContext.error

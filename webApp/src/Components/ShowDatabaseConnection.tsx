@@ -8,14 +8,14 @@ import { DefaultDatabaseConnection } from "../AppContext";
 
 export type ShowConnectionInfo = "" | "user" | "database" | "connection";
 
-export default function ShowMongoConnection(props: { show: ShowConnectionInfo, setShow: (value: ShowConnectionInfo) => void }) {
+export default function ShowDatabaseConnection(props: { show: ShowConnectionInfo, setShow: (value: ShowConnectionInfo) => void }) {
 
     const mainContext = useContext(MainContext);
     const [username, setUsername] = useState(mainContext.auth.userName);
     const [password, setPassword] = useState("");
-    const [hostname, setHostname] = useState(DefaultDatabaseConnection.hostname);
-    const [port, setPort] = useState(DefaultDatabaseConnection.port);
-    const [pathname, setPathname] = useState(DefaultDatabaseConnection.pathname);
+    const [hostname, setHostname] = useState(mainContext.databaseConnexion.hostname);
+    const [port, setPort] = useState(mainContext.databaseConnexion.port);
+    const [database, setDatabase] = useState(mainContext.databaseConnexion.database);
     const [error, setError] = useState<unknown>(undefined);
     const [info, setInfo] = useState("");
     const [loading, setLoading] = useState(false);
@@ -26,18 +26,16 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
         setLoading(true);
         setInfo("🕜 Validating connection...");
         try {
-            const newUrl = new MongoDbUrl(MongoDbUrl.buildUrl({
+            const newUrl = new MongoDbUrl({
                 username,
                 password,
                 hostname,
                 port,
-                database: pathname
-            }));
+                database: database
+            });
             const collections = await ValidateConnection(newUrl, mainContext.setAuth);
             mainContext.setDatabaseRepositories(collections);
             mainContext.setDatabaseRepository(collections[0]);
-            localStorage.setItem("Cirrus-WebGui4Db-MongoCollection", collections[0]);
-            localStorage.setItem("Cirrus-WebGui4Db-MongoDb-Connection", newUrl.toSave());
             setPassword("");
             setInfo("");
             setLoading(false);
@@ -52,11 +50,11 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
 
     const onCancel = () => {
         props.setShow("");
-        setUsername(DefaultDatabaseConnection.username);
-        setPassword(DefaultDatabaseConnection.password);
-        setHostname(DefaultDatabaseConnection.hostname);
-        setPort(DefaultDatabaseConnection.port);
-        setPathname(DefaultDatabaseConnection.pathname);
+        setUsername(mainContext.databaseConnexion.username);
+        setPassword(mainContext.databaseConnexion.password);
+        setHostname(mainContext.databaseConnexion.hostname);
+        setPort(mainContext.databaseConnexion.port);
+        setDatabase(mainContext.databaseConnexion.database);
         setError(undefined);
     }
 
@@ -65,13 +63,13 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
         setLoading(true);
         setInfo("🕜 Testing...");
         try {
-            const newUrl = new MongoDbUrl(MongoDbUrl.buildUrl({
+            const newUrl = new MongoDbUrl({
                 username,
                 password,
                 hostname,
                 port,
-                database: pathname
-            }));
+                database: database
+            });
             await TestConnection(newUrl);
             setInfo(`✅ Connection test: Ok`);
             setLoading(false);
@@ -120,9 +118,9 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
                                         value={port} />
                                     <Form.Label>Path name ( /[🛢️ Database name] ):</Form.Label>
                                     <Form.Control type="text"
-                                        placeholder={MongoDbUrl.Sample.pathname}
-                                        onChange={(event: any) => setPathname(event.target.value)}
-                                        value={pathname} />
+                                        placeholder={MongoDbUrl.Sample.database}
+                                        onChange={(event: any) => setDatabase(event.target.value)}
+                                        value={database} />
                                 </>
                                 : props.show === "user"
                                     ? <>
@@ -149,9 +147,9 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
                                                 value={password} />
                                             <Form.Label>🛢️ Database name:</Form.Label>
                                             <Form.Control type="text"
-                                                placeholder={MongoDbUrl.Sample.pathname}
-                                                onChange={(event: any) => setPathname("/" + event.target.value)}
-                                                value={pathname.replace("/", "")} />
+                                                placeholder={MongoDbUrl.Sample.database}
+                                                onChange={(event: any) => setDatabase("/" + event.target.value)}
+                                                value={database} />
                                         </>
                                         : <></>
                         }

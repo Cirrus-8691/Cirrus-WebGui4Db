@@ -3,14 +3,13 @@ import { MainContext } from "../App";
 import DialogOffCanvas from "./DialogOffCanvas";
 import { Button, Stack } from "react-bootstrap";
 
-export default function ShowMongoCollection() {
+export default function ShowDatabaseRepositories() {
 
     const mainContext = useContext(MainContext);
     const [showInputCollections, setShowInputCollections] = useState(false);
 
     const onSelectCollection = (collectionName: string) => {
         mainContext.setDatabaseRepository(collectionName);
-        localStorage.setItem("Cirrus-WebGui4Db-MongoCollection", collectionName);
         setShowInputCollections(false);
     }
 

@@ -18,15 +18,10 @@ export default function RequestResultColumns(props: {
     }
     const columnsName = Object.keys(props.data[props.data.length - 1]).sort((a: string, b: string) => a.localeCompare(b));
 
-    const previousColumnsViewed = localStorage.getItem("Cirrus-WebGui4Db-ColumnsViewed");
-    const [columnsViewed, setColumnsViewed] = useState<string[]>(
-        previousColumnsViewed
-            ? previousColumnsViewed.split(",")
-            : columnsName);
+    const [columnsViewed, setColumnsViewed] = useState<string[]>(columnsName);
 
     const viewColumns = (newColumns: string[]) => {
         setColumnsViewed(newColumns);
-        localStorage.setItem("Cirrus-WebGui4Db-ColumnsViewed", newColumns.join(","));
 
         // Order Columns
         const addedColumnsOrder: string[] = [];
@@ -50,7 +45,6 @@ export default function RequestResultColumns(props: {
         }
         // else Remove column
         setColumnsOrder(newColumnsOrder);
-        localStorage.setItem("Cirrus-WebGui4Db-ColumnsOrder", newColumnsOrder.join(","));
         props.setDrawGrid({
             columnsViewed: newColumns,
             columnsDate,
@@ -74,9 +68,7 @@ export default function RequestResultColumns(props: {
         viewColumns(newColumns);
     }
 
-    const [columnsDate, setColumnsDate] = useState<string[]>(
-        localStorage.getItem("Cirrus-WebGui4Db-ColumnsDate")?.split(",") ??
-        []);
+    const [columnsDate, setColumnsDate] = useState<string[]>([]);
 
     const onColumnDateSelected = (columnName: string) => {
         const index = columnsDate.indexOf(columnName);
@@ -92,18 +84,13 @@ export default function RequestResultColumns(props: {
             ];;
         }
         setColumnsDate(newColumns);
-        localStorage.setItem("Cirrus-WebGui4Db-ColumnsDate", newColumns.join(","));
         props.setDrawGrid({
             columnsViewed,
             columnsDate: newColumns,
             columnsOrder
         });
     }
-    const previousColumnsOrder = localStorage.getItem("Cirrus-WebGui4Db-ColumnsOrder");
-    const [columnsOrder, setColumnsOrder] = useState<string[]>(
-        previousColumnsOrder
-            ? previousColumnsOrder.split(",")
-            : columnsViewed);
+    const [columnsOrder, setColumnsOrder] = useState<string[]>(columnsViewed);
 
     const onColumnsOrderSelected = (columnName: string) => {
         const index = columnsOrder.indexOf(columnName);
@@ -114,7 +101,6 @@ export default function RequestResultColumns(props: {
             newColumns[index] = prevColumnName
 
             setColumnsOrder(newColumns);
-            localStorage.setItem("Cirrus-WebGui4Db-ColumnsOrder", newColumns.join(","));
             props.setDrawGrid({
                 columnsViewed,
                 columnsDate,

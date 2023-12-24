@@ -1,55 +1,47 @@
-import { ConnexionDetailes, DbUrl } from "./DbUrl";
+import { ConnexionDetails, DbUrl } from "./DbUrl";
 
 export const MongoDbProtocol = "mongodb:";
-const OtherProtocol = "mongodb+srv:";
 /**
  * https://www.mongodb.com/docs/manual/reference/connection-string/
  */
 export default class MongoDbUrl implements DbUrl {
 
-    private readonly origProtocol: string;
-    private readonly httpUrl: URL;
+    private readonly params: ConnexionDetails;
 
-    public constructor(url: string) {
-        this.httpUrl = new URL(url);
-        this.origProtocol = this.httpUrl.protocol;
-        if (this.origProtocol !== MongoDbProtocol && this.protocol !== OtherProtocol) {
-            throw new Error(`Unexpected URL protocol! Only protocols: ['${MongoDbProtocol}','${OtherProtocol}'] are managed`);
-        }
-
-        this.httpUrl.protocol = "http";
+    public constructor(params: ConnexionDetails) {
+        this.params = params;
     }
 
-    public build(params: ConnexionDetailes): DbUrl {
-        const userPassword = params.username
-            ? `${params.username}${params.password
-                ? `:${params.password}`
-                : ""}`
-            : "";
-        const port = params.port
-            ? `:${params.port}`
-            : "";
-        const path = (params.database && params.database !== "")
-            ? params.database?.startsWith("/")
-                ? params.database
-                : `/${params.database}`
-            : "";
-        return new MongoDbUrl(`${MongoDbProtocol}//${userPassword}@${params.hostname}${port}${path}`);
+    build(params: ConnexionDetails) : DbUrl {
+        return new MongoDbUrl(params);
     }
 
     //"mongodb://usr:Flin*123@192.168.232.133:27017/Histo")
-    public static Sample = (new MongoDbUrl("")).build({
-            username: "usr",
-            password: "Flin*123",
-            hostname: "192.168.232.133",
-            port: "27017",
-            database: "/Histo"
+    public static Sample = new MongoDbUrl({
+        username: "usr",
+        password: "Flin*123",
+        hostname: "192.168.232.133",
+        port: "27017",
+        database: "/Histo"
     });
 
     public toString(): string {
-        return this.httpUrl.toString().replace("http:", this.origProtocol);
+        const userPassword = this.params.username
+            ? `${this.params.username}${this.params.password
+                ? `:${this.params.password}`
+                : ""}`
+            : "";
+        const port = this.params.port
+            ? `:${this.params.port}`
+            : "";
+        const path = (this.params.database && this.params.database !== "")
+            ? this.params.database?.startsWith("/")
+                ? this.params.database
+                : `/${this.params.database}`
+            : "";
+        return `${MongoDbProtocol}//${userPassword}@${this.params.hostname}${port}${path}`;
     }
-    
+
     public logo(): string {
         return "🌿";
     }
@@ -58,18 +50,11 @@ export default class MongoDbUrl implements DbUrl {
         return "Using MongoDb authentication Mechanism: DEFAULT";
     }
 
-    public toSave(): string {
-        const url = new URL(this.httpUrl.toString());
-        url.username = "";
-        url.password = "";
-        return url.toString().replace("http:", this.origProtocol);
-    }
-
-    public get protocol() { return this.origProtocol; }
-    public get username() { return this.httpUrl.username; }
-    public get password() { return this.httpUrl.password; }
-    public get hostname() { return this.httpUrl.hostname; }
-    public get pathname() { return this.httpUrl.pathname; }
-    public get port() { return this.httpUrl.port; }
+    public get protocol() { return MongoDbProtocol; }
+    public get username() { return this.params.username ?? ""; }
+    public get password() { return this.params.password ?? ""; }
+    public get hostname() { return this.params.hostname ?? ""; }
+    public get database() { return this.params.database ?? ""; }
+    public get port() { return this.params.port ?? ""; }
 
 }
