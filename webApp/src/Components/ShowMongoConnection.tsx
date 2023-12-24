@@ -26,7 +26,7 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
         setLoading(true);
         setInfo("🕜 Validating connection...");
         try {
-            const newUrl = new MongoDbUrl(MongoDbUrl.BuildUrl({
+            const newUrl = new MongoDbUrl(MongoDbUrl.buildUrl({
                 username,
                 password,
                 hostname,
@@ -65,7 +65,7 @@ export default function ShowMongoConnection(props: { show: ShowConnectionInfo, s
         setLoading(true);
         setInfo("🕜 Testing...");
         try {
-            const newUrl = new MongoDbUrl(MongoDbUrl.BuildUrl({
+            const newUrl = new MongoDbUrl(MongoDbUrl.buildUrl({
                 username,
                 password,
                 hostname,

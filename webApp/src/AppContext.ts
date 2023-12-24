@@ -47,7 +47,7 @@ const defaultConnection = (): MongoDbUrl => {
             console.log("────────────────────────────────────────────");
             console.log(`🌟 MongoDbUrl: use REACT_APP_MONGO...`);
             console.log("────────────────────────────────────────────");
-            return new MongoDbUrl(MongoDbUrl.BuildUrl({
+            return new MongoDbUrl(MongoDbUrl.buildUrl({
                 hostname: process.env.REACT_APP_MONGO_HOST,
                 port: process.env.REACT_APP_MONGO_PORT,
                 database: process.env.REACT_APP_MONGO_DATABASE
@@ -69,7 +69,7 @@ const otherConnections = (): DbUrl[] => {
         console.log("────────────────────────────────────────────");
         console.log(`🌟 PostgreSqlUrl: use REACT_APP_POSTGRE...`);
         console.log("────────────────────────────────────────────");
-        const dbUrl = new PostgreSqlUrl(PostgreSqlUrl.BuildUrl({
+        const dbUrl = new PostgreSqlUrl(PostgreSqlUrl.buildUrl({
             hostname: process.env.REACT_APP_POSTGRE_HOST,
             port: process.env.REACT_APP_POSTGRE_PORT,
             database: process.env.REACT_APP_POSTGRE_DATABASE

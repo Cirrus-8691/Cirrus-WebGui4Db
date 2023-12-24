@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { MainContext } from "./App";
 import DialogError from "./Components/ShowError";
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
@@ -6,16 +6,26 @@ import GetErrorMessage from "./Domain/GetErrorMessage";
 import MongoDbUrl from "./Domain/MongoDbUrl";
 import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
-import { DefaultDatabaseConnection } from "./AppContext";
+import { DatabaseConnections, DefaultDatabaseConnection } from "./AppContext";
+import { DbUrl } from "./Domain/DbUrl";
 
 export default function PageLogin() {
 
     const mainContext = useContext(MainContext);
+
+    const [dbUrl, setDbUrl] = useState<DbUrl>(DefaultDatabaseConnection);
     const [username, setUsername] = useState(DefaultDatabaseConnection.username);
     const [password, setPassword] = useState(DefaultDatabaseConnection.password);
+    const [info, setInfo] = useState(DefaultDatabaseConnection.info());
+
+    useEffect(()=> {
+        setInfo(dbUrl.info())
+    },
+    [ dbUrl ]);
+
     const [error, setError] = useState<unknown>(undefined);
-    const [info, setInfo] = useState("ℹ️ Using MongoDb authentication Mechanism: DEFAULT");
     const [loading, setLoading] = useState(false);
+
 
     const onConnection = async () => {
         mainContext.setError(undefined);
@@ -23,14 +33,14 @@ export default function PageLogin() {
         setLoading(true);
         setInfo("🕜 Validating connection...");
         try {
-            const newUrl = new MongoDbUrl(MongoDbUrl.BuildUrl({
+            const newDbUrl = dbUrl.build({
                 username,
                 password,
                 hostname: DefaultDatabaseConnection.hostname,
                 port: DefaultDatabaseConnection.port,
                 database: DefaultDatabaseConnection.pathname
-            }));
-            const collections = await ValidateConnection(newUrl, mainContext.setAuth);
+            });
+            const collections = await ValidateConnection(newDbUrl, mainContext.setAuth);
             mainContext.setDatabaseRepositories(collections);
             setInfo("");
             setLoading(false);
@@ -57,8 +67,15 @@ export default function PageLogin() {
                                 <Form>
                                     <Form.Group>
                                         <Form.Label>Connect to:</Form.Label>
-                                        <Form.Select disabled>
-                                            <option>🌿 {DefaultDatabaseConnection.toString()}</option>
+                                        <Form.Select onChange={
+                                            (evnt: ChangeEvent<HTMLSelectElement>) => ( setDbUrl(DatabaseConnections[parseInt(evnt.target.value)]))}>
+                                            {
+                                                DatabaseConnections.map((dbUrl: DbUrl, index: number) => (
+                                                    <option key={index} value={index}>
+                                                        {dbUrl.logo()} {dbUrl.toString()}
+                                                    </option >
+                                                ))
+                                            }
                                         </Form.Select>
                                         <br />
                                         <Form.Label>UserName:</Form.Label>

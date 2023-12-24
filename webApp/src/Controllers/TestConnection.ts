@@ -1,4 +1,5 @@
-import MongoDbUrl from "../Domain/DbUrl/MongoDbUrl";
+import { DbUrl } from "../Domain/DbUrl";
+import MongoDbUrl from "../Domain/MongoDbUrl";
 import ApiGateway from "./ApiGateway";
 import { Auth } from "./Auth";
 
@@ -8,7 +9,7 @@ export default async function TestConnection(newUrl: MongoDbUrl) {
         `api/v1/mongo/connection/test?url=${encodeURIComponent(newUrl.toString())}`);
 }
 
-export async function ValidateConnection(newUrl: MongoDbUrl, setAuth: (value: Auth) => void): Promise<string[]> {
+export async function ValidateConnection(newUrl: DbUrl, setAuth: (value: Auth) => void): Promise<string[]> {
     const apiGateway = new ApiGateway();
     const auth = await apiGateway.getAsync<Auth>(
         `api/v1/mongo/connection/auth?url=${encodeURIComponent(newUrl.toString())}`);
