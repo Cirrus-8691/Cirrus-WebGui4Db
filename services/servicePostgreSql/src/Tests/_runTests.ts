@@ -1,5 +1,5 @@
 import { describe,it } from "mocha";
-import TestMongoDb from "./TestMongoDb";
+import TestMongoDb from "./TestPostgreSql";
 
 describe("Tests", () => {
 

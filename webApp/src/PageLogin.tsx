@@ -6,7 +6,7 @@ import GetErrorMessage from "./Domain/GetErrorMessage";
 import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
 import { DatabaseConnections, DefaultDatabaseConnection } from "./AppContext";
-import { DbUrl } from "./Domain/DbUrl";
+import { DbConnect } from "./Domain/DbConnect";
 
 export default function PageLogin() {
 
@@ -70,7 +70,7 @@ export default function PageLogin() {
                                         <Form.Select onChange={
                                             (evnt: ChangeEvent<HTMLSelectElement>) => (setDbUrl(DatabaseConnections[parseInt(evnt.target.value)]))}>
                                             {
-                                                DatabaseConnections.map((dbUrl: DbUrl, index: number) => (
+                                                DatabaseConnections.map((dbUrl: DbConnect, index: number) => (
                                                     <option key={index} value={index}>
                                                         {dbUrl.logo()} {dbUrl.toString()}
                                                     </option >

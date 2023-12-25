@@ -1,9 +1,10 @@
 import DbEntity from "./DbEntity";
 import { QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
+import DbConnect from "./DbConnect";
 
 export default interface Database {
 
-    connect(url: URL): void;
+    connect(dbConnect: DbConnect): void;
 
     test(): Promise<void>;
 

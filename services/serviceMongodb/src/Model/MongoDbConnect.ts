@@ -1,12 +1,13 @@
+import DbConnect from "../../../serviceGenericDatabase/src/Model/DbConnect";
+
 export const MongoDbProtocol = "mongodb:";
 const OtherProtocol = "mongodb+srv:";
 /**
  * https://www.mongodb.com/docs/manual/reference/connection-string/
  */
-export default class MongoDbUrl {
+export default class MongoDbConnect implements DbConnect {
 
-    // http://192.168.232.133:27017/
-    public static Sample = new MongoDbUrl("mongodb://usr:Flin*123@192.168.232.133:27017/Histo");
+    public static Sample = new MongoDbConnect("mongodb://usr:Flin*123@192.168.0.24:27017/Histo");
 
     private readonly origProtocol: string;
     private readonly httpUrl: URL;
@@ -34,7 +35,7 @@ export default class MongoDbUrl {
     public get username() { return this.httpUrl.username; }
     public get password() { return this.httpUrl.password; }
     public get hostname() { return this.httpUrl.hostname; }
-    public get pathname() { return this.httpUrl.pathname; }
+    public get database() { return this.httpUrl.pathname; }
     public get port() { return this.httpUrl.port; }
 
 }

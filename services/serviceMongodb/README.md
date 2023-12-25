@@ -1,2 +1,2 @@
 # Cirrus service MongoDb
-Basic service to access Mongodb
+Service to access Mongodb

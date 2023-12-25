@@ -1,10 +1,10 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
-import { QueryEntityParameters, QueryFindParameters } from "../../../serviceGenericDatabase/src/Domain/QueryParameters";
 import Database from "../../../serviceGenericDatabase/src/Model/Database";
 import DbEntity from "../../../serviceGenericDatabase/src/Model/DbEntity";
+import { QueryEntityParameters, QueryFindParameters } from "../../../serviceGenericDatabase/src/Domain/QueryParameters";
 import DbConnect from "../../../serviceGenericDatabase/src/Model/DbConnect";
 
-export default class MongoDatabase implements Database {
+export default class PostgreSqlDatabase implements Database {
 
     private client: MongoClient | undefined = undefined;
     private dbName = "";

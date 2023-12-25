@@ -1,4 +1,4 @@
-export interface DbUrl {
+export interface DbConnect {
 
     toString(): string;
     logo(): string;
@@ -7,7 +7,7 @@ export interface DbUrl {
 
     repositoriesName() :string;
 
-    build(params: ConnexionDetails) : DbUrl;
+    build(params: ConnexionDetails) : DbConnect;
 
     get protocol(): string;
     get username(): string;

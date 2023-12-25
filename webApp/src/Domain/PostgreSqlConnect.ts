@@ -1,6 +1,6 @@
-import { ConnexionDetails, DbUrl } from "./DbUrl";
+import { ConnexionDetails, DbConnect } from "./DbConnect";
 
-export default class PostgreSqlUrl implements DbUrl {
+export default class PostgreSqlUrl implements DbConnect {
 
     // "Host=192.168.0.30;Database=fred-24;Username=usr;Password=Pwd*175";
     private readonly params: ConnexionDetails;
@@ -9,7 +9,7 @@ export default class PostgreSqlUrl implements DbUrl {
         this.params = params;
     }
 
-    build(params: ConnexionDetails) : DbUrl {
+    build(params: ConnexionDetails) : DbConnect {
         return new PostgreSqlUrl(params);
     }
 

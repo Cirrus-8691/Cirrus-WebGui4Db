@@ -1,7 +1,7 @@
 import { Auth, EmptyAuth } from "./Controllers/Auth";
-import { DbUrl } from "./Domain/DbUrl";
-import MongoDbUrl from "./Domain/MongoDbUrl";
-import PostgreSqlUrl from "./Domain/PostgreSqlUrl";
+import { DbConnect } from "./Domain/DbConnect";
+import MongoDbUrl from "./Domain/MongoDbConnect";
+import PostgreSqlUrl from "./Domain/PostgreSqlConnect";
 
 export default class AppContext {
 
@@ -15,8 +15,8 @@ export default class AppContext {
         this.auth = value
     };
 
-    databaseConnexion: DbUrl = DefaultDatabaseConnection;
-    setDatabaseConnexion = (value: DbUrl) => {
+    databaseConnexion: DbConnect = DefaultDatabaseConnection;
+    setDatabaseConnexion = (value: DbConnect) => {
         this.databaseConnexion = value
     };
 
@@ -58,8 +58,8 @@ const defaultConnection = (): MongoDbUrl => {
 }
 export const DefaultDatabaseConnection = defaultConnection();
 
-const otherConnections = (): DbUrl[] => {
-    const otherUrl: DbUrl[] = [];
+const otherConnections = (): DbConnect[] => {
+    const otherUrl: DbConnect[] = [];
     if (process.env.REACT_APP_POSTGRE_HOST) {
         console.log("────────────────────────────────────────────");
         console.log(`🌟 PostgreSqlUrl: use REACT_APP_POSTGRE...`);
@@ -73,4 +73,4 @@ const otherConnections = (): DbUrl[] => {
     }
     return otherUrl;
 }
-export const DatabaseConnections: DbUrl[] = [DefaultDatabaseConnection, ...otherConnections()];
+export const DatabaseConnections: DbConnect[] = [DefaultDatabaseConnection, ...otherConnections()];

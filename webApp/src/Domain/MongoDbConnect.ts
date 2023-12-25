@@ -1,10 +1,10 @@
-import { ConnexionDetails, DbUrl } from "./DbUrl";
+import { ConnexionDetails, DbConnect } from "./DbConnect";
 
 export const MongoDbProtocol = "mongodb:";
 /**
  * https://www.mongodb.com/docs/manual/reference/connection-string/
  */
-export default class MongoDbUrl implements DbUrl {
+export default class MongoDbUrl implements DbConnect {
 
     private readonly params: ConnexionDetails;
 
@@ -12,7 +12,7 @@ export default class MongoDbUrl implements DbUrl {
         this.params = params;
     }
 
-    build(params: ConnexionDetails) : DbUrl {
+    build(params: ConnexionDetails) : DbConnect {
         return new MongoDbUrl(params);
     }
 

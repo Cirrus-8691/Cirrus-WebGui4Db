@@ -5,7 +5,7 @@ import AppContext, { DefaultDatabaseConnection, DefaultDbRepository, DefaultDbQu
 import { ValidateConnection } from './Controllers/TestConnection';
 import PageLogin from './PageLogin';
 import { Auth, EmptyAuth } from './Controllers/Auth';
-import { DbUrl } from './Domain/DbUrl';
+import { DbConnect } from './Domain/DbConnect';
 
 export const MainContext = React.createContext(new AppContext());
 
@@ -13,7 +13,7 @@ export default function App() {
 
   const [error, setError] = useState<unknown>(undefined);
   const [auth, setAuth] = useState<Auth>(EmptyAuth);
-  const [databaseConnexion, setDatabaseConnexion] = useState<DbUrl>(DefaultDatabaseConnection);
+  const [databaseConnexion, setDatabaseConnexion] = useState<DbConnect>(DefaultDatabaseConnection);
   const [databaseRepositories, setDatabaseRepositories] = useState<string[]>([DefaultDbRepository]);
   const [databaseRepository, setDatabaseRepository] = useState<string>(DefaultDbRepository);
   const [databaseQuery, setDatabaseQuery] = useState<string>(DefaultDbQuery);

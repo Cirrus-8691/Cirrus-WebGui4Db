@@ -1,11 +1,10 @@
 import { assert } from "chai";
-import StubDatabase from "../Domain/StubDatabase";
-import { TestLocalMongoDbUrl } from "./TestMongoDb";
+import StubDatabase from "../Model/StubDatabase";
 
 export default async function TestStubDb() {
     const stubDb = new StubDatabase();
-    
-    const url = TestLocalMongoDbUrl;
+
+    const url = `mongodb://usr:Flin*123@192.168.232.133:27017/Histo`;
     stubDb.connect(new URL(url));
     await stubDb.test();
 

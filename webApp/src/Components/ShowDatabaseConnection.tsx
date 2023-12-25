@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { MainContext } from "../App";
 import { Alert, Button, Form, Offcanvas, Spinner, Stack } from "react-bootstrap";
-import MongoDbUrl from "../Domain/MongoDbUrl";
+import MongoDbUrl from "../Domain/MongoDbConnect";
 import GetErrorMessage from "../Domain/GetErrorMessage";
 import TestConnection, { ValidateConnection } from "../Controllers/TestConnection";
 import { DefaultDatabaseConnection } from "../AppContext";
