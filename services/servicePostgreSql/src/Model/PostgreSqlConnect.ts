@@ -1,41 +1,68 @@
-import DbConnect from "../../../serviceGenericDatabase/src/Model/DbConnect";
+import DbConnect, { ConnexionDetails } from "../../../serviceGenericDatabase/src/Model/DbConnect";
 
-export const MongoDbProtocol = "mongodb:";
-const OtherProtocol = "mongodb+srv:";
-/**
- * https://www.mongodb.com/docs/manual/reference/connection-string/
- */
 export default class PostgreSqlConnect implements DbConnect {
 
-    public static Sample = new PostgreSqlConnect("Host=192.168.0.30;Database=fred-24;Username=usr;Password=Pwd*175");
+    // or 'postgres://username:password@host:port/database'
+    public static Sample = new PostgreSqlConnect("Host=192.168.0.30;Port=5432;Database=fred-24;Username=usr;Password=Pwd*175");
 
-    private readonly origProtocol: string;
-    private readonly httpUrl: URL;
+    private readonly params: ConnexionDetails;
 
     public constructor(url: string) {
-        this.httpUrl = new URL(url);
-        this.origProtocol = this.httpUrl.protocol;
-        if (this.origProtocol !== MongoDbProtocol && this.protocol!==OtherProtocol) {
-            throw new Error(`Unexpected URL protocol! Only protocols: ['${MongoDbProtocol}','${OtherProtocol}'] are managed`);
+        this.params = {
+            hostname: "",
+            port: "",
+            database: "",
+            username: "",
+            password: ""
+        };
+        const tokenEqualValues = url.split(";");
+        for (const tokenEqualValue of tokenEqualValues) {
+            const items = tokenEqualValue.split("=");
+            switch (items[0]) {
+                case "Host": {
+                    this.params.hostname = items[1];
+                    break;
+                }
+                case "Port": {
+                    this.params.port = items[1];
+                    break;
+                }
+                case "Database": {
+                    this.params.database = items[1];
+                    break;
+                }
+                case "Username": {
+                    this.params.username = items[1];
+                    break;
+                }
+                case "Password": {
+                    this.params.password = items[1];
+                    break;
+                }
+            }
         }
-        
-        this.httpUrl.protocol = "http";
     }
 
-    public toString() : string {
-        return this.httpUrl.toString().replace("http:", this.origProtocol);
+    toString(): string {
+        const userPassword = this.params.username
+            ? `Username=${this.params.username};${this.params.password
+                ? `Password=${this.params.password};`
+                : ""}`
+            : "";
+        const port = this.params.port
+            ? `Port=${this.params.port};`
+            : "";
+        const database = (this.params.database && this.params.database !== "")
+            ? `Database=${this.params.database};`
+            : "";
+        return `Host=${this.params.hostname};${port}${database}${userPassword}`;
     }
 
-    public toUrl() : URL {
-        return new URL(this.toString() );
-    }
-
-    public get protocol() { return this.origProtocol; }
-
-    public get username() { return this.httpUrl.username; }
-    public get password() { return this.httpUrl.password; }
-    public get hostname() { return this.httpUrl.hostname; }
-    public get database() { return this.httpUrl.pathname; }
-    public get port() { return this.httpUrl.port; }
+    public get protocol() { return ""; }
+    public get username() { return this.params.username ?? ""; }
+    public get password() { return this.params.password ?? ""; }
+    public get hostname() { return this.params.hostname ?? ""; }
+    public get database() { return this.params.database ?? ""; }
+    public get port() { return this.params.port ?? ""; }
 
 }

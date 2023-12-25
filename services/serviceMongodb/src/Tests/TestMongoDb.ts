@@ -1,6 +1,7 @@
 import { assert } from "chai";
 
 import MongoDatabase from "../Model/MongoDatabase";
+import MongoDbConnect from "../Model/MongoDbConnect";
 
 export const TestLocalMongoDbUser = "usr";
 export const TestLocalMongoDbName = "Histo";
@@ -9,8 +10,8 @@ export const TestLocalMongoDbUrl = `mongodb://${TestLocalMongoDbUser}:Flin*123@1
 export default async function TestMongoDb() {
     const db = new MongoDatabase();
 
-    const url = TestLocalMongoDbUrl;
-    db.connect(new URL(url));
+    const dbConnect = new MongoDbConnect(TestLocalMongoDbUrl);
+    db.connect(dbConnect);
     await db.test();
 
     const collections = await db.getRepositories();

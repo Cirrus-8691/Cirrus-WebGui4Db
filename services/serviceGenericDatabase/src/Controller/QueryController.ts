@@ -5,7 +5,7 @@ import GetErrorMessage from "./GetErrorMessage";
 
 export default class QueryController {
 
-    protected static RouteBeginning = "/api/v1/";
+    public static RouteBeginning = "/api/v1/";
 
     protected readonly server: HttpFastifyServer;
     protected readonly db: Database;

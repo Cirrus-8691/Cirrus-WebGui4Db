@@ -9,3 +9,11 @@ export default interface DbConnect {
     get database(): string;
     get port(): string;
 }
+
+export interface ConnexionDetails {
+    hostname?: string;
+    port?: string;
+    database?: string;
+    username?: string;
+    password?: string;
+}

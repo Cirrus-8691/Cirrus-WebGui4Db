@@ -26,10 +26,6 @@ export default class MongoDbConnect implements DbConnect {
         return this.httpUrl.toString().replace("http:", this.origProtocol);
     }
 
-    public toUrl() : URL {
-        return new URL(this.toString() );
-    }
-
     public get protocol() { return this.origProtocol; }
 
     public get username() { return this.httpUrl.username; }

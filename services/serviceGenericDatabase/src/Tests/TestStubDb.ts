@@ -1,11 +1,12 @@
 import { assert } from "chai";
 import StubDatabase from "../Model/StubDatabase";
+import StubConnect from "../Model/StubDbConnect";
 
 export default async function TestStubDb() {
     const stubDb = new StubDatabase();
 
     const url = `mongodb://usr:Flin*123@192.168.232.133:27017/Histo`;
-    stubDb.connect(new URL(url));
+    stubDb.connect(new StubConnect(url));
     await stubDb.test();
 
     const collections = await stubDb.getRepositories();

@@ -1,6 +1,7 @@
 import Database from "./Database";
 import DbEntity from "./DbEntity";
 import { QueryFindParameters, QueryEntityParameters, BodyEntityParameters } from "../Domain/QueryParameters";
+import DbConnect from "./DbConnect";
 
 export default class StubDatabase implements Database {
 
@@ -11,7 +12,7 @@ export default class StubDatabase implements Database {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    connect(url: URL): void {
+    connect(dbConnect: DbConnect): void {
         // nothing todo
     }
 

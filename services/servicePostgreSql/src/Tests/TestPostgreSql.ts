@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import PostgreSqlDatabase from "../Model/PostgreSqlDatabase";
+import PostgreSqlConnect from "../Model/PostgreSqlConnect";
 
 export const TestLocalPostgreDbUser = "usr";
 export const TestLocalPostgreDbName = "Histo";
@@ -8,8 +9,8 @@ export const TestLocalPostgreDbUrl = `"Host=192.168.0.30;Database=${TestLocalPos
 export default async function TestPostgreSqlDb() {
     const db = new PostgreSqlDatabase();
 
-    const connectString = TestLocalPostgreDbUrl;
-    db.connect(connectString, TestLocalPostgreDbName);
+    const dbConnect = new PostgreSqlConnect(TestLocalPostgreDbUrl);
+    db.connect(dbConnect);
     await db.test();
 
     const collections = await db.getRepositories();

@@ -1,16 +1,22 @@
 import { assert } from "chai";
+import Service from "../../../serviceGenericDatabase/src/Service";
+import QueryController from "../../../serviceGenericDatabase/src/Controller/QueryController";
 import { TestLocalMongoDbName, TestLocalMongoDbUrl, TestLocalMongoDbUser } from "./TestMongoDb";
 import { Auth } from "../Domain/JwToken";
-import Service from "../../../serviceGenericDatabase/src/Service";
-import StubDatabase from "../Domain/StubDatabase";
-import QueryController from "../../../serviceGenericDatabase/src/Controller/QueryController";
-
+import StubDatabase from "../../../serviceGenericDatabase/src/Model/StubDatabase";
+import HttpFastifyServer from "../../../serviceGenericDatabase/src/HttpFastifyServer";
+import Database from "../../../serviceGenericDatabase/src/Model/Database";
+import MongoQueryController from "../Controller/MongoQueryController";
 
 export const TestServiceUrl = "http://localhost:3000/";
 
 export default async function TestService(): Promise<void> {
 
-    const service = new Service(new URL(TestServiceUrl), false, new StubDatabase());
+    const service = new Service(
+        new URL(TestServiceUrl), 
+        false, 
+        new StubDatabase(),
+        (server: HttpFastifyServer, db : Database) => (new MongoQueryController(server, db )));
     try {
         let url = QueryController.RouteBeginning + "mongo/connection/test"
             + "?url=" + encodeURIComponent(TestLocalMongoDbUrl);
