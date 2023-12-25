@@ -11,11 +11,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "start": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./serviceMongodb/src/Main.ts",
-    "service-mongo": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./serviceMongodb/src/Main.ts",
-    "service-postgre": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./servicePostgreSql/src/Main.ts",
+    "start": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./serviceMongodb/Main.ts",
+    "service-mongo": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./serviceMongodb/Main.ts",
+    "service-postgre": "SERVICE_HOST=\"127.0.0.1\" SERVICE_PORT=4000 ts-node ./servicePostgreSql/Main.ts",
     "lint": "eslint ./src --ext .ts",
-    "test": "mocha --require ts-node/register --extensions ts,tsx --timeout 20000 ./serviceMongodb/src/Tests/_runTests.ts"
+    "test": "mocha --require ts-node/register --extensions ts,tsx --timeout 20000 ./serviceMongodb/Tests/_runTests.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
