@@ -1,9 +1,9 @@
 
 import { FastifyRequest } from "fastify";
 import jwt from 'jsonwebtoken';
-import { HttpHeadersAuthStartWith } from "../../../serviceGenericDatabase/src/HttpFastifyServer";
+import { HttpHeadersAuthStartWith } from "../../serviceGenericDatabase/HttpFastifyServer";
 import PostgreSqlConnect from "../Model/PostgreSqlConnect";
-import { LifeSpanSecond, Secret } from "../../../serviceGenericDatabase/src/Domain/LifeSpanSecond";
+import { LifeSpanSecond, Secret } from "../../serviceGenericDatabase/Domain/LifeSpanSecond";
 
 export interface Auth {
     accessToken: string;

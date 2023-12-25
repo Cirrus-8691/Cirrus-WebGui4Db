@@ -1,4 +1,4 @@
-import DbConnect from "../../../serviceGenericDatabase/src/Model/DbConnect";
+import DbConnect from "../../serviceGenericDatabase/Model/DbConnect";
 
 export const MongoDbProtocol = "mongodb:";
 const OtherProtocol = "mongodb+srv:";

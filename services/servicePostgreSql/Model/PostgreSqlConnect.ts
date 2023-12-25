@@ -1,4 +1,4 @@
-import DbConnect, { ConnexionDetails } from "../../../serviceGenericDatabase/src/Model/DbConnect";
+import DbConnect, { ConnexionDetails } from "../../serviceGenericDatabase/Model/DbConnect";
 
 export default class PostgreSqlConnect implements DbConnect {
 
