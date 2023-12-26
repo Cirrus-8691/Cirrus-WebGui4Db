@@ -109,7 +109,8 @@ export default class PostgreSqlDatabase implements Database {
             for (let index = 0; index < columnsList.length; index++) {
                 set.push(`${columnsList[index]}=(${valuesList[index]})`);
             }
-            const query = `UPDATE "${tableName}" SET ${set.join(",")} WHERE "${indexColumn}"='${doc[indexColumn]}'`;
+            values.push(doc[indexColumn]);
+            const query = `UPDATE "${tableName}" SET ${set.join(",")} WHERE "${indexColumn}"=($${values.length})`;
             const result = await this.client.query(query, values);
             return result !== undefined;
         }
@@ -122,8 +123,9 @@ export default class PostgreSqlDatabase implements Database {
         if (this.client) {
             const tableName = parameters.collection;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
-            const query = `DELETE FROM "${tableName}" WHERE "${indexColumn}"='${parameters._id ?? ""}'`;
-            const result = await this.client.query(query);
+            const values: string[] = [parameters._id ?? ""];
+            const query = `DELETE FROM "${tableName}" WHERE "${indexColumn}"=($1)`;
+            const result = await this.client.query(query, values);
             return result.rowCount !== null && result.rowCount >= 1;
         }
         else {
