@@ -13,10 +13,10 @@ export const TestServiceUrl = "http://localhost:3000/";
 export default async function TestServiceMongo(): Promise<void> {
 
     const service = new Service(
-        new URL(TestServiceUrl), 
-        false, 
+        new URL(TestServiceUrl),
+        false,
         new StubDatabase(),
-        (server: HttpFastifyServer, db : Database) => (new MongoQueryController(server, db )));
+        (server: HttpFastifyServer, db: Database) => (new MongoQueryController(server, db)));
     try {
         let url = QueryController.RouteBeginning + "mongo/connection/test"
             + "?url=" + encodeURIComponent(TestLocalMongoDbUrl);
@@ -29,18 +29,18 @@ export default async function TestServiceMongo(): Promise<void> {
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const auth = JSON.parse(response.body) as Auth;
         const accessToken = auth.accessToken;
-        assert.isTrue(accessToken!=="");
-        assert.isTrue(auth.userName===TestLocalMongoDbUser);
-        assert.isTrue(auth.dbName===TestLocalMongoDbName);
-        assert.isTrue(auth.dbProvider!=="");
+        assert.isTrue(accessToken !== "");
+        assert.isTrue(auth.userName === TestLocalMongoDbUser);
+        assert.isTrue(auth.dbName === TestLocalMongoDbName);
+        assert.isTrue(auth.dbProvider !== "");
 
-        url = QueryController.RouteBeginning + "mongo/entites";
+        url = QueryController.RouteBeginning + "mongo/repositories";
         response = await service.Server.injectGET(url, accessToken);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const collections = JSON.parse(response.body);
         const collectionName = collections[0];
 
-        url = QueryController.RouteBeginning + "mongo/entites"
+        url = QueryController.RouteBeginning + "mongo/entities"
             + "?from=" + encodeURIComponent(collectionName)
             + "&what=" + encodeURIComponent("{}");
         response = await service.Server.injectGET(url, accessToken);

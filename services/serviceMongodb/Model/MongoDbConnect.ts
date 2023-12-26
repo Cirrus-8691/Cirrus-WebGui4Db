@@ -15,14 +15,14 @@ export default class MongoDbConnect implements DbConnect {
     public constructor(url: string) {
         this.httpUrl = new URL(url);
         this.origProtocol = this.httpUrl.protocol;
-        if (this.origProtocol !== MongoDbProtocol && this.protocol!==OtherProtocol) {
+        if (this.origProtocol !== MongoDbProtocol && this.protocol !== OtherProtocol) {
             throw new Error(`Unexpected URL protocol! Only protocols: ['${MongoDbProtocol}','${OtherProtocol}'] are managed`);
         }
-        
+
         this.httpUrl.protocol = "http";
     }
 
-    public toString() : string {
+    public toString(): string {
         return this.httpUrl.toString().replace("http:", this.origProtocol);
     }
 
@@ -31,7 +31,7 @@ export default class MongoDbConnect implements DbConnect {
     public get username() { return this.httpUrl.username; }
     public get password() { return this.httpUrl.password; }
     public get hostname() { return this.httpUrl.hostname; }
-    public get database() { return this.httpUrl.pathname; }
+    public get database() { return this.httpUrl.pathname.replace("/", ""); }
     public get port() { return this.httpUrl.port; }
 
 }
