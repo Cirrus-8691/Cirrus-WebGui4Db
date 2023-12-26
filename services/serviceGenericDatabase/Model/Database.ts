@@ -4,7 +4,7 @@ import DbConnect from "./DbConnect";
 
 export default interface Database {
 
-    connect(dbConnect: DbConnect): void;
+    connect(dbConnect: DbConnect): Promise<void>;
 
     test(): Promise<void>;
 

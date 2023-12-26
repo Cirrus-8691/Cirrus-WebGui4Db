@@ -1,4 +1,4 @@
-import postgres from 'postgres'
+import { Client } from 'pg';
 
 import Database from "../../serviceGenericDatabase/Model/Database";
 import DbEntity from "../../serviceGenericDatabase/Model/DbEntity";
@@ -7,21 +7,22 @@ import { QueryEntityParameters, QueryFindParameters } from "../../serviceGeneric
 
 export default class PostgreSqlDatabase implements Database {
 
-    private sql: postgres.Sql | undefined = undefined;
+    private client: Client | undefined = undefined;
 
-    connect(dbConnect: DbConnect): void {
-        this.sql = postgres({
+    async connect(dbConnect: DbConnect): Promise<void> {
+        this.client = new Client({
             host: dbConnect.hostname,
             port: dbConnect.port ? parseInt(dbConnect.port) : undefined,
-            db: dbConnect.database,
-            username: dbConnect.username,
+            database: dbConnect.database,
+            user: dbConnect.username,
             password: dbConnect.password
         });
+        await this.client.connect();
     }
 
     async test(): Promise<void> {
-        if (this.sql) {
-            await this.sql`SELECT 1`
+        if (this.client) {
+            await this.client.query("SELECT 1");
         }
         else {
             throw new Error("Undefined MongoClient URL")
@@ -29,13 +30,9 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     async getRepositories(): Promise<string[]> {
-        if (this.sql) {
-            const tablenames = await this.sql<({ table_name: string } | undefined)[]>`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`;
-            if (tablenames) {
-                return tablenames.map(obj => obj?.table_name ?? "");
-            }
-            return [];
-
+        if (this.client) {
+            const tablenames = await this.client.query<{ table_name: string }>(`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`);
+            return tablenames.rows.map(obj => obj?.table_name ?? "");
         }
         else {
             throw new Error("Undefined MongoClient URL")
@@ -43,11 +40,11 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
-        if (this.sql) {
+        if (this.client) {
             const tableName = parameters.collection;
-            const data = await this.sql`SELECT * FROM ${this.sql(tableName)} WHERE ${this.sql(parameters.what)}`;
+            const data = await this.client.query(`SELECT * FROM ${tableName} WHERE ${parameters.what}`);
             if (data) {
-                return data;
+                return data.rows;
             }
             return [];
         }
@@ -56,11 +53,30 @@ export default class PostgreSqlDatabase implements Database {
         }
     }
 
+    private columnsData(doc: DbEntity): {
+        values: string[];
+        columnsList: string[];
+        valuesList: string[];
+    } {
+        const values: string[] = [];
+        const columnsList: string[] = [];
+        const valuesList: string[] = [];
+        let idCol = 1;
+        for (const key in doc) {
+            columnsList.push(key);
+            values.push(doc[key]);
+            valuesList.push("$" + idCol);
+            idCol++;
+        }
+        return { values, columnsList, valuesList };
+    }
+
     async insertEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
-        if (this.sql) {
+        if (this.client) {
             const tableName = parameters.collection;
-            const result = await this.sql`INSERT INTO ${this.sql(tableName)} ${this.sql(doc)}`
-            return result !== undefined;
+            const { values, columnsList, valuesList } = this.columnsData(doc);
+            const result = await this.client.query(`INSERT INTO ${tableName}(${columnsList.join(",")}) VALUES (${valuesList.join(",")}) RETURNING *`, values);
+            return result.rowCount !== null && result.rowCount >= 1;
         }
         else {
             throw new Error("Undefined PostgreSql instance")
@@ -68,17 +84,14 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     async getPrimaryIndexOf(tableName: string): Promise<string> {
-        if (this.sql) {
-            const columnNames = await this.sql<({ column_name: string } | undefined)[]>`SELECT c.column_name
+        if (this.client) {
+            const columnNames = await this.client.query<{ column_name: string }>(`SELECT c.column_name
                 FROM information_schema.table_constraints tc 
                 JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_name) 
                 JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema
                 AND tc.table_name = c.table_name AND ccu.column_name = c.column_name
-                WHERE tc.constraint_type = 'PRIMARY KEY' AND tc.table_name = '${tableName}'`;
-            if (columnNames) {
-                return columnNames[0]?.column_name ?? "";
-            }
-            return "";
+                WHERE tc.constraint_type = 'PRIMARY KEY' AND tc.table_name = '${tableName}'`);
+            return columnNames.rows[0]?.column_name ?? "";
         }
         else {
             throw new Error("Undefined PostgreSql instance")
@@ -86,10 +99,15 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     async updateEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
-        if (this.sql) {
+        if (this.client) {
             const tableName = parameters.collection;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
-            const result = await this.sql`UPDATE ${tableName} SET ${this.sql(doc)} WHERE ${indexColumn}=${doc[indexColumn]}`
+            const { values, columnsList, valuesList } = this.columnsData(doc);
+            const set: string[] = [];
+            for (let index = 0; index < columnsList.length; index++) {
+                set.push(columnsList[index] + "=" + valuesList[index]);
+            }
+            const result = await this.client.query(`UPDATE ${tableName} SET ${set.join(",")} WHERE ${indexColumn}=${doc[indexColumn]}`, values);
             return result !== undefined;
         }
         else {
@@ -98,11 +116,11 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     async deleteEntity(parameters: QueryEntityParameters): Promise<boolean> {
-        if (this.sql) {
+        if (this.client) {
             const tableName = parameters.collection;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
-            const result = await this.sql`DELETE FROM ${tableName} WHERE ${indexColumn}=${parameters._id ?? ""}`
-            return result !== undefined;
+            const result = await this.client.query(`DELETE FROM ${tableName} WHERE ${indexColumn}=${parameters._id ?? ""}`);
+            return result.rowCount !== null && result.rowCount >= 1;
         }
         else {
             throw new Error("Undefined PostgreSql instance")
@@ -110,8 +128,8 @@ export default class PostgreSqlDatabase implements Database {
     }
 
     dispose(): void {
-        if (this.sql) {
-            this.sql.end();
+        if (this.client) {
+            this.client.end();
         }
     }
 }

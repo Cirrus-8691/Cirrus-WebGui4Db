@@ -9,7 +9,7 @@ export default class MongoDatabase implements Database {
     private client: MongoClient | undefined = undefined;
     private dbName = "";
 
-    connect(dbConnect: DbConnect): void {
+    async connect(dbConnect: DbConnect):  Promise<void> {
         this.client = new MongoClient(dbConnect.toString() + "?authMechanism=DEFAULT");
         this.dbName = dbConnect.database;
     }
