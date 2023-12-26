@@ -3,7 +3,7 @@ import PostgreSqlDatabase from "../servicePostgreSql/Model/PostgreSqlDatabase";
 import PostgreSqlConnect from "../servicePostgreSql/Model/PostgreSqlConnect";
 
 export const TestLocalPostgreDbUser = "usr";
-export const TestLocalPostgreDbName = "Histo";
+export const TestLocalPostgreDbName = "fred-24";
 export const TestLocalPostgreDbUrl = `"Host=192.168.0.30;Database=${TestLocalPostgreDbName};Username=${TestLocalPostgreDbUser};Password=Pwd*175`;
 
 export default async function TestPostgreSql() {

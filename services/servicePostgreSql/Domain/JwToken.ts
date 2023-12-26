@@ -19,7 +19,7 @@ export class JwToken {
             accessToken: JwToken.createTokens(mongoUrl.toString()),
             userName: mongoUrl.username,
             dbName: mongoUrl.database,
-            dbProvider: "MongoDb"
+            dbProvider: "PostgreSQL"
         }
     }
 
