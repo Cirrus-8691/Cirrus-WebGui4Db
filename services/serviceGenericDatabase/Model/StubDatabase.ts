@@ -12,7 +12,7 @@ export default class StubDatabase implements Database {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    connect(dbConnect: DbConnect): void {
+    async connect(dbConnect: DbConnect): Promise<void> {
         // nothing todo
     }
 

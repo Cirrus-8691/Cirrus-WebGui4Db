@@ -42,7 +42,8 @@ export default class PostgreSqlDatabase implements Database {
     async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
         if (this.client) {
             const tableName = parameters.collection;
-            const data = await this.client.query(`SELECT * FROM ${tableName} WHERE ${parameters.what}`);
+            const query = `SELECT * FROM "${tableName}" WHERE ${parameters.what}`;
+            const data = await this.client.query(query);
             if (data) {
                 return data.rows;
             }
@@ -63,7 +64,7 @@ export default class PostgreSqlDatabase implements Database {
         const valuesList: string[] = [];
         let idCol = 1;
         for (const key in doc) {
-            columnsList.push(key);
+            columnsList.push(`"${key}"`);
             values.push(doc[key]);
             valuesList.push("$" + idCol);
             idCol++;
@@ -75,7 +76,8 @@ export default class PostgreSqlDatabase implements Database {
         if (this.client) {
             const tableName = parameters.collection;
             const { values, columnsList, valuesList } = this.columnsData(doc);
-            const result = await this.client.query(`INSERT INTO ${tableName}(${columnsList.join(",")}) VALUES (${valuesList.join(",")}) RETURNING *`, values);
+            const query = `INSERT INTO "${tableName}"(${columnsList.join(",")}) VALUES (${valuesList.join(",")}) RETURNING *`;
+            const result = await this.client.query(query, values);
             return result.rowCount !== null && result.rowCount >= 1;
         }
         else {
@@ -105,9 +107,10 @@ export default class PostgreSqlDatabase implements Database {
             const { values, columnsList, valuesList } = this.columnsData(doc);
             const set: string[] = [];
             for (let index = 0; index < columnsList.length; index++) {
-                set.push(columnsList[index] + "=" + valuesList[index]);
+                set.push(`${columnsList[index]}=(${valuesList[index]})`);
             }
-            const result = await this.client.query(`UPDATE ${tableName} SET ${set.join(",")} WHERE ${indexColumn}=${doc[indexColumn]}`, values);
+            const query = `UPDATE "${tableName}" SET ${set.join(",")} WHERE "${indexColumn}"='${doc[indexColumn]}'`;
+            const result = await this.client.query(query, values);
             return result !== undefined;
         }
         else {
@@ -119,7 +122,8 @@ export default class PostgreSqlDatabase implements Database {
         if (this.client) {
             const tableName = parameters.collection;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
-            const result = await this.client.query(`DELETE FROM ${tableName} WHERE ${indexColumn}=${parameters._id ?? ""}`);
+            const query = `DELETE FROM "${tableName}" WHERE "${indexColumn}"='${parameters._id ?? ""}'`;
+            const result = await this.client.query(query);
             return result.rowCount !== null && result.rowCount >= 1;
         }
         else {

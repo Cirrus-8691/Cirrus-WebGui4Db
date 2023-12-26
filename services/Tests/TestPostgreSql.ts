@@ -17,16 +17,16 @@ export default async function TestPostgreSql() {
         assert.isTrue(tables.length > 0);
 
         const entityUser = { Id: "World", Secret: "abc", Profil: "User", Authentication:"password" };
-        const findUser = `Id='${entityUser.Id}'`;
+        const findUser = `"Id"='${entityUser.Id}'`;
 
         let entities = await db.findOnRepository(
             {
-                collection: tables[0],
+                collection: tables[1],
                 what: findUser,
                 skip: "0",
                 limit: "10"
             });
-        assert.isUndefined(entities);
+        assert.isEmpty(entities);
     
         let ok = await db.insertEntity(
             { collection: tables[1] },
@@ -42,7 +42,7 @@ export default async function TestPostgreSql() {
         });
         assert.isNotEmpty(entities);
         assert.equal(1, entities.length);
-        assert.equal(entityUser.Id, entities[1].Id);
+        assert.equal(entityUser.Id, entities[0].Id);
 
         const docXyz = { Id: "World", Secret: "123" };
         ok = await db.updateEntity(
@@ -60,10 +60,10 @@ export default async function TestPostgreSql() {
         });
         assert.isNotEmpty(entities);
         assert.equal(1, entities.length);
-        assert.equal(docXyz.Secret, entities[1].Secret);
+        assert.equal(docXyz.Secret, entities[0].Secret);
 
         ok = await db.deleteEntity({
-            collection: tables[0],
+            collection: tables[1],
             _id: entityUser.Id
         });
         assert.isTrue(ok);
