@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import StubDatabase from "../Model/StubDatabase";
-import StubConnect from "../Model/StubDbConnect";
+import StubDatabase from "../serviceGenericDatabase/Model/StubDatabase";
+import StubConnect from "../serviceGenericDatabase/Model/StubDbConnect";
 
 export default async function TestStubDb() {
     const stubDb = new StubDatabase();

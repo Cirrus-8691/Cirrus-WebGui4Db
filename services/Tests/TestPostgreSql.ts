@@ -1,12 +1,12 @@
 import { assert } from "chai";
-import PostgreSqlDatabase from "../Model/PostgreSqlDatabase";
-import PostgreSqlConnect from "../Model/PostgreSqlConnect";
+import PostgreSqlDatabase from "../servicePostgreSql/Model/PostgreSqlDatabase";
+import PostgreSqlConnect from "../servicePostgreSql/Model/PostgreSqlConnect";
 
 export const TestLocalPostgreDbUser = "usr";
 export const TestLocalPostgreDbName = "Histo";
 export const TestLocalPostgreDbUrl = `"Host=192.168.0.30;Database=${TestLocalPostgreDbName};Username=${TestLocalPostgreDbUser};Password=Pwd*175`;
 
-export default async function TestPostgreSqlDb() {
+export default async function TestPostgreSql() {
     const db = new PostgreSqlDatabase();
 
     const dbConnect = new PostgreSqlConnect(TestLocalPostgreDbUrl);
