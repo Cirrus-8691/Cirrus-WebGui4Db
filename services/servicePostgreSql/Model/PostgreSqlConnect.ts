@@ -3,7 +3,7 @@ import DbConnect, { ConnexionDetails } from "../../serviceGenericDatabase/Model/
 export default class PostgreSqlConnect implements DbConnect {
 
     // or 'postgres://username:password@host:port/database'
-    public static Sample = new PostgreSqlConnect("Host=192.168.0.30;Port=5432;Database=fred-24;Username=usr;Password=Pwd*175");
+    public static Sample = new PostgreSqlConnect("Host=192.168.0.24;Port=5432;Database=fred-24;Username=usr;Password=Pwd*175");
 
     private readonly params: ConnexionDetails;
 

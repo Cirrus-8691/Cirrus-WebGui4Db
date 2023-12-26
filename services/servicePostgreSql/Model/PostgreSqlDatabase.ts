@@ -13,7 +13,7 @@ export default class PostgreSqlDatabase implements Database {
         this.sql = postgres({
             host: dbConnect.hostname,
             port: dbConnect.port ? parseInt(dbConnect.port) : undefined,
-            db: dbConnect.hostname,
+            db: dbConnect.database,
             username: dbConnect.username,
             password: dbConnect.password
         });
@@ -30,7 +30,7 @@ export default class PostgreSqlDatabase implements Database {
 
     async getRepositories(): Promise<string[]> {
         if (this.sql) {
-            const tablenames = await this.sql<({ table_name: string } | undefined)[]>`SELECT table_name FROM information_schema.tables WHERE table_schema="public"`;
+            const tablenames = await this.sql<({ table_name: string } | undefined)[]>`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`;
             if (tablenames) {
                 return tablenames.map(obj => obj?.table_name ?? "");
             }
@@ -45,7 +45,7 @@ export default class PostgreSqlDatabase implements Database {
     async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
         if (this.sql) {
             const tableName = parameters.collection;
-            const data = await this.sql`SELECT * FROM ${tableName} WHERE ${parameters.what}`;
+            const data = await this.sql`SELECT * FROM ${this.sql(tableName)} WHERE ${this.sql(parameters.what)}`;
             if (data) {
                 return data;
             }
@@ -59,7 +59,7 @@ export default class PostgreSqlDatabase implements Database {
     async insertEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
         if (this.sql) {
             const tableName = parameters.collection;
-            const result = await this.sql`INSERT INTO ${tableName} ${this.sql(doc)}`
+            const result = await this.sql`INSERT INTO ${this.sql(tableName)} ${this.sql(doc)}`
             return result !== undefined;
         }
         else {

@@ -4,81 +4,81 @@ import PostgreSqlConnect from "../servicePostgreSql/Model/PostgreSqlConnect";
 
 export const TestLocalPostgreDbUser = "usr";
 export const TestLocalPostgreDbName = "fred-24";
-export const TestLocalPostgreDbUrl = `"Host=192.168.0.30;Database=${TestLocalPostgreDbName};Username=${TestLocalPostgreDbUser};Password=Pwd*175`;
+export const TestLocalPostgreDbUrl = `Host=192.168.0.24;Port=5432;Database=${TestLocalPostgreDbName};Username=${TestLocalPostgreDbUser};Password=Pwd*175`;
 
 export default async function TestPostgreSql() {
     const db = new PostgreSqlDatabase();
+    try {
+        const dbConnect = new PostgreSqlConnect(TestLocalPostgreDbUrl);
+        db.connect(dbConnect);
+        await db.test();
 
-    const dbConnect = new PostgreSqlConnect(TestLocalPostgreDbUrl);
-    db.connect(dbConnect);
-    await db.test();
+        const tables = await db.getRepositories();
+        assert.isTrue(tables.length > 0);
 
-    const collections = await db.getRepositories();
-    assert.isTrue(collections.length > 0);
+        const entityUser = { Id: "World", Secret: "abc", Profil: "User", Authentication:"password" };
+        const findUser = `Id='${entityUser.Id}'`;
 
-    let documents = await db.findOnRepository(
-        {
-            collection: collections[0],
-            what: "{}",
+        let entities = await db.findOnRepository(
+            {
+                collection: tables[0],
+                what: findUser,
+                skip: "0",
+                limit: "10"
+            });
+        assert.isUndefined(entities);
+    
+        let ok = await db.insertEntity(
+            { collection: tables[1] },
+            entityUser
+        );
+        assert.isTrue(ok);
+
+        entities = await db.findOnRepository({
+            collection: tables[1],
+            what: findUser,
             skip: "0",
-            limit: "10"
+            limit: "1"
         });
-    assert.isDefined(documents);
+        assert.isNotEmpty(entities);
+        assert.equal(1, entities.length);
+        assert.equal(entityUser.Id, entities[1].Id);
 
-    const docWorld = { Hello: "World" };
-    const findWorld = JSON.stringify(docWorld);
-    let ok = await db.insertEntity(
-        { collection: collections[0] },
-        { document: docWorld }
-    );
-    assert.isTrue(ok);
+        const docXyz = { Id: "World", Secret: "123" };
+        ok = await db.updateEntity(
+            {
+                collection: tables[1],
+            },
+            docXyz);
+        assert.isTrue(ok);
 
-    documents = await db.findOnRepository({
-        collection: collections[0],
-        what: findWorld,
-        skip: "0",
-        limit: "1"
-    });
-    assert.isNotEmpty(documents);
-    assert.equal(1, documents.length);
-    assert.equal(docWorld.Hello, documents[0].Hello);
-
-    const docXyz= { Hello: "Xyz" };
-    const findXyz = JSON.stringify(docXyz);
-    ok = await db.updateEntity(
-        {
-            collection: collections[0],
-            _id: documents[0]._id
-        },
-        {
-            document: docXyz
+        entities = await db.findOnRepository({
+            collection: tables[1],
+            what: findUser,
+            skip: "0",
+            limit: "1"
         });
-    assert.isTrue(ok);
+        assert.isNotEmpty(entities);
+        assert.equal(1, entities.length);
+        assert.equal(docXyz.Secret, entities[1].Secret);
 
-    documents = await db.findOnRepository({
-        collection: collections[0],
-        what: findXyz,
-        skip: "0",
-        limit: "1"
-    });
-    assert.isNotEmpty(documents);
-    assert.equal(1, documents.length);
-    assert.equal(docXyz.Hello, documents[0].Hello);
+        ok = await db.deleteEntity({
+            collection: tables[0],
+            _id: entityUser.Id
+        });
+        assert.isTrue(ok);
 
-    ok = await db.deleteEntity({
-        collection: collections[0],
-        _id: documents[0]._id
-    });
-    assert.isTrue(ok);
+        entities = await db.findOnRepository({
+            collection: tables[1],
+            what: findUser,
+            skip: "0",
+            limit: "1"
+        });
+        assert.isEmpty(entities);
+        assert.equal(0, entities.length);
 
-    documents = await db.findOnRepository({
-        collection: collections[0],
-        what: findXyz,
-        skip: "0",
-        limit: "1"
-    });
-    assert.isEmpty(documents);
-    assert.equal(0, documents.length);
-
-    db.dispose();
+    }
+    finally {
+        db.dispose();
+    }
 }

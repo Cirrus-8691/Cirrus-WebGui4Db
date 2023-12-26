@@ -3,7 +3,7 @@ import TestMongoDb from "./TestMongoDb";
 import TestServiceMongo from "./TestServiceMongo";
 import TestStubDb from "./TestStubDb";
 import TestServicePostgre from "./TestServicePostgre";
-//import TestPostgreSql from "./TestPostgreSql";
+import TestPostgreSql from "./TestPostgreSql";
 
 describe("Tests", () => {
 
@@ -12,7 +12,7 @@ describe("Tests", () => {
         it(`Test Service Mongo`, TestServiceMongo);
         it(`Test MongoDb `, TestMongoDb);
         it(`Test Service ostgre`, TestServicePostgre);
-        //  it(`Test PostgreSql `,    TestPostgreSql);
+        it(`Test PostgreSql `, TestPostgreSql);
     });
 
 });
