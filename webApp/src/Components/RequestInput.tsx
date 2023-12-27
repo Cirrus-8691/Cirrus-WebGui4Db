@@ -1,28 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { MainContext } from "../App";
 import { Button, Card, Container, Dropdown, Form, Pagination, Spinner, Stack } from "react-bootstrap";
-import { DefaultDbQuery } from "../AppContext";
 import { RunQueryFind } from "../Controllers/RunQueries";
 import DbDocument from "../Domain/DbDocument";
 import { QueryFindParameters } from "../Domain/QueryParameters";
+import { GetQueries } from "../Domain/GetQueries";
 
 const DefaultLinesPerPages = 16;
-
-const GetQueries = (serviceName : string): string[] => {
-    const queries = [DefaultDbQuery];
-    const service = serviceName.toLowerCase();
-    const count = process.env[`REACT_APP_${service}_QUERIES_COUNT`];
-    if (count && (+count > 0)) {
-        const lenght = 1 + (+count);
-        for (let index = 1; index < lenght; index++) {
-            const query = process.env[`REACT_APP_${service}_QUERIES_${index}`];
-            if (query) {
-                queries.push(query)
-            }
-        }
-    }
-    return queries;
-}
 
 const Operators = [
     '$and   And ,           sample: {"$and": { "a": "1", "b": "2"}}'.replaceAll(' ', '\xA0'),

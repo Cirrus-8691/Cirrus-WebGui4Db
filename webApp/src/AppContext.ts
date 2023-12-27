@@ -36,7 +36,7 @@ export default class AppContext {
     };
 }
 export const DefaultDbRepository = process.env.REACT_APP_MONGO_COLLECTION ?? "payments";
-export const DefaultDbQuery = "{}";
+export const DefaultDbQuery = "";
 
 const defaultConnection = (): MongoDbUrl => {
     if (process.env.REACT_APP_MONGO_HOST) {

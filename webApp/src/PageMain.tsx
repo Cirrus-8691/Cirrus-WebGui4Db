@@ -4,7 +4,7 @@ import ShowDatabaseConnection, { ShowConnectionInfo } from "./Components/ShowDat
 import RequestInput from "./Components/RequestInput";
 import RequestResult from "./Components/RequestResult";
 import ShowError from "./Components/ShowError";
-import { NavDropdown, Navbar, Stack } from "react-bootstrap";
+import { NavDropdown, Navbar } from "react-bootstrap";
 import ShowDatabaseRepositories from "./Components/ShowDatabaseRepositories";
 import DbDocument from "./Domain/DbDocument";
 import { EmptyAuth } from "./Controllers/Auth";

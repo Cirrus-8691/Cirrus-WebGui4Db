@@ -25,7 +25,6 @@ export default function PageLogin() {
     const [error, setError] = useState<unknown>(undefined);
     const [loading, setLoading] = useState(false);
 
-
     const onConnection = async () => {
         mainContext.setError(undefined);
         setError(undefined);
