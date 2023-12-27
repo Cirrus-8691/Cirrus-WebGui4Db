@@ -55,7 +55,11 @@ export default class MongoDbUrl implements DbConnect {
     }
 
     public repositoriesName() :string {
-        return "Collections";
+        return "Collection";
+    }
+
+    queryToFindAllEntities(): string {
+        return "{}";
     }
 
     public get protocol() { return MongoDbProtocol; }

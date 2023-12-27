@@ -41,6 +41,7 @@ export default function PageLogin() {
             });
             const repositories = await ValidateConnection(newDbUrl, mainContext.setAuth);
             mainContext.setDatabaseConnexion(newDbUrl);
+            mainContext.setDatabaseQuery(newDbUrl.queryToFindAllEntities());
             mainContext.setDatabaseRepositories(repositories);
             setInfo("");
             setLoading(false);

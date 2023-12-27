@@ -41,7 +41,11 @@ export default class PostgreSqlUrl implements DbConnect {
     }
 
     public repositoriesName() :string {
-        return "Tables";
+        return "Table";
+    }
+
+    queryToFindAllEntities(): string {
+        return "";
     }
 
     public get protocol() { return ""; }

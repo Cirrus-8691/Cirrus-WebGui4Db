@@ -4,6 +4,7 @@ export interface DbConnect {
     logo(): string;
     info(): string;
     service(): string;
+    queryToFindAllEntities(): string;
 
     repositoriesName() :string;
 

@@ -19,7 +19,7 @@ export default function ShowDatabaseRepositories() {
         <DialogOffCanvas titleDialog={`🗃️ ${mainContext.databaseConnexion.repositoriesName()}`}
             open={showInputRepositories}
             setOpen={setShowInputRepositories}
-            titleButton={"🗃️ Collection: " + mainContext.databaseRepository.toString()}>
+            titleButton={`🗃️ ${mainContext.databaseConnexion.repositoriesName()}: ${mainContext.databaseRepository.toString()}`}>
 
             <Stack gap={2}>
                 {
