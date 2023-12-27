@@ -1,9 +1,10 @@
 
 import { FastifyRequest } from "fastify";
 import jwt from 'jsonwebtoken';
-import { HttpHeadersAuthStartWith } from "../../serviceGenericDatabase/HttpFastifyServer";
-import PostgreSqlConnect from "../Model/PostgreSqlConnect";
-import { LifeSpanSecond, Secret } from "../../serviceGenericDatabase/Domain/LifeSpanSecond";
+
+import MongoDbConnect from "../Model/MongoDbConnect";
+import { HttpHeadersAuthStartWith } from "../../GenericServiceDatabase/HttpFastifyServer";
+import { LifeSpanSecond, Secret } from "../../GenericServiceDatabase/Domain/LifeSpanSecond";
 
 export interface Auth {
     accessToken: string;
@@ -14,12 +15,12 @@ export interface Auth {
 
 export class JwToken {
 
-    public static authDb(mongoUrl: PostgreSqlConnect): Auth {
+    public static authDb(mongoUrl: MongoDbConnect): Auth {
         return {
             accessToken: JwToken.createTokens(mongoUrl.toString()),
             userName: mongoUrl.username,
             dbName: mongoUrl.database,
-            dbProvider: "PostgreSQL"
+            dbProvider: "MongoDb"
         }
     }
 
@@ -32,7 +33,7 @@ export class JwToken {
         return accessToken
     }
 
-    public static connect(request: FastifyRequest): PostgreSqlConnect {
+    public static connect(request: FastifyRequest): MongoDbConnect {
         const accessToken = JwToken.extractToken(request);
         return JwToken.valideAccessToken(accessToken);
     }
@@ -45,11 +46,11 @@ export class JwToken {
         throw Error("request.headers.authorization is undefined or empty");
     }
 
-    private static valideAccessToken = (accessToken: string): PostgreSqlConnect => {
+    private static valideAccessToken = (accessToken: string): MongoDbConnect => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const decode: any = jwt.verify(accessToken, Secret);
         const url = decode.url;
-        return new PostgreSqlConnect(url);
+        return new MongoDbConnect(url);
     }
 
 }

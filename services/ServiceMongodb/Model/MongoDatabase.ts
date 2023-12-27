@@ -1,8 +1,8 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
-import { QueryEntityParameters, QueryFindParameters } from "../../serviceGenericDatabase/Domain/QueryParameters";
-import Database from "../../serviceGenericDatabase/Model/Database";
-import DbEntity from "../../serviceGenericDatabase/Model/DbEntity";
-import DbConnect from "../../serviceGenericDatabase/Model/DbConnect";
+import { QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
+import Database from "../../GenericServiceDatabase/Model/Database";
+import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
+import DbConnect from "../../GenericServiceDatabase/Model/DbConnect";
 
 export default class MongoDatabase implements Database {
 

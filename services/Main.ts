@@ -1,12 +1,18 @@
-import HttpFastifyServer from "./serviceGenericDatabase/HttpFastifyServer";
-import Database from "./serviceGenericDatabase/Model/Database";
-import Service from "./serviceGenericDatabase/Service";
-import MongoQueryController from "./serviceMongodb/Controller/MongoQueryController";
-import MongoDatabase from "./serviceMongodb/Model/MongoDatabase";
-import PostgreSqlQueryController from "./servicePostgreSql/Controller/PostgreSqlQueryController";
-import PostgreSqlDatabase from "./servicePostgreSql/Model/PostgreSqlDatabase";
+import Gateway from "./Gateway/Gateway";
+import graphicArtGateway from "./Gateway/GraphicArt";
+import HttpFastifyServer from "./GenericServiceDatabase/HttpFastifyServer";
+import Database from "./GenericServiceDatabase/Model/Database";
+import Service, { BaseService } from "./GenericServiceDatabase/Service";
 
-const exitHandler = async (serviceStarted: Service | undefined): Promise<void> => {
+import graphicArtMongodb from "./ServiceMongodb/GraphicArt";
+import MongoQueryController from "./ServiceMongodb/Controller/MongoQueryController";
+import MongoDatabase from "./ServiceMongodb/Model/MongoDatabase";
+
+import graphicArtPostgre from "./ServicePostgreSql/GraphicArt";
+import PostgreSqlQueryController from "./ServicePostgreSql/Controller/PostgreSqlQueryController";
+import PostgreSqlDatabase from "./ServicePostgreSql/Model/PostgreSqlDatabase";
+
+const exitHandler = async (serviceStarted: BaseService | undefined): Promise<void> => {
     console.log(`Process terminated by SIGNAL`);
     if (serviceStarted) {
         console.log("Disposing: " + serviceStarted.toString());
@@ -15,8 +21,8 @@ const exitHandler = async (serviceStarted: Service | undefined): Promise<void> =
     process.exit(0);
 }
 
-export const startService = async (port: string | undefined, injectService: (url: URL) => Service): Promise<Service | undefined> => {
-    let serviceStarted: Service | undefined = undefined;
+export const startService = async (port: string | undefined, injectService: (url: URL) => BaseService): Promise<BaseService | undefined> => {
+    let serviceStarted: BaseService | undefined = undefined;
     process.once('SIGINT', // action on [Ctrl]+C
         async () => await exitHandler(serviceStarted));
     process.once('SIGTERM', // https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination
@@ -52,17 +58,20 @@ export const startService = async (port: string | undefined, injectService: (url
 (async function main() {
 
     // Starting API gateway
-    const port = process.env.SERVICE_PORT; // expecting 4000
-    const portApiGateway = parseInt(port??"4000");
-    //graphicArt()
-    // startService(
-    //     port,
-    //     (url: URL) => (new Service(
-    //         url,
-    //         true,
-    //         new PostgreSqlDatabase(),
-    //         (server: HttpFastifyServer, db: Database) => (new PostgreSqlQueryController(server, db)))
-    //     ));
+    const portGateway = process.env.SERVICE_PORT; // expecting 4000
+    const portApiGateway = parseInt(portGateway ?? "4000");
+    graphicArtGateway();
+    startService(
+        portGateway,
+        (url: URL) => (new Gateway(
+            url,
+            true,
+            (server: HttpFastifyServer) => {
+                //
+            })
+        ));
+
+    graphicArtMongodb();
     const postMongo = (portApiGateway + 1).toString();
     startService(
         postMongo,
@@ -72,6 +81,8 @@ export const startService = async (port: string | undefined, injectService: (url
             new MongoDatabase(),
             (server: HttpFastifyServer, db: Database) => (new MongoQueryController(server, db)))
         ));
+
+    graphicArtPostgre();
     const portPostgre = (portApiGateway + 2).toString();
     startService(
         portPostgre,

@@ -1,7 +1,7 @@
 import { startService } from "../Main";
-import HttpFastifyServer from "../serviceGenericDatabase/HttpFastifyServer";
-import Database from "../serviceGenericDatabase/Model/Database";
-import Service from "../serviceGenericDatabase/Service";
+import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
+import Database from "../GenericServiceDatabase/Model/Database";
+import Service from "../GenericServiceDatabase/Service";
 import MongoQueryController from "./Controller/MongoQueryController";
 import graphicArt from "./GraphicArt";
 import MongoDatabase from "./Model/MongoDatabase";

@@ -2,16 +2,23 @@ import Database from "./Model/Database";
 import { PackageJson } from "./Domain/PackageJson";
 import HttpFastifyServer from "./HttpFastifyServer";
 
-export default class Service {
+export interface BaseService {
+    start(): Promise<void>;
+    toString(): string;
+    dispose(): Promise<void>;
+
+}
+
+export default class Service implements BaseService {
 
     public static readonly Name = PackageJson().name;
     public static readonly Desc = PackageJson().version;
     public static readonly Version = PackageJson().version;
 
     private readonly server: HttpFastifyServer;
-    public get Server() : HttpFastifyServer { return this.server }
+    public get Server(): HttpFastifyServer { return this.server }
 
-    public constructor(url: URL, logger : boolean, db : Database, createController :(server: HttpFastifyServer, db : Database) => void) {
+    public constructor(url: URL, logger: boolean, db: Database, createController: (server: HttpFastifyServer, db: Database) => void) {
         this.server = new HttpFastifyServer(url, logger);
         createController(this.server, db);
     }

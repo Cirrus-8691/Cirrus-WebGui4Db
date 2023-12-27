@@ -1,10 +1,10 @@
 import { FastifyRequest } from "fastify";
-import HttpFastifyServer from "../../serviceGenericDatabase/HttpFastifyServer";
-import Database from "../../serviceGenericDatabase/Model/Database";
-import QueryController from "../../serviceGenericDatabase/Controller/QueryController";
-import GetErrorMessage from "../../serviceGenericDatabase/Controller/GetErrorMessage";
-import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../serviceGenericDatabase/Domain/QueryParameters";
-import DbEntity from "../../serviceGenericDatabase/Model/DbEntity";
+import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
+import Database from "../../GenericServiceDatabase/Model/Database";
+import QueryController from "../../GenericServiceDatabase/Controller/QueryController";
+import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
+import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
+import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import { Auth, JwToken } from "../Domain/JwToken";
 import PostgreSqlDbUrl from "../Model/PostgreSqlConnect";
 
