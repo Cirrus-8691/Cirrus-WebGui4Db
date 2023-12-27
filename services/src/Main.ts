@@ -1,12 +1,15 @@
 import Gateway from "./Gateway/Gateway";
 import graphicArtGateway from "./Gateway/GraphicArt";
 
+import MongoGatewayController from "./Gateway/Controller/MongoController";
+import PostgrGatewayController from "./Gateway/Controller/PostgreController";
+
 import graphicArtMongodb from "./ServiceMongodb/GraphicArt";
-import MongoQueryController from "./ServiceMongodb/Controller/MongoQueryController";
+import MongoController from "./ServiceMongodb/Controller/MongoController";
 import MongoDatabase from "./ServiceMongodb/Model/MongoDatabase";
 
 import graphicArtPostgre from "./ServicePostgreSql/GraphicArt";
-import PostgreSqlQueryController from "./ServicePostgreSql/Controller/PostgreSqlQueryController";
+import PostgreController from "./ServicePostgreSql/Controller/PostgreSqlController";
 import PostgreSqlDatabase from "./ServicePostgreSql/Model/PostgreSqlDatabase";
 import Service from "./GenericServiceDatabase/Service";
 import HttpFastifyServer from "./GenericServiceDatabase/HttpFastifyServer";
@@ -28,7 +31,8 @@ import { startService } from "./GenericServiceDatabase/StartService";
             url,
             true,
             (server: HttpFastifyServer) => {
-                //
+                new MongoGatewayController(server);
+                new PostgrGatewayController(server);
             })
         ));
 
@@ -40,7 +44,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
             url,
             true,
             new MongoDatabase(),
-            (server: HttpFastifyServer, db: Database) => (new MongoQueryController(server, db)))
+            (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)))
         ));
 
     graphicArtPostgre();
@@ -51,7 +55,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
             url,
             true,
             new PostgreSqlDatabase(),
-            (server: HttpFastifyServer, db: Database) => (new PostgreSqlQueryController(server, db)))
+            (server: HttpFastifyServer, db: Database) => (new PostgreController(server, db)))
         ));
 
 })()

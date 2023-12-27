@@ -4,9 +4,9 @@ import Service from "../GenericServiceDatabase/Service";
 import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../GenericServiceDatabase/Model/Database";
-import MongoQueryController from "../ServiceMongodb/Controller/MongoQueryController";
 import QueryController from "../Gateway/Controller/QueryController";
 import { Auth } from "../ServiceMongodb/Domain/JwToken";
+import MongoController from "../ServiceMongodb/Controller/MongoController";
 
 export const TestServiceUrl = "http://localhost:3000/";
 
@@ -16,14 +16,14 @@ export default async function TestServiceMongo(): Promise<void> {
         new URL(TestServiceUrl),
         false,
         new StubDatabase(),
-        (server: HttpFastifyServer, db: Database) => (new MongoQueryController(server, db)));
+        (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)));
     try {
-        let url = QueryController.RouteBeginning + "mongo/connection/test"
+        let url = QueryController.RouteBeginning + "connection/test"
             + "?url=" + encodeURIComponent(TestLocalMongoDbUrl);
         let response = await service.Server.injectGET(url);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
 
-        url = QueryController.RouteBeginning + "mongo/connection/auth"
+        url = QueryController.RouteBeginning + "connection/auth"
             + "?url=" + encodeURIComponent(TestLocalMongoDbUrl);
         response = await service.Server.injectGET(url);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
@@ -34,13 +34,13 @@ export default async function TestServiceMongo(): Promise<void> {
         assert.isTrue(auth.dbName === TestLocalMongoDbName);
         assert.isTrue(auth.dbProvider !== "");
 
-        url = QueryController.RouteBeginning + "mongo/repositories";
+        url = QueryController.RouteBeginning + "repositories";
         response = await service.Server.injectGET(url, accessToken);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const collections = JSON.parse(response.body);
         const collectionName = collections[0];
 
-        url = QueryController.RouteBeginning + "mongo/entities"
+        url = QueryController.RouteBeginning + "entities"
             + "?from=" + encodeURIComponent(collectionName)
             + "&what=" + encodeURIComponent("{}");
         response = await service.Server.injectGET(url, accessToken);

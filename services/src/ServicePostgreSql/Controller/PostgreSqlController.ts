@@ -1,68 +1,47 @@
 import { FastifyRequest } from "fastify";
-import MongoDbConnect from "../Model/MongoDbConnect";
 import { Auth, JwToken } from "../Domain/JwToken";
-import QueryController from "../../Gateway/Controller/QueryController";
+import PostgreSqlDbUrl from "../Model/PostgreSqlConnect";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../../GenericServiceDatabase/Model/Database";
-import GetErrorMessage from "../../Gateway/Controller/GetErrorMessage";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
+import QueryController from "../../GenericServiceDatabase/Controller/QueryController";
+import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 
-
-export default class MongoQueryController extends QueryController {
+export default class PostgreController extends QueryController {
 
     public constructor(server: HttpFastifyServer, db: Database) {
         super(server, db);
 
-        this.server.get(QueryController.RouteBeginning
-            + "mongo/connection/test"
-            , {
-                handler: this.getTestConnection.bind(this)
-            }
-        );
-        this.server.get(QueryController.RouteBeginning
-            + "mongo/connection/auth"
-            , {
-                handler: this.getAuth.bind(this)
-            }
-        );
-        this.server.get(QueryController.RouteBeginning
-            + "mongo/repositories"
-            , {
-                handler: this.getRepositories.bind(this)
-            }
-        );
-        this.server.get(QueryController.RouteBeginning
-            + "mongo/entities"
-            , {
-                handler: this.getEntities.bind(this)
-            }
-        );
-        this.server.delete(QueryController.RouteBeginning
-            + "mongo/entity"
-            , {
-                handler: this.deleteEntity.bind(this)
-            }
-        );
-        this.server.post(QueryController.RouteBeginning
-            + "mongo/entity"
-            , {
-                handler: this.updateEntity.bind(this)
-            }
-        );
-        this.server.put(QueryController.RouteBeginning
-            + "mongo/entity"
-            , {
-                handler: this.insertEntity.bind(this)
-            }
-        );
+        const route = QueryController.RouteBeginning;
+        this.server.get(route + "connection/test", {
+            handler: this.getTestConnection.bind(this)
+        });
+        this.server.get(route + "connection/auth", {
+            handler: this.getAuth.bind(this)
+        });
+        this.server.get(route + "repositories", {
+            handler: this.getRepositories.bind(this)
+        });
+        this.server.get(route + "entities", {
+            handler: this.getEntities.bind(this)
+        });
+        this.server.delete(route + "entity", {
+            handler: this.deleteEntity.bind(this)
+        });
+        this.server.post(route + "entity", {
+            handler: this.updateEntity.bind(this)
+        });
+        this.server.put(route + "entity", {
+            handler: this.insertEntity.bind(this)
+        });
 
     }
 
     public async getTestConnection(request: FastifyRequest<{ Querystring: { url: string } }>): Promise<void> {
         try {
-            const mongoConnect = new MongoDbConnect(request.query.url);
-            this.db.connect(mongoConnect);
+            const connectString = new PostgreSqlDbUrl(request.query.url);
+            this.db.connect(connectString);
             await this.db.test();
         }
         catch (error) {
@@ -73,10 +52,10 @@ export default class MongoQueryController extends QueryController {
 
     public async getAuth(request: FastifyRequest<{ Querystring: { url: string } }>): Promise<Auth> {
         try {
-            const mongoConnect = new MongoDbConnect(request.query.url);
-            this.db.connect(mongoConnect);
+            const connectString = new PostgreSqlDbUrl(request.query.url);
+            this.db.connect(connectString);
             await this.db.test();
-            const auth = JwToken.authDb(mongoConnect);
+            const auth = JwToken.authDb(connectString);
             return auth;
         }
         catch (error) {
@@ -87,8 +66,8 @@ export default class MongoQueryController extends QueryController {
 
     public async getRepositories(request: FastifyRequest): Promise<string[]> {
         try {
-            const mongoConnect = JwToken.connect(request);
-            this.db.connect(mongoConnect);
+            const connectString = JwToken.connect(request);
+            this.db.connect(connectString);
             return await this.db.getRepositories();
         }
         catch (error) {
@@ -101,8 +80,8 @@ export default class MongoQueryController extends QueryController {
         Querystring: QueryFindParameters
     }>): Promise<DbEntity[]> {
         try {
-            const mongoConnect = JwToken.connect(request);
-            this.db.connect(mongoConnect);
+            const connectString = JwToken.connect(request);
+            this.db.connect(connectString);
             return await this.db.findOnRepository(request.query);
         }
         catch (error) {
@@ -115,8 +94,8 @@ export default class MongoQueryController extends QueryController {
         Querystring: QueryEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
-            this.db.connect(mongoConnect);
+            const connectString = JwToken.connect(request);
+            this.db.connect(connectString);
             return await this.db.deleteEntity(request.query);
         }
         catch (error) {
@@ -130,8 +109,8 @@ export default class MongoQueryController extends QueryController {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
-            this.db.connect(mongoConnect);
+            const connectString = JwToken.connect(request);
+            this.db.connect(connectString);
             return await this.db.updateEntity(request.query, request.body);
         }
         catch (error) {
@@ -145,8 +124,8 @@ export default class MongoQueryController extends QueryController {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
-            this.db.connect(mongoConnect);
+            const connectString = JwToken.connect(request);
+            this.db.connect(connectString);
             return await this.db.insertEntity(request.query, request.body);
         }
         catch (error) {

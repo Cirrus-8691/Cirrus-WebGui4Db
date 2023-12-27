@@ -35,9 +35,9 @@ export default function PageLogin() {
             const newDbUrl = dbUrl.build({
                 username,
                 password,
-                hostname: DefaultDatabaseConnection.hostname,
-                port: DefaultDatabaseConnection.port,
-                database: DefaultDatabaseConnection.database
+                hostname: dbUrl.hostname,
+                port: dbUrl.port,
+                database: dbUrl.database
             });
             const repositories = await ValidateConnection(newDbUrl, mainContext.setAuth);
             mainContext.setDatabaseConnexion(newDbUrl);

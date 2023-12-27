@@ -3,10 +3,10 @@ import { TestLocalPostgreDbName, TestLocalPostgreDbUrl, TestLocalPostgreDbUser }
 import Service from "../GenericServiceDatabase/Service";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../GenericServiceDatabase/Model/Database";
-import PostgreSqlQueryController from "../ServicePostgreSql/Controller/PostgreSqlQueryController";
 import QueryController from "../Gateway/Controller/QueryController";
 import { Auth } from "../ServicePostgreSql/Domain/JwToken";
 import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
+import PostgreController from "../ServicePostgreSql/Controller/PostgreSqlController";
 
 export const TestServiceUrl = "http://localhost:3000/";
 
@@ -16,14 +16,14 @@ export default async function TestServicePostgre(): Promise<void> {
         new URL(TestServiceUrl),
         false,
         new StubDatabase(),
-        (server: HttpFastifyServer, db: Database) => (new PostgreSqlQueryController(server, db)));
+        (server: HttpFastifyServer, db: Database) => (new PostgreController(server, db)));
     try {
-        let url = QueryController.RouteBeginning + "postgre/connection/test"
+        let url = QueryController.RouteBeginning + "connection/test"
             + "?url=" + encodeURIComponent(TestLocalPostgreDbUrl);
         let response = await service.Server.injectGET(url);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
 
-        url = QueryController.RouteBeginning + "postgre/connection/auth"
+        url = QueryController.RouteBeginning + "connection/auth"
             + "?url=" + encodeURIComponent(TestLocalPostgreDbUrl);
         response = await service.Server.injectGET(url);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
@@ -34,13 +34,13 @@ export default async function TestServicePostgre(): Promise<void> {
         assert.isTrue(auth.dbName === TestLocalPostgreDbName);
         assert.isTrue(auth.dbProvider !== "");
 
-        url = QueryController.RouteBeginning + "postgre/repositories";
+        url = QueryController.RouteBeginning + "repositories";
         response = await service.Server.injectGET(url, accessToken);
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const collections = JSON.parse(response.body);
         const collectionName = collections[0];
 
-        url = QueryController.RouteBeginning + "postgre/entities"
+        url = QueryController.RouteBeginning + "entities"
             + "?from=" + encodeURIComponent(collectionName)
             + "&what=" + encodeURIComponent("{}");
         response = await service.Server.injectGET(url, accessToken);

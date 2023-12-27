@@ -1,25 +1,47 @@
 import { FastifyRequest } from "fastify";
-import GetErrorMessage from "./GetErrorMessage";
-import Database from "../../GenericServiceDatabase/Model/Database";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
+import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
+import axios, { AxiosResponse } from "axios";
+
+export async function GetAxios<T>(path : string, request: FastifyRequest) : Promise<T> {
+    const config = request.headers ? { headers: request.headers } : undefined;
+    return (await axios.get<T, AxiosResponse<T>>(path, config)).data;
+}
+
+export async function PostAxios<T>(path : string, request: FastifyRequest) : Promise<T> {
+    const config = request.headers ? { headers: request.headers } : undefined;
+    const body = request.body;
+    return (await axios.post<T, AxiosResponse<T>>(path, body, config)).data;
+}
+
+export async function DeleteAxios<T>(path : string, request: FastifyRequest) : Promise<T> {
+    const config = request.headers ? { headers: request.headers } : undefined;
+    return (await axios.delete<T, AxiosResponse<T>>(path, config)).data;
+}
+
+export async function PutAxios<T>(path : string, request: FastifyRequest) : Promise<T> {
+    const config = request.headers ? { headers: request.headers } : undefined;
+    const body = request.body;
+    return (await axios.put<T, AxiosResponse<T>>(path, body, config)).data;
+}
 
 export default class QueryController {
 
     public static RouteBeginning = "/api/v1/";
 
     protected readonly server: HttpFastifyServer;
-    protected readonly db: Database;
 
-    public constructor(server: HttpFastifyServer, db: Database) {
+    public constructor(server: HttpFastifyServer) {
 
-        this.db = db;
         this.server = server;
-
-        this.server.get("/"
-            , {
-                handler: this.getHealth.bind(this)
-            }
-        );
+        if (server.HealthSet) {
+            server.HealthSet = false;
+            this.server.get("/"
+                , {
+                    handler: this.getHealth.bind(this)
+                }
+            );
+        }
 
     }
 

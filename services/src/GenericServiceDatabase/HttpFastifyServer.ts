@@ -8,6 +8,14 @@ export default class HttpFastifyServer {
     private readonly instance: FastifyInstance;
     private readonly url: URL;
 
+    private setHealth = true;
+    public set HealthSet(value : boolean) {
+        this.setHealth = value;
+    }
+    public get HealthSet() : boolean {
+        return this.setHealth;
+    }
+
     public constructor(url: URL, logger: boolean) {
         this.url = url;
         this.instance = fastify({
