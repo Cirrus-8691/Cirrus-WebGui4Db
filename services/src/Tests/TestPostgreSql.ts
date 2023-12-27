@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import PostgreSqlDatabase from "../servicePostgreSql/Model/PostgreSqlDatabase";
-import PostgreSqlConnect from "../servicePostgreSql/Model/PostgreSqlConnect";
+import PostgreSqlDatabase from "../ServicePostgreSql/Model/PostgreSqlDatabase";
+import PostgreSqlConnect from "../ServicePostgreSql/Model/PostgreSqlConnect";
 
 export const TestLocalPostgreDbUser = "usr";
 export const TestLocalPostgreDbName = "fred-24";

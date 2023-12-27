@@ -1,12 +1,13 @@
 import { FastifyRequest } from "fastify";
 import MongoDbConnect from "../Model/MongoDbConnect";
+import { Auth, JwToken } from "../Domain/JwToken";
+import QueryController from "../../Gateway/Controller/QueryController";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../../GenericServiceDatabase/Model/Database";
-import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
+import GetErrorMessage from "../../Gateway/Controller/GetErrorMessage";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
-import { Auth, JwToken } from "../Domain/JwToken";
-import QueryController from "../../GenericServiceDatabase/Controller/QueryController";
+
 
 export default class MongoQueryController extends QueryController {
 

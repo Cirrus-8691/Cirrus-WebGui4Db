@@ -1,7 +1,7 @@
 import { FastifyRequest } from "fastify";
-import HttpFastifyServer from "../HttpFastifyServer";
-import Database from "../Model/Database";
 import GetErrorMessage from "./GetErrorMessage";
+import Database from "../../GenericServiceDatabase/Model/Database";
+import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 
 export default class QueryController {
 

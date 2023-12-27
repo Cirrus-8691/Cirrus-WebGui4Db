@@ -1,9 +1,9 @@
 import { Client } from 'pg';
+import Database from '../../GenericServiceDatabase/Model/Database';
+import DbConnect from '../../GenericServiceDatabase/Model/DbConnect';
+import { QueryEntityParameters, QueryFindParameters } from '../../GenericServiceDatabase/Domain/QueryParameters';
+import DbEntity from '../../GenericServiceDatabase/Model/DbEntity';
 
-import Database from "../../GenericServiceDatabase/Model/Database";
-import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
-import DbConnect from "../../GenericServiceDatabase/Model/DbConnect";
-import { QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 
 export default class PostgreSqlDatabase implements Database {
 

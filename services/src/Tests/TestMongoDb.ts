@@ -1,7 +1,6 @@
 import { assert } from "chai";
-
-import MongoDatabase from "../serviceMongodb/Model/MongoDatabase";
-import MongoDbConnect from "../serviceMongodb/Model/MongoDbConnect";
+import MongoDatabase from "../ServiceMongodb/Model/MongoDatabase";
+import MongoDbConnect from "../ServiceMongodb/Model/MongoDbConnect";
 
 export const TestLocalMongoDbUser = "usr";
 export const TestLocalMongoDbName = "fred";

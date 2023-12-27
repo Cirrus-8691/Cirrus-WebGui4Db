@@ -1,12 +1,12 @@
 import { assert } from "chai";
-import Service from "../serviceGenericDatabase/Service";
-import QueryController from "../serviceGenericDatabase/Controller/QueryController";
-import { Auth } from "../serviceMongodb/Domain/JwToken";
-import StubDatabase from "../serviceGenericDatabase/Model/StubDatabase";
-import HttpFastifyServer from "../serviceGenericDatabase/HttpFastifyServer";
-import Database from "../serviceGenericDatabase/Model/Database";
-import PostgreSqlQueryController from "../servicePostgreSql/Controller/PostgreSqlQueryController";
 import { TestLocalPostgreDbName, TestLocalPostgreDbUrl, TestLocalPostgreDbUser } from "./TestPostgreSql";
+import Service from "../GenericServiceDatabase/Service";
+import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
+import Database from "../GenericServiceDatabase/Model/Database";
+import PostgreSqlQueryController from "../ServicePostgreSql/Controller/PostgreSqlQueryController";
+import QueryController from "../Gateway/Controller/QueryController";
+import { Auth } from "../ServicePostgreSql/Domain/JwToken";
+import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
 
 export const TestServiceUrl = "http://localhost:3000/";
 

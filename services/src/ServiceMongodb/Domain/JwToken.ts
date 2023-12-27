@@ -1,10 +1,9 @@
 
 import { FastifyRequest } from "fastify";
 import jwt from 'jsonwebtoken';
-
 import MongoDbConnect from "../Model/MongoDbConnect";
-import { HttpHeadersAuthStartWith } from "../../GenericServiceDatabase/HttpFastifyServer";
 import { LifeSpanSecond, Secret } from "../../GenericServiceDatabase/Domain/LifeSpanSecond";
+import { HttpHeadersAuthStartWith } from "../../GenericServiceDatabase/HttpFastifyServer";
 
 export interface Auth {
     accessToken: string;

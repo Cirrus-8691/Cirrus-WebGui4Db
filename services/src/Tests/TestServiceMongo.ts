@@ -1,12 +1,12 @@
 import { assert } from "chai";
-import Service from "../serviceGenericDatabase/Service";
-import QueryController from "../serviceGenericDatabase/Controller/QueryController";
 import { TestLocalMongoDbName, TestLocalMongoDbUrl, TestLocalMongoDbUser } from "./TestMongoDb";
-import { Auth } from "../serviceMongodb/Domain/JwToken";
-import StubDatabase from "../serviceGenericDatabase/Model/StubDatabase";
-import HttpFastifyServer from "../serviceGenericDatabase/HttpFastifyServer";
-import Database from "../serviceGenericDatabase/Model/Database";
-import MongoQueryController from "../serviceMongodb/Controller/MongoQueryController";
+import Service from "../GenericServiceDatabase/Service";
+import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
+import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
+import Database from "../GenericServiceDatabase/Model/Database";
+import MongoQueryController from "../ServiceMongodb/Controller/MongoQueryController";
+import QueryController from "../Gateway/Controller/QueryController";
+import { Auth } from "../ServiceMongodb/Domain/JwToken";
 
 export const TestServiceUrl = "http://localhost:3000/";
 

@@ -1,7 +1,7 @@
-import { startService } from "../Main";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import graphicArt from "./GraphicArt";
 import Gateway from "./Gateway";
+import { startService } from "../GenericServiceDatabase/StartService";
 
 /***
  * Call of Main function to start Api Gateway service
