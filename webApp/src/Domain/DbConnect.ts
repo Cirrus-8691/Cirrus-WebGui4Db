@@ -1,5 +1,6 @@
 export interface DbConnect {
 
+    name(): string;
     toString(): string;
     logo(): string;
     info(): string;

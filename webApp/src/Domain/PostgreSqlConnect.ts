@@ -1,5 +1,7 @@
 import { ConnexionDetails, DbConnect } from "./DbConnect";
 
+const PostgreSqlProtocol = "postgresql:";
+
 export default class PostgreSqlUrl implements DbConnect {
 
     // "Host=192.168.0.30;Database=fred-24;Username=usr;Password=Pwd*175";
@@ -28,6 +30,11 @@ export default class PostgreSqlUrl implements DbConnect {
         return `Host=${this.params.hostname};${port}${database}${userPassword}`;
     }
 
+    public name(): string {
+        return "PostgreSSQL";
+    }
+
+
     public logo(): string {
         return "🐘";
     }
@@ -53,7 +60,7 @@ export default class PostgreSqlUrl implements DbConnect {
         return false ;
     }
 
-    public get protocol() { return ""; }
+    public get protocol() { return PostgreSqlProtocol; }
     public get username() { return this.params.username ?? ""; }
     public get password() { return this.params.password ?? ""; }
     public get hostname() { return this.params.hostname ?? ""; }

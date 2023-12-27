@@ -4,7 +4,6 @@ import { Alert, Button, Form, Offcanvas, Spinner, Stack } from "react-bootstrap"
 import MongoDbUrl from "../Domain/MongoDbConnect";
 import GetErrorMessage from "../Domain/GetErrorMessage";
 import TestConnection, { ValidateConnection } from "../Controllers/TestConnection";
-import { DefaultDatabaseConnection } from "../AppContext";
 
 export type ShowConnectionInfo = "" | "user" | "database" | "connection";
 
@@ -85,7 +84,7 @@ export default function ShowDatabaseConnection(props: { show: ShowConnectionInfo
 
         <Offcanvas show={props.show !== ""} onHide={onCancel} placement="end">
             <Offcanvas.Header closeButton>
-                <Offcanvas.Title>🌿 Mongodb database connection</Offcanvas.Title>
+                <Offcanvas.Title>{mainContext.databaseConnexion.logo()} {mainContext.databaseConnexion.name()} database connection</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <Form>
@@ -95,7 +94,7 @@ export default function ShowDatabaseConnection(props: { show: ShowConnectionInfo
                                 ? <>
                                     <Form.Label>Protocol:</Form.Label>
                                     <Form.Control type="text" disabled
-                                        value={DefaultDatabaseConnection.protocol} />
+                                        value={mainContext.databaseConnexion.protocol} />
                                     <br />
                                     <Form.Label>👤 User name:</Form.Label>
                                     <Form.Control type="text"

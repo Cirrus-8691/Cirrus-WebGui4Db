@@ -10,7 +10,7 @@ import DbDocument from "./Domain/DbDocument";
 import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
 import RequestResultColumns, { DrawGrid } from "./Components/RequestResultColumns";
-import { DefaultDatabaseConnection } from "./AppContext";
+import { DefaultDatabaseConnection, DefaultDbQuery, DefaultDbRepository } from "./AppContext";
 
 export const Application = {
     name: process.env.REACT_APP_NAME,
@@ -31,6 +31,10 @@ export default function PageMain() {
     const [runQuery, setRunQuery] = useState(false);
 
     const onSignOut = () => {
+        mainContext.setDatabaseConnexion(DefaultDatabaseConnection);
+        mainContext.setDatabaseRepositories([DefaultDbRepository]);
+        mainContext.setDatabaseRepository(DefaultDbRepository);
+        mainContext.setDatabaseQuery(DefaultDbQuery);
         mainContext.setAuth(EmptyAuth);
     };
     const [showInputConnection, setShowInputConnection] = useState<ShowConnectionInfo>("");
@@ -63,7 +67,7 @@ export default function PageMain() {
                         <NavDropdown.Header>Connection:</NavDropdown.Header>
                         <NavDropdown.Item
                             onClick={() => setShowInputConnection("connection")}
-                        >🌿{DefaultDatabaseConnection.protocol}</NavDropdown.Item>
+                        >{mainContext.databaseConnexion.logo()} {mainContext.databaseConnexion.name()}</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item
                             onClick={() => setShowAbout(true)}>

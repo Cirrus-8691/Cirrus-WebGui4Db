@@ -75,7 +75,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [props.runQuery]);
 
-    return (
+    return (<>
         <Card>
             <Card.Header>🔍 Query</Card.Header>
             <Card.Body >
@@ -108,8 +108,39 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
-                            : <></>
+                            : <>{mainContext.databaseConnexion.repositoriesName()}</>
                     }
+                </Stack>
+                <Stack direction="horizontal" gap={2}>
+
+                    <Form.Control as="textarea"
+                        value={currentQuery}
+                        onChange={(event: any) => setCurrentQuery(event.target.value)}
+                    />
+                    {
+                        loading
+                            ? <Spinner animation="border" variant="success" />
+                            : <Button onClick={onRun} variant="success" >{">"}</Button>
+                    }
+                </Stack>
+            </Card.Body>
+        </Card>
+        <Card>
+            <Card.Header>📚 Rows</Card.Header>
+            <Card.Body >
+                <Stack direction="horizontal" gap={2}>
+                    <div >
+                        <Dropdown>
+                            <Dropdown.Toggle variant="Light" id="dropdown-basic">{`${limit} lines per pages`}</Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages)}>{DefaultLinesPerPages}</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 2)}>{DefaultLinesPerPages * 2}</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 3)}>{DefaultLinesPerPages * 3}</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 4)}>{DefaultLinesPerPages * 4}</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 8)}>{DefaultLinesPerPages * 8}</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
                     <div className="ms-auto" ></div>
                     <div >
                         <Pagination>
@@ -128,33 +159,11 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
                             }} />
                         </Pagination>
                     </div>
-                    <div >
-                        <Dropdown>
-                            <Dropdown.Toggle variant="Light" id="dropdown-basic">{`${limit} lines per pages`}</Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages)}>{DefaultLinesPerPages}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 2)}>{DefaultLinesPerPages * 2}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 3)}>{DefaultLinesPerPages * 3}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 4)}>{DefaultLinesPerPages * 4}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setLimit(DefaultLinesPerPages * 8)}>{DefaultLinesPerPages * 8}</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-                </Stack>
-                <Stack direction="horizontal" gap={2}>
 
-                    <Form.Control as="textarea"
-                        value={currentQuery}
-                        onChange={(event: any) => setCurrentQuery(event.target.value)}
-                    />
-                    {
-                        loading
-                            ? <Spinner animation="border" variant="success" />
-                            : <Button onClick={onRun} variant="success" >{">"}</Button>
-                    }
                 </Stack>
             </Card.Body>
         </Card>
+    </>
     );
 
 }

@@ -1,6 +1,6 @@
 import { ConnexionDetails, DbConnect } from "./DbConnect";
 
-export const MongoDbProtocol = "mongodb:";
+const MongoDbProtocol = "mongodb:";
 /**
  * https://www.mongodb.com/docs/manual/reference/connection-string/
  */
@@ -12,7 +12,7 @@ export default class MongoDbUrl implements DbConnect {
         this.params = params;
     }
 
-    build(params: ConnexionDetails) : DbConnect {
+    build(params: ConnexionDetails): DbConnect {
         return new MongoDbUrl(params);
     }
 
@@ -42,6 +42,10 @@ export default class MongoDbUrl implements DbConnect {
         return `${MongoDbProtocol}//${userPassword}@${this.params.hostname}${port}${path}`;
     }
 
+    public name(): string {
+        return "MongoDb";
+    }
+
     public logo(): string {
         return "🌿";
     }
@@ -54,7 +58,7 @@ export default class MongoDbUrl implements DbConnect {
         return "mongo";
     }
 
-    public repositoriesName() :string {
+    public repositoriesName(): string {
         return "Collection";
     }
 
@@ -62,7 +66,7 @@ export default class MongoDbUrl implements DbConnect {
         return "{}";
     }
 
-    public showOperators(): boolean{
+    public showOperators(): boolean {
         return true;
     }
 

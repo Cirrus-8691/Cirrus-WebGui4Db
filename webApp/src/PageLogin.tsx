@@ -5,7 +5,7 @@ import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import GetErrorMessage from "./Domain/GetErrorMessage";
 import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
-import { DatabaseConnections, DefaultDatabaseConnection } from "./AppContext";
+import { DatabaseConnections } from "./AppContext";
 import { DbConnect } from "./Domain/DbConnect";
 
 export default function PageLogin() {
