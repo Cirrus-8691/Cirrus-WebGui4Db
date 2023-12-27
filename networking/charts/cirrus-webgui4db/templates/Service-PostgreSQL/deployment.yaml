@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cirrus-service-postgresql.fullname" . }}
+  labels:
+    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.servicePostgreSql.autoscaling.enabled }}
+  replicas: {{ .Values.servicePostgreSql.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "cirrus-webgui4db.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.servicePostgreSql.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cirrus-webgui4db.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.servicePostgreSql.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cirrus-service-postgresql.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.servicePostgreSql.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.servicePostgreSql.securityContext | nindent 12 }}
+          image: "{{ .Values.servicePostgreSql.image.repository }}:{{ .Values.servicePostgreSql.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.servicePostgreSql.image.pullPolicy }}
+          ports:
+            - name : service-port
+              containerPort: 3000
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: service-port
+            initialDelaySeconds: 5
+            periodSeconds: 20
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: service-port
+            initialDelaySeconds: 5
+            periodSeconds: 20
+
+          env:
+          - name: SERVICE_HOST
+            value: "0.0.0.0"  ## see Dockerfile SERVICE_HOST="0.0.0.0"
+          - name: SERVICE_PORT
+            value: "3000"     ## see Dockerfile SERVICE_PORT="3000"
+
+          resources:
+            {{- toYaml .Values.servicePostgreSql.resources | nindent 12 }}
+      {{- with .Values.servicePostgreSql.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.servicePostgreSql.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.servicePostgreSql.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -5,10 +5,22 @@ Expand the name of the webApp chart.
 {{- default .Chart.Name .Values.webApp.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{/*
+Expand the name of the serviceGateway chart.
+*/}}
+{{- define "cirrus-service-gateway" -}}
+{{- default .Chart.Name .Values.serviceGateway.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{/*
 Expand the name of the serviceMongoDb chart.
 */}}
 {{- define "cirrus-service-mongodb" -}}
 {{- default .Chart.Name .Values.serviceMongoDb.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{/*
+Expand the name of the servicePostgreSql chart.
+*/}}
+{{- define "cirrus-service-postgresql" -}}
+{{- default .Chart.Name .Values.servicePostgreSql.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -29,11 +41,25 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 {{/*
+Create a fully qualified serviceGateway name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "cirrus-service-gateway.fullname" -}}
+{{- .Values.serviceGateway.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{/*
 Create a fully qualified serviceMongoDb name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "cirrus-service-mongodb.fullname" -}}
 {{- .Values.serviceMongoDb.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{/*
+Create a fully qualified servicePostgreSql name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "cirrus-service-postgresql.fullname" -}}
+{{- .Values.servicePostgreSql.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -74,6 +100,16 @@ Create the name of the service account to use with webApp
 {{- end }}
 {{- end }}
 {{/*
+Create the name of the service account to use with serviceGateway
+*/}}
+{{- define "cirrus-service-gateway.serviceAccountName" -}}
+{{- if .Values.serviceGateway.serviceAccount.create }}
+{{- default (include "cirrus-service-gateway.fullname" .) .Values.serviceGateway.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceGateway.serviceAccount.name }}
+{{- end }}
+{{- end }}
+{{/*
 Create the name of the service account to use with serviceMongoDb
 */}}
 {{- define "cirrus-service-mongodb.serviceAccountName" -}}
@@ -81,5 +117,15 @@ Create the name of the service account to use with serviceMongoDb
 {{- default (include "cirrus-service-mongodb.fullname" .) .Values.serviceMongoDb.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceMongoDb.serviceAccount.name }}
+{{- end }}
+{{- end }}
+{{/*
+Create the name of the service account to use with servicePostgreSql
+*/}}
+{{- define "cirrus-service-postgresql.serviceAccountName" -}}
+{{- if .Values.servicePostgreSql.serviceAccount.create }}
+{{- default (include "cirrus-service-postgresql.fullname" .) .Values.servicePostgreSql.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.servicePostgreSql.serviceAccount.name }}
 {{- end }}
 {{- end }}

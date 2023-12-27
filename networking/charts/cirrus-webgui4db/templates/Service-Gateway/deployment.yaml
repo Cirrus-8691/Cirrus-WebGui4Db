@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cirrus-service-gateway.fullname" . }}
+  labels:
+    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.serviceGateway.autoscaling.enabled }}
+  replicas: {{ .Values.serviceGateway.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "cirrus-webgui4db.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.serviceGateway.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cirrus-webgui4db.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.serviceGateway.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cirrus-service-gateway.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.serviceGateway.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.serviceGateway.securityContext | nindent 12 }}
+          image: "{{ .Values.serviceGateway.image.repository }}:{{ .Values.serviceGateway.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.serviceGateway.image.pullPolicy }}
+          ports:
+            - name : service-port
+              containerPort: 3000
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: service-port
+            initialDelaySeconds: 5
+            periodSeconds: 20
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: service-port
+            initialDelaySeconds: 5
+            periodSeconds: 20
+
+          env:
+          - name: SERVICE_HOST
+            value: "0.0.0.0"  ## see Dockerfile SERVICE_HOST="0.0.0.0"
+          - name: SERVICE_PORT
+            value: "3000"     ## see Dockerfile SERVICE_PORT="3000"
+
+          resources:
+            {{- toYaml .Values.serviceGateway.resources | nindent 12 }}
+      {{- with .Values.serviceGateway.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.serviceGateway.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.serviceGateway.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
