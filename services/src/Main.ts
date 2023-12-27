@@ -17,7 +17,7 @@ import Database from "./GenericServiceDatabase/Model/Database";
 import { startService } from "./GenericServiceDatabase/StartService";
 
 /***
- * Call of Main function to start service
+ * Call main function to start all services
  */
 (async function main() {
 
@@ -35,7 +35,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
                 new PostgrGatewayController(server);
             })
         ));
-
+    // Starting services...
     graphicArtMongodb();
     const postMongo = (portApiGateway + 1).toString();
     startService(

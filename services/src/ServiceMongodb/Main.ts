@@ -2,14 +2,14 @@ import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../GenericServiceDatabase/Model/Database";
 import Service from "../GenericServiceDatabase/Service";
 import { startService } from "../GenericServiceDatabase/StartService";
-import MongoQueryController from "./Controller/MongoQueryController";
+import MongoController from "./Controller/MongoController";
 import graphicArt from "./GraphicArt";
 import MongoDatabase from "./Model/MongoDatabase";
 
 
 
 /***
- * Call of Main function to start service
+ * Call main function to start service
  */
 (async function main() {
 
@@ -21,7 +21,7 @@ import MongoDatabase from "./Model/MongoDatabase";
             url,
             true,
             new MongoDatabase(),
-            (server: HttpFastifyServer, db: Database) => (new MongoQueryController(server, db)))
+            (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)))
         ));
 
 })()
