@@ -8,13 +8,14 @@ import { QueryFindParameters } from "../Domain/QueryParameters";
 
 const DefaultLinesPerPages = 16;
 
-const GetQueries = (): string[] => {
+const GetQueries = (serviceName : string): string[] => {
     const queries = [DefaultDbQuery];
-    const count = process.env.REACT_APP_QUERIES_COUNT;
+    const service = serviceName.toLowerCase();
+    const count = process.env[`REACT_APP_${service}_QUERIES_COUNT`];
     if (count && (+count > 0)) {
         const lenght = 1 + (+count);
         for (let index = 1; index < lenght; index++) {
-            const query = process.env[`REACT_APP_QUERIES_${index}`];
+            const query = process.env[`REACT_APP_${service}_QUERIES_${index}`];
             if (query) {
                 queries.push(query)
             }
@@ -41,7 +42,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(DefaultLinesPerPages);
 
-    const [queries] = useState<string[]>(GetQueries());
+    const [queries] = useState<string[]>(GetQueries(mainContext.databaseConnexion.service()));
 
     const onRun = async () => {
         mainContext.setError(undefined);
