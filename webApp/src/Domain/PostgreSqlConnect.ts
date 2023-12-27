@@ -48,6 +48,11 @@ export default class PostgreSqlUrl implements DbConnect {
         return "";
     }
 
+
+    public showOperators(): boolean{
+        return false ;
+    }
+
     public get protocol() { return ""; }
     public get username() { return this.params.username ?? ""; }
     public get password() { return this.params.password ?? ""; }

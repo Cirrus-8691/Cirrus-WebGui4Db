@@ -96,16 +96,20 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
                             }
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Dropdown>
-                        <Dropdown.Toggle variant="Light" id="dropdown-basic">⚒️ Operators</Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            {
-                                Operators.map((operator: string, index: number) =>
-                                    <Dropdown.Item key={index}>{operator}</Dropdown.Item>
-                                )
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    {
+                        mainContext.databaseConnexion.showOperators()
+                            ? <Dropdown>
+                                <Dropdown.Toggle variant="Light" id="dropdown-basic">⚒️ Operators</Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        Operators.map((operator: string, index: number) =>
+                                            <Dropdown.Item key={index}>{operator}</Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            : <></>
+                    }
                     <div className="ms-auto" ></div>
                     <div >
                         <Pagination>

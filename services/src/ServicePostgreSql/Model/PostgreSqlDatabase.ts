@@ -42,9 +42,11 @@ export default class PostgreSqlDatabase implements Database {
     async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
         if (this.client) {
             const tableName = parameters.collection;
-            const query = parameters.what && parameters.what !== ""
+            const query = (parameters.what //&& parameters.what !== ""
                 ? `SELECT * FROM "${tableName}" WHERE ${parameters.what}`
-                : `SELECT * FROM "${tableName}"`;
+                : `SELECT * FROM "${tableName}"`)
+                + (parameters.limit ? ` LIMIT ${parameters.limit}` : "")
+                + (parameters.skip ? ` OFFSET ${parameters.skip}` : "");
             const data = await this.client.query(query);
             if (data) {
                 return data.rows;

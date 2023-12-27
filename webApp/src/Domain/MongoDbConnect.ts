@@ -58,8 +58,12 @@ export default class MongoDbUrl implements DbConnect {
         return "Collection";
     }
 
-    queryToFindAllEntities(): string {
+    public queryToFindAllEntities(): string {
         return "{}";
+    }
+
+    public showOperators(): boolean{
+        return true;
     }
 
     public get protocol() { return MongoDbProtocol; }

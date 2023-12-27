@@ -5,10 +5,11 @@ export interface DbConnect {
     info(): string;
     service(): string;
     queryToFindAllEntities(): string;
+    repositoriesName(): string;
 
-    repositoriesName() :string;
+    showOperators(): boolean;
 
-    build(params: ConnexionDetails) : DbConnect;
+    build(params: ConnexionDetails): DbConnect;
 
     get protocol(): string;
     get username(): string;
