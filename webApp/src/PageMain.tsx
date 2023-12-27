@@ -18,8 +18,8 @@ export const Application = {
 }
 
 export interface OrderColum {
-    runQuery : boolean,
-    colName: string, 
+    runQuery: boolean,
+    colName: string,
     asc: boolean
 }
 
@@ -51,6 +51,7 @@ export default function PageMain() {
                 <Navbar.Brand className="justify-center">{"🐻 " + Application.name}</Navbar.Brand>
                 <Navbar.Collapse >
                     <ShowDatabaseRepositories />
+                    <RequestResultColumns data={data.length > 0 ? data : [{}]} setDrawGrid={setDrawGrid} />
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                     <NavDropdown drop='start' title={
@@ -85,11 +86,8 @@ export default function PageMain() {
                     : <></>
             }
             <div style={{ margin: 10 }}>
-                <Stack direction="horizontal" gap={2}>
-                    <RequestInput setData={setData} runQuery={runQuery} setRunQuery={setRunQuery}/>
-                    <RequestResultColumns data={data.length > 0 ? data : [{}]} setDrawGrid={setDrawGrid} />
-                </Stack>
-                <RequestResult data={data} drawGrid={drawGrid} refreshData={() => setRunQuery(true) } />
+                <RequestInput setData={setData} runQuery={runQuery} setRunQuery={setRunQuery} />
+                <RequestResult data={data} drawGrid={drawGrid} refreshData={() => setRunQuery(true)} />
             </div>
         </>
     );

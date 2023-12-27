@@ -116,64 +116,45 @@ export default function RequestResultColumns(props: {
     }
 
     return (
-        <Card>
-            <Card.Header>⚙️ Tools</Card.Header>
-            <Card.Body >
-                <Stack direction="horizontal" gap={2}>
-                    <SplitButton variant="secondary" title="🔍 Columns viewed" autoClose="outside" >
-                        <Dropdown.Item onClick={() => viewColumns(columnsName)}>(All)</Dropdown.Item>
-                        <Dropdown.Item onClick={() => viewColumns([])}>(None)</Dropdown.Item>
-                        <Dropdown.Divider />
-                        {
-                            columnsName.map((columnName: string, index: number) =>
-                                <Dropdown.Item key={index}
-                                    onClick={() => onViewColumn(columnName)}
-                                    active={columnsViewed?.includes(columnName)}>{columnName}</Dropdown.Item>
-                            )
-                        }
-                    </SplitButton>
-                    <SplitButton variant="secondary" title="🔂 Order columns" autoClose="outside" >
-                        <Dropdown.Item disabled>Click item to move it up</Dropdown.Item>
-                        <Dropdown.Divider />
-                        {
-                            columnsOrder.map((columnName: string, index: number) =>
-                                <Dropdown.Item key={index} disabled={index === 0}
-                                    onClick={() => onColumnsOrderSelected(columnName)}>{columnName}</Dropdown.Item>
-                            )
-                        }
-                    </SplitButton>
-                    <SplitButton variant="secondary" title="📅 Date columns" autoClose="outside" >
-                        <Dropdown.Item disabled>Select columns rendered as date</Dropdown.Item>
-                        <Dropdown.Divider />
-                        {
-                            columnsViewed.map((columnName: string, index: number) =>
-                                <Dropdown.Item key={index}
-                                    onClick={() => onColumnDateSelected(columnName)}
-                                    active={columnsDate?.includes(columnName)}>{columnName}</Dropdown.Item>
-                            )
-                        }
-                    </SplitButton>
-                </Stack>
-                <br />
-                <Stack direction="horizontal" gap={2}>
-                    <Button disabled={columnsName.length === 0} variant="success" onClick={downLoadCsv}>💾 Export data as csv</Button>
-                    {/*
-                    <SplitButton variant="secondary" title="🆎 Order by column" autoClose="outside" >
-                        <Dropdown.Item disabled>Select order column</Dropdown.Item>
-                        <Dropdown.Divider />
-                        {
-                            columnsViewed.map((columnName: string, index: number) =>
-                                <Dropdown.Item key={index}
-                                    onClick={() => setOrderColumn(columnName)}
-                                    active={columnName===orderColumn}>{columnName}</Dropdown.Item>
-                            )
-                        }
-                    </SplitButton>*/
-}
-                </Stack>
-                <CSVLink id="downloadcsv" style={{ visibility: "hidden" }} filename="data" data={props.data} headers={csvHeader()}></CSVLink>
-            </Card.Body>
-        </Card >
+        <>
+            <SplitButton variant="secondary" title="🔍 Columns viewed" autoClose="outside" >
+                <Dropdown.Item onClick={() => viewColumns(columnsName)}>(All)</Dropdown.Item>
+                <Dropdown.Item onClick={() => viewColumns([])}>(None)</Dropdown.Item>
+                <Dropdown.Divider />
+                {
+                    columnsName.map((columnName: string, index: number) =>
+                        <Dropdown.Item key={index}
+                            onClick={() => onViewColumn(columnName)}
+                            active={columnsViewed?.includes(columnName)}>{columnName}</Dropdown.Item>
+                    )
+                }
+            </SplitButton>
+            <SplitButton variant="secondary" title="🔂 Order columns" autoClose="outside" >
+                <Dropdown.Item disabled>Click item to move it up</Dropdown.Item>
+                <Dropdown.Divider />
+                {
+                    columnsOrder.map((columnName: string, index: number) =>
+                        <Dropdown.Item key={index} disabled={index === 0}
+                            onClick={() => onColumnsOrderSelected(columnName)}>{columnName}</Dropdown.Item>
+                    )
+                }
+            </SplitButton>
+            <SplitButton variant="secondary" title="📅 Date columns" autoClose="outside" >
+                <Dropdown.Item disabled>Select columns rendered as date</Dropdown.Item>
+                <Dropdown.Divider />
+                {
+                    columnsViewed.map((columnName: string, index: number) =>
+                        <Dropdown.Item key={index}
+                            onClick={() => onColumnDateSelected(columnName)}
+                            active={columnsDate?.includes(columnName)}>{columnName}</Dropdown.Item>
+                    )
+                }
+            </SplitButton>
+            &nbsp;
+            <Button disabled={columnsName.length === 0} variant="success" onClick={downLoadCsv}>💾 Export data as csv</Button>
+            <CSVLink id="downloadcsv" style={{ visibility: "hidden" }} filename="data" data={props.data} headers={csvHeader()}></CSVLink>
+        </>
+
     );
 
 }
