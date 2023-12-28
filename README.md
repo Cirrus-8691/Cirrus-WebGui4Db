@@ -132,13 +132,13 @@ webApp:
         hosts:
           - myDomain.com
 
-serviceMongoDb:
+serviceGateway:
   ingress:
     hosts:
       #- host: localhost
        - host: myDomain.com
         paths:
-          - path: /cirrus-service-mongodb(/|$)(.*)
+          - path: /cirrus-webgui4db-gateway(/|$)(.*)
             pathType: Prefix
      tls:
       - secretName: cirrus-tls

@@ -28,7 +28,7 @@ serviceGateway:
       - host: localhost
       # - host: myDomain.com
         paths:
-          - path: /cirrus-service-gateway(/|$)(.*)
+          - path: /cirrus-webgui4db-gateway(/|$)(.*)
             pathType: Prefix
     # tls:
     #  - secretName: letsencrypt-tls
