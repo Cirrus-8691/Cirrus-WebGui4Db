@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.serviceGateway.image.pullPolicy }}
           ports:
             - name : service-port
-              containerPort: 3000
+              containerPort: 3000   ## see Dockerfile.gateway SERVICE_PORT="3000"
               protocol: TCP
 
           livenessProbe:
@@ -54,9 +54,19 @@ spec:
 
           env:
           - name: SERVICE_HOST
-            value: "0.0.0.0"  ## see Dockerfile SERVICE_HOST="0.0.0.0"
+            value: "0.0.0.0"  ## see Dockerfile.gateway SERVICE_HOST="0.0.0.0"
           - name: SERVICE_PORT
-            value: "3000"     ## see Dockerfile SERVICE_PORT="3000"
+            value: "3000"     ## see Dockerfile.gateway SERVICE_PORT="3000"
+          - name: SERVICE_NAMESPACE
+            value: {{ .Release.Namespace | quote }}
+          - name: SERVICE_MONGODB_NAME
+            name: {{ include "cirrus-service-mongodb.fullname" . }}
+          - name: SERVICE_MONGODB_PORT
+            value: "3000"     ## see Dockerfile.mongodb SERVICE_PORT="3000"
+          - name: SERVICE_POSTGRESQL_NAME
+            name: {{ include "cirrus-service-postgresql.fullname" . }}
+          - name: SERVICE_POSTGRESQL_PORT
+            value: "3000"     ## see Dockerfile.postgresql SERVICE_PORT="3000"
 
           resources:
             {{- toYaml .Values.serviceGateway.resources | nindent 12 }}

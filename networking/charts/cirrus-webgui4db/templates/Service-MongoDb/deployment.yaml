@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.serviceMongoDb.image.pullPolicy }}
           ports:
             - name : service-port
-              containerPort: 3000
+              containerPort: 3000   ## see Dockerfile.mongodb SERVICE_PORT="3000"
               protocol: TCP
 
           livenessProbe:
@@ -54,9 +54,9 @@ spec:
 
           env:
           - name: SERVICE_HOST
-            value: "0.0.0.0"  ## see Dockerfile SERVICE_HOST="0.0.0.0"
+            value: "0.0.0.0"  ## see Dockerfile.mongodb SERVICE_HOST="0.0.0.0"
           - name: SERVICE_PORT
-            value: "3000"     ## see Dockerfile SERVICE_PORT="3000"
+            value: "3000"     ## see Dockerfile.mongodb SERVICE_PORT="3000"
 
           resources:
             {{- toYaml .Values.serviceMongoDb.resources | nindent 12 }}

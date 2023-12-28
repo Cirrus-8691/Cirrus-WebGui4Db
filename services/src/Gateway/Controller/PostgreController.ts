@@ -6,9 +6,10 @@ export default class PostgreController extends GenericDbController {
 
     public constructor(server: HttpFastifyServer) {
 
-        const namespace = undefined;
-        const serviceUrl = "127.0.0.1:4002";
-        const serviceRoute = `http://${namespace ? namespace + "." : ""}${serviceUrl}${QueryController.RouteBeginning}`;
+        const namespace = process.env.SERVICE_NAMESPACE;
+        const serviceHost = process.env.SERVICE_POSTGRESQL_NAME ?? "127.0.0.1:4002";
+        const servicePort = process.env.SERVICE_POSTGRESQL_PORT ?? "4002";
+        const serviceRoute = `http://${namespace ? namespace + "." : ""}${serviceHost}:${servicePort}${QueryController.RouteBeginning}`;
 
         super(server, "postgre", serviceRoute);
     }
