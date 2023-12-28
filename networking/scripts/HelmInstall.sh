@@ -32,7 +32,7 @@ if ! [ $? -eq 0 ]; then
   exit 1
 fi
 
-echo "♻️  Uninstall $CHART "wget 
+echo "♻️  Uninstall $CHART " 
 helm -n $1 uninstall $CHART
 
 echo "✨  Install $CHART"
