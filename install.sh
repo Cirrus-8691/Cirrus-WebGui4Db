@@ -1,7 +1,7 @@
 #!/bin/bash
 # Use this version if no parameter supplied
 DEFAULT_NAMESPACE=Default
-DEFAULT_VERSION="0.1.2"
+DEFAULT_VERSION="1.2.0"
 
 if [ $# -eq 0 ]; then
     NAMESPACE=$DEFAULT_NAMESPACE
