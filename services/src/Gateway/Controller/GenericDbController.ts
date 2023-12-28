@@ -16,38 +16,38 @@ export default class GenericDbController extends QueryController {
 
         this.serviceRoute = serviceRoute;
 
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/test`
-            , {
+        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/test`,
+            {
                 handler: this.getTestConnection.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/auth`
-            , {
+        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/auth`,
+            {
                 handler: this.getAuth.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/repositories`
-            , {
+        this.server.get(`${QueryController.RouteBeginning}${serviceName}/repositories`,
+            {
                 handler: this.getRepositories.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/entities`
-            , {
+        this.server.get(`${QueryController.RouteBeginning}${serviceName}/entities`,
+            {
                 handler: this.getEntities.bind(this)
             }
         );
-        this.server.delete(`${QueryController.RouteBeginning}${serviceName}/entity`
-            , {
+        this.server.delete(`${QueryController.RouteBeginning}${serviceName}/entity`,
+            {
                 handler: this.deleteEntity.bind(this)
             }
         );
-        this.server.post(`${QueryController.RouteBeginning}${serviceName}/entity`
-            , {
+        this.server.post(`${QueryController.RouteBeginning}${serviceName}/entity`,
+            {
                 handler: this.updateEntity.bind(this)
             }
         );
-        this.server.put(`${QueryController.RouteBeginning}${serviceName}/entity`
-            , {
+        this.server.put(`${QueryController.RouteBeginning}${serviceName}/entity`,
+            {
                 handler: this.insertEntity.bind(this)
             }
         );
