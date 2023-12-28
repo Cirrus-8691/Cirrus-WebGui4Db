@@ -2,7 +2,7 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 # Use this version if no parameter supplied
-PREVIOUS_DEFAULT_VERSION="0.1.2"
+PREVIOUS_DEFAULT_VERSION="1.2.0"
 
 echo ""
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

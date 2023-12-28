@@ -8,4 +8,4 @@ type: application
 version: 0.1.2
 
 # This is the version number of the application being deployed.
-appVersion: "0.1.2"
+appVersion: "1.2.0"
