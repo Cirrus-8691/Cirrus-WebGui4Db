@@ -20,6 +20,7 @@ echo "┃ 🧊  Build $bold $PACKAGE_NAME $normal Docker image"
 echo "┃────────────────────────────────────────────"
 echo "┃ ✳️ PACKAGE_VERSION="$PACKAGE_VERSION
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "♻️  Clean 'dist/'" 
 rm -r -d dist/
 
 docker build --pull --rm -f "Dockerfile.$SERVICE_ID" -t $PACKAGE_NAME:$PACKAGE_VERSION "."
