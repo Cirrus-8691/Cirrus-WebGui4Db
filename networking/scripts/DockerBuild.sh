@@ -18,7 +18,7 @@ echo ""
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "┃ ⚙️  Build $bold $PACKAGE_NAME $normal"
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-rm -r -d dist/
+rm -r -d build/
 npm run build
 if ! [ $? -eq 0 ]; then
     echo "$red┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
