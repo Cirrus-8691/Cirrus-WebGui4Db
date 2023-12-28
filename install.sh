@@ -1,7 +1,7 @@
 #!/bin/bash
 # Use this version if no parameter supplied
 DEFAULT_NAMESPACE=Default
-DEFAULT_VERSION="0.1.1"
+DEFAULT_VERSION="0.1.2"
 
 if [ $# -eq 0 ]; then
     NAMESPACE=$DEFAULT_NAMESPACE
@@ -58,13 +58,24 @@ if ! [ $? -eq 0 ]; then
   exit 1
 fi
 
-cd ../serviceMongodb/
+cd ../service/
 npm install
 if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1
 fi
-../networking/scripts/DockerBuildService.sh $VERSION cirrus-service-mongodb
+
+../networking/scripts/DockerBuildService.sh $VERSION gateway
+if ! [ $? -eq 0 ]; then
+  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+  exit 1
+fi
+../networking/scripts/DockerBuildService.sh $VERSION mongodb
+if ! [ $? -eq 0 ]; then
+  echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+  exit 1
+fi
+../networking/scripts/DockerBuildService.sh $VERSION postgre
 if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1
