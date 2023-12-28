@@ -75,7 +75,7 @@ if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1
 fi
-../networking/scripts/DockerBuildService.sh $VERSION postgre
+../networking/scripts/DockerBuildService.sh $VERSION postgresql
 if ! [ $? -eq 0 ]; then
   echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
   exit 1
