@@ -31,7 +31,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.serviceMongoDb.securityContext | nindent 12 }}
-          image: "{{ .Values.serviceMongoDb.image.repository }}"
+          image: "{{ .Values.serviceMongoDb.image.repository }}:{{ .Values.serviceMongoDb.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.serviceMongoDb.image.pullPolicy }}
           ports:
             - name : service-port
