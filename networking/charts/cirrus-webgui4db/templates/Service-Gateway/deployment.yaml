@@ -60,11 +60,11 @@ spec:
           - name: SERVICE_NAMESPACE
             value: {{ .Release.Namespace | quote }}
           - name: SERVICE_MONGODB_NAME
-            name: {{ include "cirrus-service-mongodb.fullname" . }}
+            value: {{ include "cirrus-service-mongodb.fullname" . }}
           - name: SERVICE_MONGODB_PORT
             value: "3000"     ## see Dockerfile.mongodb SERVICE_PORT="3000"
           - name: SERVICE_POSTGRESQL_NAME
-            name: {{ include "cirrus-service-postgresql.fullname" . }}
+            value: {{ include "cirrus-service-postgresql.fullname" . }}
           - name: SERVICE_POSTGRESQL_PORT
             value: "3000"     ## see Dockerfile.postgresql SERVICE_PORT="3000"
 
