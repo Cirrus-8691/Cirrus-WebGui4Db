@@ -19,8 +19,8 @@ export interface ServiceOptions {
 export default class Service implements BaseService {
 
     public readonly name: string;
+    public readonly server: HttpFastifyServer;
 
-    private readonly server: HttpFastifyServer;
     private readonly controller: Controller;
 
     public constructor(options: ServiceOptions, createController: (server: HttpFastifyServer, db: Database) => Controller) {
