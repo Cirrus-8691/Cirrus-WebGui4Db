@@ -40,10 +40,12 @@ import { startService } from "./GenericServiceDatabase/StartService";
     const postMongo = (portApiGateway + 1).toString();
     startService(
         postMongo,
-        (url: URL) => (new Service(
+        (url: URL) => (new Service({
+            name: "mongodb",
             url,
-            true,
-            new MongoDatabase(),
+            logger: true,
+            db: new MongoDatabase()
+        },
             (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)))
         ));
 
@@ -51,10 +53,12 @@ import { startService } from "./GenericServiceDatabase/StartService";
     const portPostgre = (portApiGateway + 2).toString();
     startService(
         portPostgre,
-        (url: URL) => (new Service(
+        (url: URL) => (new Service({
+            name: "postgresql",
             url,
-            true,
-            new PostgreSqlDatabase(),
+            logger: true,
+            db: new PostgreSqlDatabase()
+        },
             (server: HttpFastifyServer, db: Database) => (new PostgreController(server, db)))
         ));
 

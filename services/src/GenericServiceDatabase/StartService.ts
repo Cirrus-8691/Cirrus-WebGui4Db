@@ -4,7 +4,7 @@ import { BaseService } from "./Service";
 const exitHandler = async (serviceStarted: BaseService | undefined): Promise<void> => {
     console.log(`Process terminated by SIGNAL`);
     if (serviceStarted) {
-        console.log("Disposing: " + serviceStarted.toString());
+        console.log("💀 Disposing: " + serviceStarted.toString());
         await serviceStarted.dispose();
     }
     process.exit(0);

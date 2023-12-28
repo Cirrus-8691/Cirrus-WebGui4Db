@@ -17,10 +17,12 @@ import MongoDatabase from "./Model/MongoDatabase";
     const port = process.env.SERVICE_PORT;
     startService(
         port,
-        (url: URL) => (new Service(
+        (url: URL) => (new Service({
+            name: "mongodb",
             url,
-            true,
-            new MongoDatabase(),
+            logger: true,
+            db: new MongoDatabase()
+        },
             (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)))
         ));
 

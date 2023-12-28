@@ -5,15 +5,15 @@ import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../../GenericServiceDatabase/Model/Database";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
-import QueryController from "../../GenericServiceDatabase/Controller/QueryController";
+import Controller from "../../GenericServiceDatabase/Controller/Controller";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 
-export default class MongoController extends QueryController {
+export default class MongoController extends Controller {
 
     public constructor(server: HttpFastifyServer, db: Database) {
         super(server, db);
 
-        const route = QueryController.RouteBeginning;
+        const route = Controller.RouteBeginning;
         this.server.get(route + "connection/test", {
             handler: this.getTestConnection.bind(this)
         });

@@ -4,9 +4,7 @@ import { BaseService } from "../GenericServiceDatabase/Service";
 
 export default class Gateway implements BaseService {
 
-    public static readonly Name = PackageJson().name;
-    public static readonly Desc = PackageJson().version;
-    public static readonly Version = PackageJson().version;
+    public readonly name = `${PackageJson().name}-gateway`;
 
     private readonly server: HttpFastifyServer;
     public get Server() : HttpFastifyServer { return this.server }
@@ -27,6 +25,8 @@ export default class Gateway implements BaseService {
     }
 
     public toString(): string {
-        return `${Gateway.Name} v${Gateway.Version} (c)${PackageJson().author}`;
+        const version = PackageJson().version;
+        const author = PackageJson().author;
+        return `${this.name} v${version} (c)${author}`;
     }
 }

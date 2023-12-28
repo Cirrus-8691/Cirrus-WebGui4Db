@@ -1,6 +1,6 @@
 {
-  "name": "cirrus-service-4db",
-  "version": "1.1.0",
+  "name": "cirrus-service",
+  "version": "1.2.0",
   "private": true,
   "description": "Cirrus service MongoDb and PostgreSQL for cirrus-webgui4db",
   "author": "Cirrus-8691",

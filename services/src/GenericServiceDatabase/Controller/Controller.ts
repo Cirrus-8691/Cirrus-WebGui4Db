@@ -3,7 +3,7 @@ import HttpFastifyServer from "../HttpFastifyServer";
 import Database from "../Model/Database";
 import GetErrorMessage from "./GetErrorMessage";
 
-export default class QueryController {
+export default class Controller {
 
     public static RouteBeginning = "/api/v1/";
 
@@ -21,6 +21,10 @@ export default class QueryController {
             }
         );
 
+    }
+
+    public async dispose(): Promise<void> {
+        this.db.dispose();
     }
 
     public async getHealth(request: FastifyRequest): Promise<string> {
