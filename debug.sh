@@ -1,16 +1,16 @@
 #!/bin/bash
-export DEFAULT_NAMESPACE=Default
-export DEFAULT_VERSION="0.1.1"
+DEFAULT_NAMESPACE=Default
+DEFAULT_VERSION="1.2.0"
 
 if [ $# -eq 0 ]; then
-    export NAMESPACE=$DEFAULT_NAMESPACE
-    export VERSION=$DEFAULT_VERSION
+    NAMESPACE=$DEFAULT_NAMESPACE
+    VERSION=$DEFAULT_VERSION
 elif [ $# -eq 1 ]; then
-    export NAMESPACE=$1
-    export VERSION=$DEFAULT_VERSION
+    NAMESPACE=$1
+    VERSION=$DEFAULT_VERSION
 elif [ $# -eq 2 ]; then
-      export NAMESPACE=$1
-      export VERSION=$2
+      NAMESPACE=$1
+      VERSION=$2
 else
       echo "🔥 Bad parameters 🔥"
 fi
