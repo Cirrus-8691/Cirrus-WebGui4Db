@@ -16,7 +16,15 @@ export default class PostgreController extends GenericDbController {
         const servicePort = process.env.SERVICE_POSTGRESQL_PORT ?? "4002";
         const serviceRoute = `http://${serviceHost}${namespace ? "." + namespace : ""}:${servicePort}${BaseController.RouteBeginning}`;
 
-        super(server, PostgreController.Tag, serviceRoute);
+        super(server,
+            {
+                ...PostgreController.Tag,
+                repositories: "tables",
+                repository: "table",
+                entities: "rows",
+                entity: "row"
+            },
+            serviceRoute);
     }
 
 }

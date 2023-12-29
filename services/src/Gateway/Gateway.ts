@@ -20,9 +20,9 @@ export default class Gateway implements BaseService {
             description: PackageJson().description,
             version: this.version,
             tags: [
-                MongoController.Tag,
-                PostgreController.Tag,
                 BaseController.Tag,
+                MongoController.Tag,
+                PostgreController.Tag
             ]
 
         });

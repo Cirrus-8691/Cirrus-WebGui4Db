@@ -6,12 +6,18 @@ import BaseController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./Ba
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 import { Auth } from "../../ServiceMongodb/Domain/JwToken";
 
+export interface DbTag extends Tag {
+    repositories : string;
+    repository : string;
+    entities : string;
+    entity : string;
+}
 
 export default class GenericDbController extends BaseController {
 
     private readonly serviceRoute: string;
 
-    public constructor(server: HttpFastifyServer, tag: Tag, serviceRoute: string) {
+    public constructor(server: HttpFastifyServer, tag: DbTag, serviceRoute: string) {
         super(server);
 
         this.serviceRoute = serviceRoute;
@@ -22,38 +28,49 @@ export default class GenericDbController extends BaseController {
                 description: "Test database connection",
             },
             handler: this.getTestConnection.bind(this)
-        }
-        );
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`,
-            {
-                handler: this.getAuth.bind(this)
-            }
-        );
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`,
-            {
-                handler: this.getRepositories.bind(this)
-            }
-        );
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`,
-            {
-                handler: this.getEntities.bind(this)
-            }
-        );
-        this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`,
-            {
-                handler: this.deleteEntity.bind(this)
-            }
-        );
-        this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`,
-            {
-                handler: this.updateEntity.bind(this)
-            }
-        );
-        this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`,
-            {
-                handler: this.insertEntity.bind(this)
-            }
-        );
+        });
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`, {
+            schema: {
+                tags: [tag.name],
+                description: "Athenticate to database by connection",
+            },
+            handler: this.getAuth.bind(this)
+        });
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`, {
+            schema: {
+                tags: [tag.name],
+                description: `List of database ${tag.repositories}`,
+            },
+            handler: this.getRepositories.bind(this)
+        });
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`, {
+            schema: {
+                tags: [tag.name],
+                description: `List of ${tag.entities} of a ${tag.repository}`,
+            },
+            handler: this.getEntities.bind(this)
+        });
+        this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`, {
+            schema: {
+                tags: [tag.name],
+                description: `Insert a ${tag.entity} of a ${tag.repository}`,
+            },
+            handler: this.insertEntity.bind(this)
+        });
+        this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`, {
+            schema: {
+                tags: [tag.name],
+                description: `Update a ${tag.entity} of a ${tag.repository}`,
+            },
+            handler: this.updateEntity.bind(this)
+        });
+        this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`, {
+            schema: {
+                tags: [tag.name],
+                description: `Delete a ${tag.entity} of a ${tag.repository}`,
+            },
+            handler: this.deleteEntity.bind(this)
+        });
 
     }
 

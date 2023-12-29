@@ -16,7 +16,15 @@ export default class MongoController extends GenericDbController {
         const servicePort = process.env.SERVICE_MONGODB_PORT ?? "4001";
         const serviceRoute = `http://${serviceHost}${namespace ? "." + namespace : ""}:${servicePort}${BaseController.RouteBeginning}`;
 
-        super(server, MongoController.Tag, serviceRoute);
+        super(server,
+            {
+                ...MongoController.Tag,
+                repositories: "collections",
+                repository: "collection",
+                entities: "documents",
+                entity: "document"
+            },
+            serviceRoute);
 
     }
 
