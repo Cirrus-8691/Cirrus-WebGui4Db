@@ -84,7 +84,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common labels
 */}}
 {{- define "cirrus-service-gateway.labels" -}}
-helm.sh/chart: {{ include "cirrus-service-gateway.chart" . }}
+helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
 {{ include "cirrus-webgui4db.service-gateway" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -95,7 +95,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common labels
 */}}
 {{- define "cirrus-cirrus-service-mongodb.labels" -}}
-helm.sh/chart: {{ include "cirrus-cirrus-service-mongodb.chart" . }}
+helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
 {{ include "cirrus-cirrus-service-mongodb.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -106,7 +106,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common labels
 */}}
 {{- define "cirrus-service-postgresql.labels" -}}
-helm.sh/chart: {{ include "cirrus-service-postgresql.chart" . }}
+helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
 {{ include "cirrus-service-postgresql.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
