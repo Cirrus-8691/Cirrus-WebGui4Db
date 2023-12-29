@@ -1,8 +1,13 @@
-import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
+import HttpFastifyServer, { Tag } from "../../GenericServiceDatabase/HttpFastifyServer";
 import QueryController from "./QueryController";
 import GenericDbController from "./GenericDbController";
 
 export default class PostgreController extends GenericDbController {
+
+    static Tag: Tag = {
+        name: "postgre",
+        description: "PostgreSQL service provider"
+    };
 
     public constructor(server: HttpFastifyServer) {
 
@@ -11,7 +16,7 @@ export default class PostgreController extends GenericDbController {
         const servicePort = process.env.SERVICE_POSTGRESQL_PORT ?? "4002";
         const serviceRoute = `http://${serviceHost}${namespace ? "." + namespace : ""}:${servicePort}${QueryController.RouteBeginning}`;
 
-        super(server, "postgre", serviceRoute);
+        super(server, PostgreController.Tag, serviceRoute);
     }
 
 }

@@ -1,35 +1,53 @@
-import fastify, { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import fastify, { FastifyInstance, FastifyPluginOptions, FastifyRegisterOptions, LightMyRequestResponse } from 'fastify';
 import fastifyCors from '@fastify/cors';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 
 export const HttpHeadersAuthStartWith = "Bearer ";
+
+export interface Tag {
+    name: string,
+    description: string
+}
+export interface ServerOptions {
+    url: URL;
+    logger: boolean;
+    name: string,
+    description: string,
+    version: number,
+    tags: Tag[]
+}
 
 export default class HttpFastifyServer {
 
     private readonly instance: FastifyInstance;
-    private readonly url: URL;
+    private readonly options: ServerOptions;
 
     private setHealth = true;
-    public set HealthSet(value : boolean) {
+    public set HealthSet(value: boolean) {
         this.setHealth = value;
     }
-    public get HealthSet() : boolean {
+    public get HealthSet(): boolean {
         return this.setHealth;
     }
 
-    public constructor(url: URL, logger: boolean) {
-        this.url = url;
+    public constructor(options: ServerOptions) {
+        this.options = options;
         this.instance = fastify({
             caseSensitive: true,
-            logger
+            logger: options.logger
         });
         this.instance.register(fastifyCors, { origin: "*" });
     }
 
     public async start(): Promise<void> {
         await this.instance.ready();
+        if (this.externalPath) {
+            this.instance.swagger();
+        }
         await this.instance.listen({
-            port: +this.url.port,
-            host: this.url.hostname
+            port: +this.options.url.port,
+            host: this.options.url.hostname
         });
     }
 
@@ -95,6 +113,43 @@ export default class HttpFastifyServer {
             });
         }
         return response;
+    }
+
+    static SwaggerRoutePrefix = "/documentation";
+
+    private externalPath = "";
+    get docUrl(): string {
+        return this.externalPath + HttpFastifyServer.SwaggerRoutePrefix;
+    }
+
+    async documentation(externalPath: string): Promise<void> {
+        this.externalPath = externalPath;
+        const swaggerOpts: FastifyRegisterOptions<FastifyPluginOptions> = {
+            routePrefix: HttpFastifyServer.SwaggerRoutePrefix,
+            exposeRoute: true,
+            hideUntagged: true,
+            swagger: {
+                host: `${this.options.url.host}:${this.options.url.port}`,
+                schemes: [this.options.url.protocol],
+                info: {
+                    title: "Service: " + this.options.name,
+                    description: this.options.description,
+                    version: this.options.version.toPrecision(2)
+                },
+                tags: this.options.tags,
+                securityDefinitions: {
+                    apiKey: {
+                        // https://swagger.io/docs/specification/authentication/api-keys/
+                        type: "apiKey",
+                        in: "header",
+                        name: "authorization",
+                        description: `This API uses Value equal to 'Bearer [authToken]'`
+                    }
+                }
+            }
+        };
+        await this.instance.register(fastifySwagger, swaggerOpts);
+        await this.instance.register(fastifySwaggerUi, swaggerOpts);
     }
 
     public async close(): Promise<void> {

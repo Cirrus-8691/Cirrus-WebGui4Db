@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
+import HttpFastifyServer, { Tag } from "../../GenericServiceDatabase/HttpFastifyServer";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import QueryController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./QueryController";
@@ -11,42 +11,42 @@ export default class GenericDbController extends QueryController {
 
     private readonly serviceRoute: string;
 
-    public constructor(server: HttpFastifyServer, serviceName: string, serviceRoute: string) {
+    public constructor(server: HttpFastifyServer, tag: Tag, serviceRoute: string) {
         super(server);
 
         this.serviceRoute = serviceRoute;
 
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/test`,
+        this.server.get(`${QueryController.RouteBeginning}${tag.name}/connection/test`,
             {
                 handler: this.getTestConnection.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/connection/auth`,
+        this.server.get(`${QueryController.RouteBeginning}${tag.name}/connection/auth`,
             {
                 handler: this.getAuth.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/repositories`,
+        this.server.get(`${QueryController.RouteBeginning}${tag.name}/repositories`,
             {
                 handler: this.getRepositories.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${serviceName}/entities`,
+        this.server.get(`${QueryController.RouteBeginning}${tag.name}/entities`,
             {
                 handler: this.getEntities.bind(this)
             }
         );
-        this.server.delete(`${QueryController.RouteBeginning}${serviceName}/entity`,
+        this.server.delete(`${QueryController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.deleteEntity.bind(this)
             }
         );
-        this.server.post(`${QueryController.RouteBeginning}${serviceName}/entity`,
+        this.server.post(`${QueryController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.updateEntity.bind(this)
             }
         );
-        this.server.put(`${QueryController.RouteBeginning}${serviceName}/entity`,
+        this.server.put(`${QueryController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.insertEntity.bind(this)
             }

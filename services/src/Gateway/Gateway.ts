@@ -1,16 +1,33 @@
 import { PackageJson } from "../GenericServiceDatabase/Domain/PackageJson";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import { BaseService } from "../GenericServiceDatabase/Service";
+import MongoController from "./Controller/MongoController";
+import PostgreController from "./Controller/PostgreController";
 
 export default class Gateway implements BaseService {
 
     public readonly name = `${PackageJson().name}-gateway`;
+    public readonly version = parseInt(PackageJson().version ?? "0");
 
-    private readonly server: HttpFastifyServer;
-    public get Server() : HttpFastifyServer { return this.server }
+    public readonly server: HttpFastifyServer;
 
-    public constructor(url: URL, logger : boolean, createControllers :(server: HttpFastifyServer) => void) {
-        this.server = new HttpFastifyServer(url, logger);
+    public constructor(url: URL, logger: boolean, createControllers: (server: HttpFastifyServer) => void) {
+        this.server = new HttpFastifyServer({
+            url,
+            logger,
+            name: this.name,
+            description: PackageJson().description,
+            version: this.version,
+            tags: [
+                MongoController.Tag,
+                PostgreController.Tag,
+                {
+                    name : "probes",
+                    description:"Kubernetes liveness and readyness probes"
+                }
+            ]
+
+        });
         createControllers(this.server);
     }
 
@@ -25,8 +42,7 @@ export default class Gateway implements BaseService {
     }
 
     public toString(): string {
-        const version = PackageJson().version;
         const author = PackageJson().author;
-        return `${this.name} v${version} (c)${author}`;
+        return `${this.name} v${this.version} (c)${author}`;
     }
 }

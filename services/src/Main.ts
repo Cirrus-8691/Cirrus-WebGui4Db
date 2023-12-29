@@ -25,12 +25,13 @@ import { startService } from "./GenericServiceDatabase/StartService";
     const portGateway = process.env.SERVICE_PORT; // expecting 4000
     const portApiGateway = parseInt(portGateway ?? "4000");
     graphicArtGateway();
-    startService(
+    await startService(
         portGateway,
         (url: URL) => (new Gateway(
             url,
             true,
             (server: HttpFastifyServer) => {
+                server.documentation("http://localhost");
                 new MongoGatewayController(server);
                 new PostgrGatewayController(server);
             })
@@ -38,7 +39,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
     // Starting services...
     graphicArtMongodb();
     const postMongo = (portApiGateway + 1).toString();
-    startService(
+    await startService(
         postMongo,
         (url: URL) => (new Service({
             name: "mongodb",
@@ -51,7 +52,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
 
     graphicArtPostgre();
     const portPostgre = (portApiGateway + 2).toString();
-    startService(
+    await startService(
         portPostgre,
         (url: URL) => (new Service({
             name: "postgresql",
