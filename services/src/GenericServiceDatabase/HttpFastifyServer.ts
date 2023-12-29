@@ -127,6 +127,10 @@ export default class HttpFastifyServer {
         if (externalHost) {
             // externalPath expecting: /cirrus-webgui4db-gateway(/|$)(.*)
             // or `localhost:4000`
+            const pOfAccolad = externalHost.indexOf("(");
+            if(pOfAccolad>0) {
+                externalHost = externalHost.substring(0,pOfAccolad);
+            }
             this.externalPath = externalHost;
             const host = externalHost ?? this.options.url.host;
             const swaggerOpts: FastifyRegisterOptions<FastifyPluginOptions> = {
