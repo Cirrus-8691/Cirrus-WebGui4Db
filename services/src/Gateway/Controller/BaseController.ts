@@ -54,7 +54,7 @@ export default class BaseController {
 
     public async getHealth(request: FastifyRequest): Promise<string> {
         try {
-            return "Gateway OK at " + Date.now();
+            return `Gateway OK at ${Date.now()}`;
         }
         catch (error) {
             request.log.error(error);

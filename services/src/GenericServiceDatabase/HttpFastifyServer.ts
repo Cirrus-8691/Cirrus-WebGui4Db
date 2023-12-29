@@ -21,7 +21,7 @@ export interface ServerOptions {
 export default class HttpFastifyServer {
 
     private readonly instance: FastifyInstance;
-    private readonly options: ServerOptions;
+    public readonly options: ServerOptions;
 
     private setHealth = true;
     public set HealthSet(value: boolean) {
@@ -120,7 +120,7 @@ export default class HttpFastifyServer {
 
     private externalPath: string | undefined = undefined;
     get docUrl(): string {
-        return this.externalPath + HttpFastifyServer.SwaggerRoutePrefix;
+        return this.options.url.protocol+ "//" + this.externalPath + HttpFastifyServer.SwaggerRoutePrefix;
     }
 
     async documentation(externalHost: string | undefined): Promise<void> {

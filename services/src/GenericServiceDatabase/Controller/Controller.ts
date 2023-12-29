@@ -29,7 +29,7 @@ export default class Controller {
 
     public async getHealth(request: FastifyRequest): Promise<string> {
         try {
-            return "Ok at " + Date.now();
+            return `Service ${this.server.options.name} Ok at ${Date.now()}`;
         }
         catch (error) {
             request.log.error(error);
