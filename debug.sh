@@ -1,5 +1,5 @@
 #!/bin/bash
-DEFAULT_NAMESPACE=Default
+DEFAULT_NAMESPACE=default
 DEFAULT_VERSION="1.2.0"
 
 if [ $# -eq 0 ]; then
