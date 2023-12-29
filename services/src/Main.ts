@@ -29,7 +29,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
         portGateway,
         async (url: URL) => (new Gateway(url, true)),
         async (server: HttpFastifyServer) => {
-            await server.documentation("http://localhost");
+            await server.documentation(`localhost:${portApiGateway}`);
             new MongoGatewayController(server);
             new PostgrGatewayController(server);
         }

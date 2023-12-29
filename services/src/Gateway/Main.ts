@@ -12,16 +12,16 @@ import MongoController from "./Controller/MongoController";
 
     graphicArt();
     const port = process.env.SERVICE_PORT;
-    startService(
+    const host = process.env.APIGATEWAY_INGRESS_HOST_PATH;
+    await startService(
         port,
-        (url: URL) => (new Gateway(
-            url,
-            true,
-            (server: HttpFastifyServer) => {
-                new MongoController(server);
-                new PostgreController(server);
-            })
-        ));
+        async (url: URL) => (new Gateway(url, true)),
+        async (server: HttpFastifyServer) => {
+            await server.documentation(host);
+            new MongoController(server);
+            new PostgreController(server);
+        }
+    );
 
 })()
 

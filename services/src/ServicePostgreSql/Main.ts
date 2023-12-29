@@ -14,16 +14,20 @@ import PostgreSqlDatabase from "./Model/PostgreSqlDatabase";
 
     graphicArt();
     const port = process.env.SERVICE_PORT;
-    startService(
+    await startService(
         port,
-        (url: URL) => (new Service({
-            name: "postgresql",
-            url,
-            logger: true,
-            db: new PostgreSqlDatabase()
-        },
-            (server: HttpFastifyServer, db: Database) => (new PostgreSqlController(server, db)))
-        ));
+        async (url: URL) => (
+            new Service(
+                {
+                    name: "postgresql",
+                    url,
+                    logger: true,
+                    db: new PostgreSqlDatabase()
+                },
+                (server: HttpFastifyServer, db: Database) => (new PostgreSqlController(server, db))
+            )
+        )
+    );
 
 })()
 

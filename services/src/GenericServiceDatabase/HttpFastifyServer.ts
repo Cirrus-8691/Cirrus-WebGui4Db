@@ -44,6 +44,7 @@ export default class HttpFastifyServer {
         await this.instance.ready();
         if (this.externalPath) {
             this.instance.swagger();
+            console.log("📘 Swagger documentation available at " + this.docUrl);
         }
         await this.instance.listen({
             port: +this.options.url.port,
@@ -117,39 +118,44 @@ export default class HttpFastifyServer {
 
     static SwaggerRoutePrefix = "/documentation";
 
-    private externalPath = "";
+    private externalPath: string | undefined = undefined;
     get docUrl(): string {
         return this.externalPath + HttpFastifyServer.SwaggerRoutePrefix;
     }
 
-    async documentation(externalPath: string): Promise<void> {
-        this.externalPath = externalPath;
-        const swaggerOpts: FastifyRegisterOptions<FastifyPluginOptions> = {
-            routePrefix: HttpFastifyServer.SwaggerRoutePrefix,
-            exposeRoute: true,
-            hideUntagged: true,
-            swagger: {
-                host: `${this.options.url.host}:${this.options.url.port}`,
-                schemes: [this.options.url.protocol],
-                info: {
-                    title: "Service: " + this.options.name,
-                    description: this.options.description,
-                    version: this.options.version.toPrecision(2)
-                },
-                tags: this.options.tags,
-                securityDefinitions: {
-                    apiKey: {
-                        // https://swagger.io/docs/specification/authentication/api-keys/
-                        type: "apiKey",
-                        in: "header",
-                        name: "authorization",
-                        description: `This API uses Value equal to 'Bearer [authToken]'`
+    async documentation(externalHost: string | undefined): Promise<void> {
+        if (externalHost) {
+            // externalPath expecting: /cirrus-webgui4db-gateway(/|$)(.*)
+            // or `localhost:4000`
+            this.externalPath = externalHost;
+            const host = externalHost ?? this.options.url.host;
+            const swaggerOpts: FastifyRegisterOptions<FastifyPluginOptions> = {
+                routePrefix: HttpFastifyServer.SwaggerRoutePrefix,
+                exposeRoute: true,
+                hideUntagged: true,
+                swagger: {
+                    host,
+                    schemes: [this.options.url.protocol.replace(":","")],
+                    info: {
+                        title: "Service: " + this.options.name,
+                        description: this.options.description,
+                        version: this.options.version.toPrecision(2)
+                    },
+                    tags: this.options.tags,
+                    securityDefinitions: {
+                        apiKey: {
+                            // https://swagger.io/docs/specification/authentication/api-keys/
+                            type: "apiKey",
+                            in: "header",
+                            name: "authorization",
+                            description: `This API uses Value equal to 'Bearer [authToken]'`
+                        }
                     }
                 }
-            }
-        };
-        await this.instance.register(fastifySwagger, swaggerOpts);
-        await this.instance.register(fastifySwaggerUi, swaggerOpts);
+            };
+            await this.instance.register(fastifySwagger, swaggerOpts);
+            await this.instance.register(fastifySwaggerUi, swaggerOpts);
+        }
     }
 
     public async close(): Promise<void> {
