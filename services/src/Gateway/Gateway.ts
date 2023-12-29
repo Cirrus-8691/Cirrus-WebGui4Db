@@ -3,6 +3,7 @@ import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import { BaseService } from "../GenericServiceDatabase/Service";
 import MongoController from "./Controller/MongoController";
 import PostgreController from "./Controller/PostgreController";
+import BaseController from "./Controller/BaseController";
 
 export default class Gateway implements BaseService {
 
@@ -11,7 +12,7 @@ export default class Gateway implements BaseService {
 
     public readonly server: HttpFastifyServer;
 
-    public constructor(url: URL, logger: boolean, createControllers: (server: HttpFastifyServer) => void) {
+    public constructor(url: URL, logger: boolean) {
         this.server = new HttpFastifyServer({
             url,
             logger,
@@ -21,14 +22,10 @@ export default class Gateway implements BaseService {
             tags: [
                 MongoController.Tag,
                 PostgreController.Tag,
-                {
-                    name : "probes",
-                    description:"Kubernetes liveness and readyness probes"
-                }
+                BaseController.Tag,
             ]
 
         });
-        createControllers(this.server);
     }
 
     public async start(): Promise<void> {

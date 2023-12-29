@@ -1,3 +1,4 @@
+import HttpFastifyServer from "./HttpFastifyServer";
 import { BaseService } from "./Service";
 
 
@@ -10,7 +11,11 @@ const exitHandler = async (serviceStarted: BaseService | undefined): Promise<voi
     process.exit(0);
 }
 
-export const startService = async (port: string | undefined, injectService: (url: URL) => BaseService): Promise<BaseService | undefined> => {
+export const startService = async (port: string | undefined,
+    injectService: (url: URL) => Promise<BaseService>,
+    createControllers?: (server: HttpFastifyServer) => Promise<void>
+): Promise<BaseService | undefined> => {
+
     let serviceStarted: BaseService | undefined = undefined;
     process.once('SIGINT', // action on [Ctrl]+C
         async () => await exitHandler(serviceStarted));
@@ -32,7 +37,10 @@ export const startService = async (port: string | undefined, injectService: (url
         console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         if (hostOk && portOk) {
-            serviceStarted = injectService(url);
+            serviceStarted = await injectService(url);
+            if (createControllers) {
+                await createControllers(serviceStarted.server);
+            }
             console.log("🚀 Starting: " + serviceStarted.toString());
             console.log("────────────────────────────────────────────");
             await serviceStarted.start();

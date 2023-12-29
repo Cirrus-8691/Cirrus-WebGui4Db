@@ -27,40 +27,46 @@ import { startService } from "./GenericServiceDatabase/StartService";
     graphicArtGateway();
     await startService(
         portGateway,
-        (url: URL) => (new Gateway(
-            url,
-            true,
-            (server: HttpFastifyServer) => {
-                server.documentation("http://localhost");
-                new MongoGatewayController(server);
-                new PostgrGatewayController(server);
-            })
-        ));
+        async (url: URL) => (new Gateway(url, true)),
+        async (server: HttpFastifyServer) => {
+            await server.documentation("http://localhost");
+            new MongoGatewayController(server);
+            new PostgrGatewayController(server);
+        }
+    );
     // Starting services...
     graphicArtMongodb();
     const postMongo = (portApiGateway + 1).toString();
     await startService(
         postMongo,
-        (url: URL) => (new Service({
-            name: "mongodb",
-            url,
-            logger: true,
-            db: new MongoDatabase()
-        },
-            (server: HttpFastifyServer, db: Database) => (new MongoController(server, db)))
-        ));
+        async (url: URL) => (
+            new Service(
+                {
+                    name: "mongodb",
+                    url,
+                    logger: true,
+                    db: new MongoDatabase()
+                },
+                (server: HttpFastifyServer, db: Database) => (new MongoController(server, db))
+            )
+        )
+    );
 
     graphicArtPostgre();
     const portPostgre = (portApiGateway + 2).toString();
     await startService(
         portPostgre,
-        (url: URL) => (new Service({
-            name: "postgresql",
-            url,
-            logger: true,
-            db: new PostgreSqlDatabase()
-        },
-            (server: HttpFastifyServer, db: Database) => (new PostgreController(server, db)))
-        ));
+        async (url: URL) => (
+            new Service(
+                {
+                    name: "postgresql",
+                    url,
+                    logger: true,
+                    db: new PostgreSqlDatabase()
+                },
+                (server: HttpFastifyServer, db: Database) => (new PostgreController(server, db))
+            )
+        )
+    );
 
 })()

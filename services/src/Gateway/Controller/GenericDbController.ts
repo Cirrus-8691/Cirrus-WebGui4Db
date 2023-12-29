@@ -2,12 +2,12 @@ import { FastifyRequest } from "fastify";
 import HttpFastifyServer, { Tag } from "../../GenericServiceDatabase/HttpFastifyServer";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
-import QueryController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./QueryController";
+import BaseController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./BaseController";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 import { Auth } from "../../ServiceMongodb/Domain/JwToken";
 
 
-export default class GenericDbController extends QueryController {
+export default class GenericDbController extends BaseController {
 
     private readonly serviceRoute: string;
 
@@ -16,37 +16,40 @@ export default class GenericDbController extends QueryController {
 
         this.serviceRoute = serviceRoute;
 
-        this.server.get(`${QueryController.RouteBeginning}${tag.name}/connection/test`,
-            {
-                handler: this.getTestConnection.bind(this)
-            }
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/test`, {
+            schema: {
+                tags: [tag.name],
+                description: "Test database connection",
+            },
+            handler: this.getTestConnection.bind(this)
+        }
         );
-        this.server.get(`${QueryController.RouteBeginning}${tag.name}/connection/auth`,
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`,
             {
                 handler: this.getAuth.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${tag.name}/repositories`,
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`,
             {
                 handler: this.getRepositories.bind(this)
             }
         );
-        this.server.get(`${QueryController.RouteBeginning}${tag.name}/entities`,
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`,
             {
                 handler: this.getEntities.bind(this)
             }
         );
-        this.server.delete(`${QueryController.RouteBeginning}${tag.name}/entity`,
+        this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.deleteEntity.bind(this)
             }
         );
-        this.server.post(`${QueryController.RouteBeginning}${tag.name}/entity`,
+        this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.updateEntity.bind(this)
             }
         );
-        this.server.put(`${QueryController.RouteBeginning}${tag.name}/entity`,
+        this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`,
             {
                 handler: this.insertEntity.bind(this)
             }
@@ -70,11 +73,11 @@ export default class GenericDbController extends QueryController {
         try {
             const url = request.raw.url ?? "";
             const queryString = url.substring(url.indexOf("?"));
-console.log("🟦🟦🟦🟦🟦");
-console.log(url);
-const path = `${this.serviceRoute}connection/auth${queryString}`;
-console.log("🟦🟦🟦🟦🟦");
-            
+            console.log("🟦🟦🟦🟦🟦");
+            console.log(url);
+            const path = `${this.serviceRoute}connection/auth${queryString}`;
+            console.log("🟦🟦🟦🟦🟦");
+
             return await GetAxios<Auth>(path, request);
         }
         catch (error) {

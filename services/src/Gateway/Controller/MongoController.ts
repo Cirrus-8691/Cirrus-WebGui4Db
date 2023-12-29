@@ -1,5 +1,5 @@
 import HttpFastifyServer, { Tag } from "../../GenericServiceDatabase/HttpFastifyServer";
-import QueryController from "./QueryController";
+import BaseController from "./BaseController";
 import GenericDbController from "./GenericDbController";
 
 export default class MongoController extends GenericDbController {
@@ -14,7 +14,7 @@ export default class MongoController extends GenericDbController {
         const namespace = process.env.SERVICE_NAMESPACE;
         const serviceHost = process.env.SERVICE_MONGODB_NAME ?? "127.0.0.1";
         const servicePort = process.env.SERVICE_MONGODB_PORT ?? "4001";
-        const serviceRoute = `http://${serviceHost}${namespace ? "." + namespace : ""}:${servicePort}${QueryController.RouteBeginning}`;
+        const serviceRoute = `http://${serviceHost}${namespace ? "." + namespace : ""}:${servicePort}${BaseController.RouteBeginning}`;
 
         super(server, MongoController.Tag, serviceRoute);
 
