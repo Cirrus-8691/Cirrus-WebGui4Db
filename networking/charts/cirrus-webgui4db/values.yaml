@@ -12,7 +12,7 @@ webApp:
     tag: ""
 
   imagePullSecrets: []
-  nameOverride: ""
+  nameOverride: "cirrus-webgui4db"
   fullnameOverride: "cirrus-webgui4db"
 
   serviceAccount:
@@ -100,7 +100,7 @@ serviceGateway:
     tag: ""
 
   imagePullSecrets: []
-  nameOverride: ""
+  nameOverride: "cirrus-service-gateway"
   fullnameOverride: "cirrus-service-gateway"
 
   serviceAccount:
@@ -186,7 +186,7 @@ serviceMongoDb:
     tag: ""
 
   imagePullSecrets: []
-  nameOverride: ""
+  nameOverride: "cirrus-service-mongodb"
   fullnameOverride: "cirrus-service-mongodb"
 
   serviceAccount:
@@ -267,7 +267,7 @@ servicePostgreSql:
     tag: ""
 
   imagePullSecrets: []
-  nameOverride: ""
+  nameOverride: "cirrus-service-postgresql"
   fullnameOverride: "cirrus-service-postgresql"
 
   serviceAccount:
