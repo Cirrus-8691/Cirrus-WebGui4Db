@@ -98,6 +98,10 @@ This should only be done once.
 sudo helm repo add cirrus-webgui4db \
 "https://raw.githubusercontent.com/Cirrus-8691/Cirrus-WebGui4Db/main/networking/repository"
 
+# On another branche
+sudo helm repo add cirrus-webgui4db \
+"https://raw.githubusercontent.com/Cirrus-8691/Cirrus-WebGui4Db/Adding-PostgreSQL/networking/repository"
+
 ```
 
 ## 2-Customise MongoDb host and post
