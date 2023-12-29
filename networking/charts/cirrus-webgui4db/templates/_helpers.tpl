@@ -68,6 +68,27 @@ Create chart name and version as used by the chart label.
 {{- define "cirrus-webgui4db.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "cirrus-service-gateway.chart" -}}
+{{- printf "cirrus-service-gateway-%s" .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "cirrus-service-mongodb.chart" -}}
+{{- printf "cirrus-service-mongodb-%s" .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "cirrus-service-postgresql.chart" -}}
+{{- printf "cirrus-service-postgresql-%s" .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 
 {{/*
 Common labels
@@ -84,8 +105,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common labels
 */}}
 {{- define "cirrus-service-gateway.labels" -}}
-helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
-{{ include "cirrus-webgui4db.service-gateway" . }}
+helm.sh/chart: {{ include "cirrus-service-gateway.chart" . }}
+{{ include "cirrus-service-gateway.service-gateway" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -94,9 +115,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Common labels
 */}}
-{{- define "cirrus-cirrus-service-mongodb.labels" -}}
-helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
-{{ include "cirrus-cirrus-service-mongodb.selectorLabels" . }}
+{{- define "cirrus-service-mongodb.labels" -}}
+helm.sh/chart: {{ include "cirrus-service-mongodb.chart" . }}
+{{ include "cirrus-service-mongodb.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -106,7 +127,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common labels
 */}}
 {{- define "cirrus-service-postgresql.labels" -}}
-helm.sh/chart: {{ include "cirrus-webgui4db.chart" . }}
+helm.sh/chart: {{ include "cirrus-service-postgresql.chart" . }}
 {{ include "cirrus-service-postgresql.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
