@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: "{{ include "cirrus-service-mongodb.fullname" . }}-test-connection"
   labels:
-    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+    {{- include "cirrus-service-mongodb.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
