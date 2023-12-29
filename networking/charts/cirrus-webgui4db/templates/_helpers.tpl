@@ -7,19 +7,19 @@ Expand the name of the webApp chart.
 {{/*
 Expand the name of the serviceGateway chart.
 */}}
-{{- define "cirrus-service-gateway" -}}
+{{- define "cirrus-service-gateway.name" -}}
 {{- default .Chart.Name .Values.serviceGateway.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{/*
 Expand the name of the serviceMongoDb chart.
 */}}
-{{- define "cirrus-service-mongodb" -}}
+{{- define "cirrus-service-mongodb.name" -}}
 {{- default .Chart.Name .Values.serviceMongoDb.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{/*
 Expand the name of the servicePostgreSql chart.
 */}}
-{{- define "cirrus-service-postgresql" -}}
+{{- define "cirrus-service-postgresql.name" -}}
 {{- default .Chart.Name .Values.servicePostgreSql.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
