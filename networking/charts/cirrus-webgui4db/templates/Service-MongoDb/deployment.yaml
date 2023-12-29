@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: {{ include "cirrus-service-mongodb.fullname" . }}
   labels:
-    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+    {{- include "cirrus-service-mongodb.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.serviceMongoDb.autoscaling.enabled }}
   replicas: {{ .Values.serviceMongoDb.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cirrus-webgui4db.selectorLabels" . | nindent 6 }}
+      {{- include "cirrus-service-mongodb.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.serviceMongoDb.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cirrus-webgui4db.selectorLabels" . | nindent 8 }}
+        {{- include "cirrus-service-mongodb.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.serviceMongoDb.imagePullSecrets }}
       imagePullSecrets:

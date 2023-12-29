@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: {{ include "cirrus-service-gateway.fullname" . }}
   labels:
-    {{- include "cirrus-webgui4db.labels" . | nindent 4 }}
+    {{- include "cirrus-service-gateway.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.serviceGateway.autoscaling.enabled }}
   replicas: {{ .Values.serviceGateway.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cirrus-webgui4db.selectorLabels" . | nindent 6 }}
+      {{- include "cirrus-service-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.serviceGateway.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cirrus-webgui4db.selectorLabels" . | nindent 8 }}
+        {{- include "cirrus-service-gateway.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.serviceGateway.imagePullSecrets }}
       imagePullSecrets:

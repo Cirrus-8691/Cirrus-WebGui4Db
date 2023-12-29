@@ -80,12 +80,68 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+{{/*
+Common labels
+*/}}
+{{- define "cirrus-service-gateway.labels" -}}
+helm.sh/chart: {{ include "cirrus-service-gateway.chart" . }}
+{{ include "cirrus-webgui4db.service-gateway" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+{{/*
+Common labels
+*/}}
+{{- define "cirrus-cirrus-service-mongodb.labels" -}}
+helm.sh/chart: {{ include "cirrus-cirrus-service-mongodb.chart" . }}
+{{ include "cirrus-cirrus-service-mongodb.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+{{/*
+Common labels
+*/}}
+{{- define "cirrus-service-postgresql.labels" -}}
+helm.sh/chart: {{ include "cirrus-service-postgresql.chart" . }}
+{{ include "cirrus-service-postgresql.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
 
 {{/*
 Selector labels
 */}}
 {{- define "cirrus-webgui4db.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "cirrus-webgui4db.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{/*
+{{/*
+Selector labels
+*/}}
+{{- define "cirrus-service-gateway.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "cirrus-service-gateway.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{/*
+Selector labels
+*/}}
+{{- define "cirrus-service-mongodb.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "cirrus-service-mongodb.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+{{/*
+Selector labels
+*/}}
+{{- define "cirrus-service-postgresql.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "cirrus-service-postgresql.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
