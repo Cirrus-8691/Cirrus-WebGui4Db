@@ -2,7 +2,7 @@ import { DefaultDbQuery } from "../AppContext";
 
 export const GetQueries = (serviceName : string): string[] => {
     const queries = [DefaultDbQuery];
-    const service = serviceName.toLowerCase();
+    const service = serviceName.toUpperCase();
     const count = process.env[`REACT_APP_${service}_QUERIES_COUNT`];
     if (count && (+count > 0)) {
         const lenght = 1 + (+count);
