@@ -70,10 +70,17 @@ export default class GenericDbController extends QueryController {
         try {
             const url = request.raw.url ?? "";
             const queryString = url.substring(url.indexOf("?"));
-            return await GetAxios<Auth>(`${this.serviceRoute}connection/auth${queryString}`, request);
+console.log("🟦🟦🟦🟦🟦");
+console.log(url);
+const path = `${this.serviceRoute}connection/auth${queryString}`;
+console.log("🟦🟦🟦🟦🟦");
+            
+            return await GetAxios<Auth>(path, request);
         }
         catch (error) {
+            console.log("🟥🟥🟥🟥🟥");
             request.log.error(error);
+            console.log("🟥🟥🟥🟥🟥");
             return Promise.reject(GetErrorMessage(error));
         }
     }
