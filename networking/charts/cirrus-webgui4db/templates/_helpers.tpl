@@ -106,7 +106,7 @@ Common labels
 */}}
 {{- define "cirrus-service-gateway.labels" -}}
 helm.sh/chart: {{ include "cirrus-service-gateway.chart" . }}
-{{ include "cirrus-service-gateway.service-gateway" . }}
+{{ include "cirrus-service-gateway.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
