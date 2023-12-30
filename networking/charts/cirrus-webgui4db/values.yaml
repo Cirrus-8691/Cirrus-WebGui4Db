@@ -140,6 +140,9 @@ serviceGateway:
       nginx.ingress.kubernetes.io/limit-rps: "10"
       nginx.ingress.kubernetes.io/limit-burst-multiplier: "5"
       nginx.ingress.kubernetes.io/limit-connections: "100"
+      # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
+      # https://www.fastify.io/docs/latest/Reference/Server/#bodylimit
+      nginx.ingress.kubernetes.io/client_max_body_size: "256k"
     hosts:
       - host: localhost
         paths:
