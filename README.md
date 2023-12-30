@@ -171,10 +171,14 @@ Use the install script to deploy de app
 ```bash
 # Install WebGui-For-Mongodb in namespace "cirrus-webgui4db", creating a Docker image on the fly.
 sudo ./install.sh cirrus-webgui4db
+```
 
+Then you'll see:
+
+```
 ✨  Install cirrus-webgui4db
 NAME: cirrus-webgui4db
-LAST DEPLOYED: Sat Dec 30 12:43:21 2023
+LAST DEPLOYED: Sat Dec 30 13:03:58 2023
 NAMESPACE: cirrus-webgui4db
 STATUS: deployed
 REVISION: 1
@@ -185,7 +189,12 @@ NOTES:
 2. Get the service gateway URL by running these commands:
   https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway(/|$)(.*)
 
+3. Get the service gateway Swagger Documentation URL by running these commands:
+  https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway(/|$)(.*)/documentation
+
 ```
+
+Remenber to adapt URL, for documentation use: https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway/documentation
 
 
 # Update Cirrus-WebGui4Db with Helm
