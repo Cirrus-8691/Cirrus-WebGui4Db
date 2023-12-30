@@ -56,7 +56,9 @@ export default class HttpFastifyServer {
             caseSensitive: true,
             logger: options.logger
         });
-        this.instance.register(fastifyCors, { origin: options.origin ?? "*" });
+        const origin = options.origin ?? "*";
+        console.log(`🛂 Access-Control-Allow-Origin: ${origin}`);
+        this.instance.register(fastifyCors, { origin });
         this.instance.addContentTypeParser("*", (request, payload, done) => (done(null)));
 
         // Authorization
