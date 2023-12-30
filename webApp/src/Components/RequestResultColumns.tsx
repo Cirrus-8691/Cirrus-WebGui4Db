@@ -1,5 +1,5 @@
 import { Button, Dropdown, SplitButton } from "react-bootstrap";
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
 
@@ -10,7 +10,7 @@ export interface DrawGrid {
 }
 
 export default function RequestResultColumns(props: {
-    data: DbDocument[],
+    data: DbEntity[],
     setDrawGrid: (value: DrawGrid) => void
 }) {
     if (props.data.length < 1) {

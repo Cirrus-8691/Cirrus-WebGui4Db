@@ -6,7 +6,7 @@ import RequestResult from "./Components/RequestResult";
 import ShowError from "./Components/ShowError";
 import { NavDropdown, Navbar } from "react-bootstrap";
 import ShowDatabaseRepositories from "./Components/ShowDatabaseRepositories";
-import DbDocument from "./Domain/DbDocument";
+import DbEntity from "./Domain/DbEntity";
 import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
 import RequestResultColumns, { DrawGrid } from "./Components/RequestResultColumns";
@@ -26,7 +26,7 @@ export interface OrderColum {
 export default function PageMain() {
 
     const mainContext = useContext(MainContext);
-    const [data, setData] = useState<DbDocument[]>([]);
+    const [data, setData] = useState<DbEntity[]>([]);
     const [showAbout, setShowAbout] = useState(false);
     const [runQuery, setRunQuery] = useState(false);
 

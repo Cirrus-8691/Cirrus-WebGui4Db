@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Dropdown, Spinner, SplitButton, Table, ToggleButton } from "react-bootstrap";
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import { DrawGrid } from "./RequestResultColumns";
 import { useContext, useEffect, useState } from "react";
 import DialogDbDocument from "./DialogDbDocument";
@@ -7,7 +7,7 @@ import { MainContext } from "../App";
 import { QueryDeleteParameters } from "../Domain/QueryParameters";
 import { RunQueryDelete } from "../Controllers/RunQueries";
 
-export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocument[], refreshData: () => void }) {
+export default function RequestResult(props: { drawGrid: DrawGrid, data: DbEntity[], refreshData: () => void }) {
 
     const mainContext = useContext(MainContext);
     const [loading, setLoading] = useState(false);
@@ -17,14 +17,14 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
             ? Object.keys(props.data[0])
             : []);
 
-    const [docSelected, setDocSelected] = useState<DbDocument | undefined>(undefined);
+    const [docSelected, setDocSelected] = useState<DbEntity | undefined>(undefined);
     const [selectMode, setSelectMode] = useState<boolean>(false);
     const [checked, setChecked] = useState<Map<number, boolean>>(new Map<number, boolean>());
     const [orderColumn, setOrderColumn] = useState<string>("");
     const [orderAsc, setOrderAsc] = useState<boolean>(true);
     const selectAll = async () => {
         const allChecked = new Map<number, boolean>();
-        props.data.forEach((data: DbDocument, index: number) => allChecked.set(index, true));
+        props.data.forEach((data: DbEntity, index: number) => allChecked.set(index, true));
         setChecked(allChecked);
     };
     const onDelete = async () => {
@@ -52,7 +52,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
     useEffect(() => {
         if (orderColumn !== undefined && orderColumn !== "") {
             if (props.drawGrid.columnsViewed?.includes(orderColumn)) {
-                props.data.sort((a: DbDocument, b: DbDocument) =>
+                props.data.sort((a: DbEntity, b: DbEntity) =>
                     orderAsc
                         ? (
                             a[orderColumn] !== undefined &&
@@ -121,7 +121,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbDocum
                         </thead>
                         <tbody>
                             {
-                                props.data.map((data: DbDocument, index: number) =>
+                                props.data.map((data: DbEntity, index: number) =>
                                     <tr key={index}>
                                         <tr>
                                             {

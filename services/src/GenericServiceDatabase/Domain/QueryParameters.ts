@@ -2,10 +2,10 @@ import DbEntity from "../Model/DbEntity";
 
 export interface QueryFindParameters
 {
-    collection: string,
+    repository: string,
     what: string,
-    skip : string,
-    limit : string
+    skip : number,
+    limit : number
 }
 export interface QueryEntityParameters
 {
@@ -15,5 +15,5 @@ export interface QueryEntityParameters
 
 export interface BodyEntityParameters
 {
-    document: DbEntity,
+    entity: DbEntity,
 }

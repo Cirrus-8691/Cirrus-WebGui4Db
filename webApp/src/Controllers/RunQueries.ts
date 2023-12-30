@@ -1,13 +1,13 @@
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import { QueryDeleteParameters, QueryDocumentParameters, QueryFindParameters } from "../Domain/QueryParameters";
 import ApiGateway from "./ApiGateway";
 import { Auth } from "./Auth";
 
-export async function RunQueryFind(service: string, parameters: QueryFindParameters, auth: Auth): Promise<DbDocument[]> {
+export async function RunQueryFind(service: string, parameters: QueryFindParameters, auth: Auth): Promise<DbEntity[]> {
     const apiGateway = new ApiGateway();
-    return await apiGateway.getAsync<DbDocument[]>(
+    return await apiGateway.getAsync<DbEntity[]>(
         `api/v1/${service}/entities`
-        + "?collection=" + encodeURIComponent(parameters.collection)
+        + "?repository=" + encodeURIComponent(parameters.repository)
         + "&what=" + encodeURIComponent(parameters.what)
         + "&skip=" + parameters.skip
         + "&limit=" + parameters.limit,
@@ -18,7 +18,7 @@ export async function RunQueryDelete(service: string, parameters: QueryDeletePar
     const apiGateway = new ApiGateway();
     return await apiGateway.deleteAsync<boolean>(
         `api/v1/${service}/entity`
-        + "?collection=" + encodeURIComponent(parameters.collection)
+        + "?repository=" + encodeURIComponent(parameters.collection)
         + "&_id=" + encodeURIComponent(parameters._id),
         auth.accessToken);
 }
@@ -27,8 +27,8 @@ export async function RunQueryInsert(service: string, parameters: QueryDocumentP
     const apiGateway = new ApiGateway();
     return await apiGateway.putAsync<boolean>(
         `api/v1/${service}/entity`
-        + "?collection=" + encodeURIComponent(parameters.collection),
-        parameters.document,
+        + "?repository=" + encodeURIComponent(parameters.repository),
+        parameters.entity,
         auth.accessToken);
 }
 
@@ -36,8 +36,8 @@ export async function RunQueryUpdate(service: string, parameters: QueryDocumentP
     const apiGateway = new ApiGateway();
     return await apiGateway.postAsync<boolean>(
         `api/v1/${service}/entity`
-        + "?collection=" + encodeURIComponent(parameters.collection)
-        + "&_id=" + encodeURIComponent(parameters.document._id),
-        parameters.document,
+        + "?repository=" + encodeURIComponent(parameters.repository)
+        + "&_id=" + encodeURIComponent(parameters.entity._id),
+        parameters.entity,
         auth.accessToken);
 }

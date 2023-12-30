@@ -5,12 +5,13 @@ import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import BaseController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./BaseController";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 import { Auth } from "../../ServiceMongodb/Domain/JwToken";
+import { JoiBodyEntityParameters, JoiFindParameters, JoiQueryEntityParameters, JoiRepositoryParameters, JoiUrl } from "./JoiValidation";
 
 export interface DbTag extends Tag {
-    repositories : string;
-    repository : string;
-    entities : string;
-    entity : string;
+    repositories: string;
+    repository: string;
+    entities: string;
+    entity: string;
 }
 
 export default class GenericDbController extends BaseController {
@@ -26,14 +27,18 @@ export default class GenericDbController extends BaseController {
             schema: {
                 tags: [tag.name],
                 description: "Test database connection",
+                querystring: this.JoiToJson(JoiUrl)
             },
+            validatorCompiler: this.validate({ querystring: JoiUrl }),
             handler: this.getTestConnection.bind(this)
         });
         this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`, {
             schema: {
                 tags: [tag.name],
                 description: "Athenticate to database by connection",
+                querystring: this.JoiToJson(JoiUrl)
             },
+            validatorCompiler: this.validate({ querystring: JoiUrl }),
             handler: this.getAuth.bind(this)
         });
         this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`, {
@@ -41,6 +46,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `List of database ${tag.repositories}`,
             },
+            validatorCompiler: this.validate({}),
             security: [{ "apiKey": [] }],
             handler: this.getRepositories.bind(this)
         });
@@ -48,7 +54,9 @@ export default class GenericDbController extends BaseController {
             schema: {
                 tags: [tag.name],
                 description: `List of ${tag.entities} of a ${tag.repository}`,
+                querystring: this.JoiToJson(JoiFindParameters(tag))
             },
+            validatorCompiler: this.validate({ querystring: JoiFindParameters(tag) }),
             security: [{ "apiKey": [] }],
             handler: this.getEntities.bind(this)
         });
@@ -56,7 +64,13 @@ export default class GenericDbController extends BaseController {
             schema: {
                 tags: [tag.name],
                 description: `Insert a ${tag.entity} of a ${tag.repository}`,
+                querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
+                body: this.JoiToJson(JoiBodyEntityParameters)
             },
+            validatorCompiler: this.validate({
+                querystring: JoiRepositoryParameters(tag),
+                body: JoiBodyEntityParameters
+            }),
             security: [{ "apiKey": [] }],
             handler: this.insertEntity.bind(this)
         });
@@ -64,7 +78,13 @@ export default class GenericDbController extends BaseController {
             schema: {
                 tags: [tag.name],
                 description: `Update a ${tag.entity} of a ${tag.repository}`,
+                querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
+                body: this.JoiToJson(JoiBodyEntityParameters)
             },
+            validatorCompiler: this.validate({
+                querystring: JoiRepositoryParameters(tag),
+                body: JoiBodyEntityParameters
+            }),
             security: [{ "apiKey": [] }],
             handler: this.updateEntity.bind(this)
         });
@@ -72,7 +92,11 @@ export default class GenericDbController extends BaseController {
             schema: {
                 tags: [tag.name],
                 description: `Delete a ${tag.entity} of a ${tag.repository}`,
+                querystring: this.JoiToJson(JoiQueryEntityParameters(tag))
             },
+            validatorCompiler: this.validate({
+                querystring: JoiQueryEntityParameters(tag)
+            }),
             security: [{ "apiKey": [] }],
             handler: this.deleteEntity.bind(this)
         });
@@ -95,17 +119,11 @@ export default class GenericDbController extends BaseController {
         try {
             const url = request.raw.url ?? "";
             const queryString = url.substring(url.indexOf("?"));
-            console.log("🟦🟦🟦🟦🟦");
-            console.log(url);
             const path = `${this.serviceRoute}connection/auth${queryString}`;
-            console.log("🟦🟦🟦🟦🟦");
-
             return await GetAxios<Auth>(path, request);
         }
         catch (error) {
-            console.log("🟥🟥🟥🟥🟥");
             request.log.error(error);
-            console.log("🟥🟥🟥🟥🟥");
             return Promise.reject(GetErrorMessage(error));
         }
     }

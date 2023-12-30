@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { MainContext } from "../App";
 import { Button, Card, Container, Dropdown, Form, Pagination, Spinner, Stack } from "react-bootstrap";
 import { RunQueryFind } from "../Controllers/RunQueries";
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import { QueryFindParameters } from "../Domain/QueryParameters";
 import { GetQueries } from "../Domain/GetQueries";
 
@@ -18,7 +18,7 @@ const Operators = [
     '$lt    Less than,      sample: { "a"  : { "$lt" : 65536} }'.replaceAll(' ', '\xA0'),
 ]
 
-export default function RequestInput(props: { runQuery: boolean, setRunQuery: (value: boolean) => void, setData: (data: DbDocument[]) => void }) {
+export default function RequestInput(props: { runQuery: boolean, setRunQuery: (value: boolean) => void, setData: (data: DbEntity[]) => void }) {
 
     const mainContext = useContext(MainContext);
     const [currentQuery, setCurrentQuery] = useState(mainContext.databaseQuery);
@@ -33,7 +33,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
         setLoading(true);
         try {
             const parameters: QueryFindParameters = {
-                collection: mainContext.databaseRepository,
+                repository: mainContext.databaseRepository,
                 what: currentQuery,
                 skip,
                 limit

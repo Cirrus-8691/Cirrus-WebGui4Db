@@ -1,8 +1,8 @@
-import DbDocument from "./DbDocument"
+import DbEntity from "./DbEntity"
 
 export interface QueryFindParameters
 {
-    collection: string,
+    repository: string,
     what: string,
     skip : number,
     limit : number
@@ -16,6 +16,6 @@ export interface QueryDeleteParameters
 
 export interface QueryDocumentParameters
 {
-    collection: string,
-    document: DbDocument,
+    repository: string,
+    entity: DbEntity,
 }

@@ -46,7 +46,7 @@ export default class MongoDatabase implements Database {
     }
 
     async findOnRepository(parameters: QueryFindParameters): Promise<DbEntity[]> {
-        const collection = this.getRepository(parameters.collection);
+        const collection = this.getRepository(parameters.repository);
         const filter = JSON.parse(parameters.what);
         let options: FindOptions | undefined = undefined;
         if (parameters.limit && parameters.skip) {

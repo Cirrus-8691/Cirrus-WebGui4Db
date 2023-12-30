@@ -1,11 +1,11 @@
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import DbDocument from "../Domain/DbDocument";
+import DbEntity from "../Domain/DbEntity";
 import { useContext, useState } from "react";
 import { MainContext } from "../App";
 import { QueryDeleteParameters, QueryDocumentParameters } from "../Domain/QueryParameters";
 import { RunQueryDelete, RunQueryInsert, RunQueryUpdate } from "../Controllers/RunQueries";
 
-export default function DialogDbDocument(props: { document: DbDocument, hide: () => void }) {
+export default function DialogDbDocument(props: { document: DbEntity, hide: () => void }) {
 
     const mainContext = useContext(MainContext);
     const [loading, setLoading] = useState(false);
@@ -37,10 +37,10 @@ export default function DialogDbDocument(props: { document: DbDocument, hide: ()
         setLoading(true);
         try {
             const parameters: QueryDocumentParameters = {
-                collection: mainContext.databaseRepository,
-                document: JSON.parse(doc)
+                repository: mainContext.databaseRepository,
+                entity: JSON.parse(doc)
             }
-            if (parameters.document._id) {
+            if (parameters.entity._id) {
                 await RunQueryUpdate(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             }
             else {
