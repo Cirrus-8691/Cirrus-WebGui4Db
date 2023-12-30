@@ -5,8 +5,8 @@ import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../GenericServiceDatabase/Model/Database";
 import BaseController from "../Gateway/Controller/BaseController";
-import { Auth } from "../ServiceMongodb/Domain/JwToken";
 import MongoController from "../ServiceMongodb/Controller/MongoController";
+import { Auth } from "../GenericServiceDatabase/Domain/GenericJwToken";
 
 export const TestServiceUrl = "http://localhost:3000/";
 

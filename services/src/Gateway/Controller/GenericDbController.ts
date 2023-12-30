@@ -4,8 +4,8 @@ import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import BaseController, { DeleteAxios, GetAxios, PostAxios, PutAxios } from "./BaseController";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
-import { Auth } from "../../ServiceMongodb/Domain/JwToken";
 import { JoiBodyEntityParameters, JoiFindParameters, JoiQueryEntityParameters, JoiRepositoryParameters, JoiUrl } from "./JoiValidation";
+import { Auth } from "../../GenericServiceDatabase/Domain/GenericJwToken";
 
 export interface DbTag extends Tag {
     repositories: string;
@@ -23,83 +23,102 @@ export default class GenericDbController extends BaseController {
 
         this.serviceRoute = serviceRoute;
 
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/test`, {
-            schema: {
-                tags: [tag.name],
-                description: "Test database connection",
-                querystring: this.JoiToJson(JoiUrl)
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/test`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: "Test database connection",
+                    querystring: this.JoiToJson(JoiUrl)
+                },
+                validatorCompiler: this.validate({ querystring: JoiUrl }),
+                handler: this.getTestConnection.bind(this)
+            }
+        );
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: "Athenticate to database by connection",
+                    querystring: this.JoiToJson(JoiUrl)
+                },
+                validatorCompiler: this.validate({ querystring: JoiUrl }),
+                handler: this.getAuth.bind(this)
+            }
+        );
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: `List of database ${tag.repositories}`,
+                    security: [{ apiKey: [] }]
+                },
+                validatorCompiler: this.validate({}),
+                handler: this.getRepositories.bind(this)
             },
-            validatorCompiler: this.validate({ querystring: JoiUrl }),
-            handler: this.getTestConnection.bind(this)
-        });
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/connection/auth`, {
-            schema: {
-                tags: [tag.name],
-                description: "Athenticate to database by connection",
-                querystring: this.JoiToJson(JoiUrl)
+            { validatedUserPassword: true }
+        );
+        this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: `List of ${tag.entities} of a ${tag.repository}`,
+                    querystring: this.JoiToJson(JoiFindParameters(tag)),
+                    security: [{ apiKey: [] }]
+                },
+                validatorCompiler: this.validate({ querystring: JoiFindParameters(tag) }),
+                handler: this.getEntities.bind(this),
             },
-            validatorCompiler: this.validate({ querystring: JoiUrl }),
-            handler: this.getAuth.bind(this)
-        });
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/repositories`, {
-            schema: {
-                tags: [tag.name],
-                description: `List of database ${tag.repositories}`,
+            { validatedUserPassword: true }
+        );
+        this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: `Insert a ${tag.entity} of a ${tag.repository}`,
+                    querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
+                    body: this.JoiToJson(JoiBodyEntityParameters),
+                    security: [{ apiKey: [] }]
+                },
+                validatorCompiler: this.validate({
+                    querystring: JoiRepositoryParameters(tag),
+                    body: JoiBodyEntityParameters
+                }),
+                handler: this.insertEntity.bind(this),
             },
-            validatorCompiler: this.validate({}),
-            security: [{ "apiKey": [] }],
-            handler: this.getRepositories.bind(this)
-        });
-        this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`, {
-            schema: {
-                tags: [tag.name],
-                description: `List of ${tag.entities} of a ${tag.repository}`,
-                querystring: this.JoiToJson(JoiFindParameters(tag))
+            { validatedUserPassword: true }
+        );
+        this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: `Update a ${tag.entity} of a ${tag.repository}`,
+                    querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
+                    body: this.JoiToJson(JoiBodyEntityParameters),
+                    security: [{ apiKey: [] }]
+                },
+                validatorCompiler: this.validate({
+                    querystring: JoiRepositoryParameters(tag),
+                    body: JoiBodyEntityParameters
+                }),
+                handler: this.updateEntity.bind(this),
             },
-            validatorCompiler: this.validate({ querystring: JoiFindParameters(tag) }),
-            security: [{ "apiKey": [] }],
-            handler: this.getEntities.bind(this)
-        });
-        this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`, {
-            schema: {
-                tags: [tag.name],
-                description: `Insert a ${tag.entity} of a ${tag.repository}`,
-                querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
-                body: this.JoiToJson(JoiBodyEntityParameters)
+            { validatedUserPassword: true }
+        );
+        this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`,
+            {
+                schema: {
+                    tags: [tag.name],
+                    description: `Delete a ${tag.entity} of a ${tag.repository}`,
+                    querystring: this.JoiToJson(JoiQueryEntityParameters(tag)),
+                    security: [{ apiKey: [] }]
+                },
+                validatorCompiler: this.validate({
+                    querystring: JoiQueryEntityParameters(tag)
+                }),
+                handler: this.deleteEntity.bind(this),
             },
-            validatorCompiler: this.validate({
-                querystring: JoiRepositoryParameters(tag),
-                body: JoiBodyEntityParameters
-            }),
-            security: [{ "apiKey": [] }],
-            handler: this.insertEntity.bind(this)
-        });
-        this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`, {
-            schema: {
-                tags: [tag.name],
-                description: `Update a ${tag.entity} of a ${tag.repository}`,
-                querystring: this.JoiToJson(JoiRepositoryParameters(tag)),
-                body: this.JoiToJson(JoiBodyEntityParameters)
-            },
-            validatorCompiler: this.validate({
-                querystring: JoiRepositoryParameters(tag),
-                body: JoiBodyEntityParameters
-            }),
-            security: [{ "apiKey": [] }],
-            handler: this.updateEntity.bind(this)
-        });
-        this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`, {
-            schema: {
-                tags: [tag.name],
-                description: `Delete a ${tag.entity} of a ${tag.repository}`,
-                querystring: this.JoiToJson(JoiQueryEntityParameters(tag))
-            },
-            validatorCompiler: this.validate({
-                querystring: JoiQueryEntityParameters(tag)
-            }),
-            security: [{ "apiKey": [] }],
-            handler: this.deleteEntity.bind(this)
-        });
+            { validatedUserPassword: true }
+        );
 
     }
 

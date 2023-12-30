@@ -1,12 +1,13 @@
 import { FastifyRequest } from "fastify";
 import MongoDbConnect from "../Model/MongoDbConnect";
-import { Auth, JwToken } from "../Domain/JwToken";
+import { JwToken } from "../Domain/JwToken";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../../GenericServiceDatabase/Model/Database";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import Controller from "../../GenericServiceDatabase/Controller/Controller";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
+import { Auth } from "../../GenericServiceDatabase/Domain/GenericJwToken";
 
 export default class MongoController extends Controller {
 
@@ -55,7 +56,7 @@ export default class MongoController extends Controller {
             const mongoConnect = new MongoDbConnect(request.query.url);
             this.db.connect(mongoConnect);
             await this.db.test();
-            const auth = JwToken.authDb(mongoConnect);
+            const auth = JwToken.authToDb(mongoConnect);
             return auth;
         }
         catch (error) {
@@ -66,7 +67,7 @@ export default class MongoController extends Controller {
 
     public async getRepositories(request: FastifyRequest): Promise<string[]> {
         try {
-            const mongoConnect = JwToken.connect(request);
+            const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);
             return await this.db.getRepositories();
         }
@@ -80,7 +81,7 @@ export default class MongoController extends Controller {
         Querystring: QueryFindParameters
     }>): Promise<DbEntity[]> {
         try {
-            const mongoConnect = JwToken.connect(request);
+            const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);
             return await this.db.findOnRepository(request.query);
         }
@@ -94,7 +95,7 @@ export default class MongoController extends Controller {
         Querystring: QueryEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
+            const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);
             return await this.db.deleteEntity(request.query);
         }
@@ -109,7 +110,7 @@ export default class MongoController extends Controller {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
+            const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);
             return await this.db.updateEntity(request.query, request.body);
         }
@@ -124,7 +125,7 @@ export default class MongoController extends Controller {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const mongoConnect = JwToken.connect(request);
+            const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);
             return await this.db.insertEntity(request.query, request.body);
         }

@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import { Auth, JwToken } from "../Domain/JwToken";
+import {  JwToken } from "../Domain/JwToken";
 import PostgreSqlDbUrl from "../Model/PostgreSqlConnect";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../../GenericServiceDatabase/Model/Database";
@@ -7,6 +7,7 @@ import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import Controller from "../../GenericServiceDatabase/Controller/Controller";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
+import { Auth } from "../../GenericServiceDatabase/Domain/GenericJwToken";
 
 export default class PostgreController extends Controller {
 
@@ -55,7 +56,7 @@ export default class PostgreController extends Controller {
             const connectString = new PostgreSqlDbUrl(request.query.url);
             this.db.connect(connectString);
             await this.db.test();
-            const auth = JwToken.authDb(connectString);
+            const auth = JwToken.authToDb(connectString);
             return auth;
         }
         catch (error) {
@@ -66,7 +67,7 @@ export default class PostgreController extends Controller {
 
     public async getRepositories(request: FastifyRequest): Promise<string[]> {
         try {
-            const connectString = JwToken.connect(request);
+            const connectString = JwToken.connectTo(request);
             this.db.connect(connectString);
             return await this.db.getRepositories();
         }
@@ -80,7 +81,7 @@ export default class PostgreController extends Controller {
         Querystring: QueryFindParameters
     }>): Promise<DbEntity[]> {
         try {
-            const connectString = JwToken.connect(request);
+            const connectString = JwToken.connectTo(request);
             this.db.connect(connectString);
             return await this.db.findOnRepository(request.query);
         }
@@ -94,7 +95,7 @@ export default class PostgreController extends Controller {
         Querystring: QueryEntityParameters
     }>): Promise<boolean> {
         try {
-            const connectString = JwToken.connect(request);
+            const connectString = JwToken.connectTo(request);
             this.db.connect(connectString);
             return await this.db.deleteEntity(request.query);
         }
@@ -109,7 +110,7 @@ export default class PostgreController extends Controller {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const connectString = JwToken.connect(request);
+            const connectString = JwToken.connectTo(request);
             this.db.connect(connectString);
             return await this.db.updateEntity(request.query, request.body);
         }
@@ -124,7 +125,7 @@ export default class PostgreController extends Controller {
         Body: BodyEntityParameters
     }>): Promise<boolean> {
         try {
-            const connectString = JwToken.connect(request);
+            const connectString = JwToken.connectTo(request);
             this.db.connect(connectString);
             return await this.db.insertEntity(request.query, request.body);
         }

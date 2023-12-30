@@ -19,10 +19,10 @@ export default async function TestMongoDb() {
 
         let documents = await db.findOnRepository(
             {
-                collection: collections[0],
+                repository: collections[0],
                 what: "{}",
-                skip: "0",
-                limit: "10"
+                skip: 0,
+                limit: 10
             });
         assert.isDefined(documents, "documents Defined");
 
@@ -35,10 +35,10 @@ export default async function TestMongoDb() {
         assert.isTrue(ok, "insertEntity OK");
 
         documents = await db.findOnRepository({
-            collection: collections[0],
+            repository: collections[0],
             what: findWorld,
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isNotEmpty(documents, "insertEntity findOnRepository ");
         assert.equal(1, documents.length);
@@ -57,10 +57,10 @@ export default async function TestMongoDb() {
         assert.isTrue(ok, "updateEntity Ok");
 
         documents = await db.findOnRepository({
-            collection: collections[0],
+            repository: collections[0],
             what: JSON.stringify({ Hello: docXyz.Hello }),
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isNotEmpty(documents, "updateEntity findOnRepository ");
         assert.equal(1, documents.length);
@@ -73,10 +73,10 @@ export default async function TestMongoDb() {
         assert.isTrue(ok, "deleteEntity OK");
 
         documents = await db.findOnRepository({
-            collection: collections[0],
+            repository: collections[0],
             what: findXyz,
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isEmpty(documents, "deleteEntity findOnRepository ");
         assert.equal(0, documents.length);

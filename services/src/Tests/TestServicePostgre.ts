@@ -4,9 +4,9 @@ import Service from "../GenericServiceDatabase/Service";
 import HttpFastifyServer from "../GenericServiceDatabase/HttpFastifyServer";
 import Database from "../GenericServiceDatabase/Model/Database";
 import BaseController from "../Gateway/Controller/BaseController";
-import { Auth } from "../ServicePostgreSql/Domain/JwToken";
 import StubDatabase from "../GenericServiceDatabase/Model/StubDatabase";
 import PostgreController from "../ServicePostgreSql/Controller/PostgreSqlController";
+import { Auth } from "../GenericServiceDatabase/Domain/GenericJwToken";
 
 export const TestServiceUrl = "http://localhost:3000/";
 

@@ -14,10 +14,10 @@ export default async function TestStubDb() {
 
     const document = await stubDb.findOnRepository(
         {
-            collection: "",
+            repository: "",
             what: "",
-            skip : "0",
-            limit : "10"
+            skip : 0,
+            limit : 10
         });
     assert.isTrue(document.length>0);
     assert.equal(document[0].id, StubDatabase.Entity1.id);

@@ -1,10 +1,9 @@
 import Joi from "joi";
 import parseJoi from "joi-to-json";
 import { FastifyRequest } from "fastify";
-import HttpFastifyServer, { Tag } from "../../GenericServiceDatabase/HttpFastifyServer";
+import HttpFastifyServer, { Schema, Tag, Validator } from "../../GenericServiceDatabase/HttpFastifyServer";
 import GetErrorMessage from "../../GenericServiceDatabase/Controller/GetErrorMessage";
 import axios, { AxiosResponse } from "axios";
-import { HttpError } from "../../GenericServiceDatabase/HttpError";
 
 export async function GetAxios<T>(path: string, request: FastifyRequest): Promise<T> {
     const config = request.headers ? { headers: request.headers } : undefined;
@@ -26,16 +25,6 @@ export async function PutAxios<T>(path: string, request: FastifyRequest): Promis
     const config = request.headers ? { headers: request.headers } : undefined;
     const body = request.body;
     return (await axios.put<T, AxiosResponse<T>>(path, body, config)).data;
-}
-
-export type Validator = (data: unknown) => Joi.ValidationResult<unknown>;
-
-export interface Schema {
-    tags?: string[];
-    description?: string;
-    querystring?: unknown;
-    body?: unknown;
-    // header?: unknown;
 }
 
 export default class BaseController {
@@ -95,7 +84,8 @@ export default class BaseController {
             }
             const validatedData = joiSchema.validate(data);
             if (validatedData.error != undefined) {
-                throw new HttpError(400, validatedData.error.details[0].message);
+                // statusCode: 400
+                throw new Error(validatedData.error.details[0].message);
             }
             return validatedData;
         }

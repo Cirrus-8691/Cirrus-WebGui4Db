@@ -21,10 +21,10 @@ export default async function TestPostgreSql() {
 
         let entities = await db.findOnRepository(
             {
-                collection: tables[1],
+                repository: tables[1],
                 what: findUser,
-                skip: "0",
-                limit: "10"
+                skip: 0,
+                limit: 10
             });
         assert.isEmpty(entities);
     
@@ -35,10 +35,10 @@ export default async function TestPostgreSql() {
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            collection: tables[1],
+            repository: tables[1],
             what: findUser,
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isNotEmpty(entities);
         assert.equal(1, entities.length);
@@ -53,10 +53,10 @@ export default async function TestPostgreSql() {
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            collection: tables[1],
+            repository: tables[1],
             what: findUser,
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isNotEmpty(entities);
         assert.equal(1, entities.length);
@@ -69,10 +69,10 @@ export default async function TestPostgreSql() {
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            collection: tables[1],
+            repository: tables[1],
             what: findUser,
-            skip: "0",
-            limit: "1"
+            skip: 0,
+            limit: 1
         });
         assert.isEmpty(entities);
         assert.equal(0, entities.length);
