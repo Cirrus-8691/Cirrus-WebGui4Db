@@ -28,7 +28,7 @@ serviceGateway:
       - host: begin-diaz.freeboxos.fr
         paths:
         ## SEE file: ".env.production", line:4 REACT_APP_SERVICE_ROUTE=cirrus-webgui4db-gateway/
-          - path: /cirrus-webgui4db-gateway(/|$)(.*)
+          - path: /cirrus-webgui4db-gateway/
             pathType: Prefix
     tls:
       - secretName: cirrus-tls
