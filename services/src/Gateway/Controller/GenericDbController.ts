@@ -41,6 +41,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `List of database ${tag.repositories}`,
             },
+            security: [{ "apiKey": [] }],
             handler: this.getRepositories.bind(this)
         });
         this.server.get(`${BaseController.RouteBeginning}${tag.name}/entities`, {
@@ -48,6 +49,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `List of ${tag.entities} of a ${tag.repository}`,
             },
+            security: [{ "apiKey": [] }],
             handler: this.getEntities.bind(this)
         });
         this.server.put(`${BaseController.RouteBeginning}${tag.name}/entity`, {
@@ -55,6 +57,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `Insert a ${tag.entity} of a ${tag.repository}`,
             },
+            security: [{ "apiKey": [] }],
             handler: this.insertEntity.bind(this)
         });
         this.server.post(`${BaseController.RouteBeginning}${tag.name}/entity`, {
@@ -62,6 +65,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `Update a ${tag.entity} of a ${tag.repository}`,
             },
+            security: [{ "apiKey": [] }],
             handler: this.updateEntity.bind(this)
         });
         this.server.delete(`${BaseController.RouteBeginning}${tag.name}/entity`, {
@@ -69,6 +73,7 @@ export default class GenericDbController extends BaseController {
                 tags: [tag.name],
                 description: `Delete a ${tag.entity} of a ${tag.repository}`,
             },
+            security: [{ "apiKey": [] }],
             handler: this.deleteEntity.bind(this)
         });
 
