@@ -15,6 +15,7 @@ export interface Tag {
 
 export interface ServerOptions {
     url: URL;
+    origin?: string;   // CORS
     logger: boolean;
     name: string,
     description: string,
@@ -55,8 +56,8 @@ export default class HttpFastifyServer {
             caseSensitive: true,
             logger: options.logger
         });
-        this.instance.register(fastifyCors, { origin: "*" });
-        this.instance.addContentTypeParser("*", (request,payload,done) => (done(null)));
+        this.instance.register(fastifyCors, { origin: options.origin ?? "*" });
+        this.instance.addContentTypeParser("*", (request, payload, done) => (done(null)));
 
         // Authorization
         this.instance.decorate('validatedUserPassword', this.validatedUserPassword);
@@ -99,7 +100,7 @@ export default class HttpFastifyServer {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    get(route: string, options: any, requiredCredentials? : Credentials): void {
+    get(route: string, options: any, requiredCredentials?: Credentials): void {
         const validatedUserPassword = requiredCredentials?.validatedUserPassword;
         if (validatedUserPassword) {
             this.instance.after(() => {
@@ -113,7 +114,7 @@ export default class HttpFastifyServer {
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    post(route: string, options: any, requiredCredentials? : Credentials): void {
+    post(route: string, options: any, requiredCredentials?: Credentials): void {
         const validatedUserPassword = requiredCredentials?.validatedUserPassword;
         if (validatedUserPassword) {
             this.instance.after(() => {
@@ -127,7 +128,7 @@ export default class HttpFastifyServer {
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    put(route: string, options: any, requiredCredentials? : Credentials): void {
+    put(route: string, options: any, requiredCredentials?: Credentials): void {
         const validatedUserPassword = requiredCredentials?.validatedUserPassword;
         if (validatedUserPassword) {
             this.instance.after(() => {
@@ -141,7 +142,7 @@ export default class HttpFastifyServer {
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete(route: string, options: any, requiredCredentials? : Credentials): void {
+    delete(route: string, options: any, requiredCredentials?: Credentials): void {
         const validatedUserPassword = requiredCredentials?.validatedUserPassword;
         if (validatedUserPassword) {
             this.instance.after(() => {

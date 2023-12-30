@@ -68,12 +68,20 @@ spec:
           - name: SERVICE_POSTGRESQL_PORT
             value: "3000"     ## see Dockerfile.postgresql SERVICE_PORT="3000"
 
-          - name: APIGATEWAY_INGRESS_HOST_PATH
+          - name: SERVICEGATEWAY_INGRESS_HOSTS_PATHS_PATH
           {{- if .Values.serviceGateway.ingress.enabled }}
           {{- range $host := .Values.serviceGateway.ingress.hosts }}
             {{- range .paths }}
             value: {{ $host.host }}{{ .path }}
             {{- end }}
+          {{- end }}
+          {{- else }}
+            value: ""
+          {{- end }}
+          - name: WEBAPP_INGRESS_HOSTS_HOST
+          {{- if .Values.webApp.ingress.enabled }}
+          {{- range $host := .Values.webApp.ingress.hosts }}
+            value: {{ $host.host }}
           {{- end }}
           {{- else }}
             value: ""

@@ -12,13 +12,14 @@ export default class Gateway implements BaseService {
 
     public readonly server: HttpFastifyServer;
 
-    public constructor(url: URL, logger: boolean) {
+    public constructor(url: URL, logger: boolean, origin? : string) {
         this.server = new HttpFastifyServer({
             url,
             logger,
             name: this.name,
             description: PackageJson().description,
             version: this.version,
+            origin,
             tags: [
                 BaseController.Tag,
                 MongoController.Tag,

@@ -24,7 +24,7 @@ import { startService } from "./GenericServiceDatabase/StartService";
     // Starting API gateway
     const portGateway = process.env.SERVICE_PORT; // expecting 4000
     const portApiGateway = parseInt(portGateway ?? "4000");
-    graphicArtGateway();
+        graphicArtGateway();
     await startService(
         portGateway,
         async (url: URL) => (new Gateway(url, true)),

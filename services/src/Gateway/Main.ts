@@ -12,10 +12,11 @@ import MongoController from "./Controller/MongoController";
 
     graphicArt();
     const port = process.env.SERVICE_PORT;
-    const host = process.env.APIGATEWAY_INGRESS_HOST_PATH;
+    const host = process.env.SERVICEGATEWAY_INGRESS_HOSTS_PATHS_PATH;
+    const origin = process.env.WEBAPP_INGRESS_HOSTS_HOST;
     await startService(
         port,
-        async (url: URL) => (new Gateway(url, true)),
+        async (url: URL) => (new Gateway(url, true, origin)),
         async (server: HttpFastifyServer) => {
             await server.documentation(host);
             new MongoController(server);
