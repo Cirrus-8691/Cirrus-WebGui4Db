@@ -193,9 +193,20 @@ NOTES:
   https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway(/|$)(.*)/documentation
 
 ```
-
+<p>
+    <img width="400px"
+        alt="login"
+        src="assets/login.png"
+    />
+    &nbsp;
+    <img width="400px"
+        alt="swagger"
+        src="assets/swagger.png"
+    />
+</p>
 Remenber to adapt URL, for documentation use: https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway/documentation
-
+As you can see in <a href="./networking/charts/cirrus-webgui4db/values.yaml">charts/cirrus-webgui4db/values.yaml</a>
+we use nginx.ingress.kubernetes to limit-rps, and connections.
 
 # Update Cirrus-WebGui4Db with Helm
 
