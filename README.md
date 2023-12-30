@@ -162,7 +162,7 @@ Customise file networking/tls/letsencrypt-issuer.yaml
 To add a tls certificate to your host use this script:
 
 ```bash
-# Install WebGui-For-Mongodb in namespace "cirrus-webgui4db", creating a Docker image on the fly.
+# Deploy a Let's Encrypt issuer to get an TLS certificate for HTTPS used in namespace "cirrus-webgui4db"
 sudo ./https.sh cirrus-webgui4db
 ```
 
@@ -172,7 +172,21 @@ Use the install script to deploy de app
 # Install WebGui-For-Mongodb in namespace "cirrus-webgui4db", creating a Docker image on the fly.
 sudo ./install.sh cirrus-webgui4db
 
+✨  Install cirrus-webgui4db
+NAME: cirrus-webgui4db
+LAST DEPLOYED: Sat Dec 30 12:43:21 2023
+NAMESPACE: cirrus-webgui4db
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the web application URL by running these commands:
+  https://begin-diaz.freeboxos.fr/cirrus-webgui4db/
+
+2. Get the service gateway URL by running these commands:
+  https://begin-diaz.freeboxos.fr/cirrus-webgui4db-gateway(/|$)(.*)
+
 ```
+
 
 # Update Cirrus-WebGui4Db with Helm
 

@@ -43,3 +43,26 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- end }}
+
+3. Get the service gateway Swagger Documentation URL by running these commands:
+{{- if .Values.serviceGateway.ingress.enabled }}
+{{- range $host := .Values.serviceGateway.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.serviceGateway.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}/documentation
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.serviceGateway.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "cirrus-service-gateway.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT/documentation
+{{- else if contains "LoadBalancer" .Values.serviceGateway.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "cirrus-service-gateway.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "cirrus-service-gateway.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.serviceMongoDb.service.port }}/documentation
+{{- else if contains "ClusterIP" .Values.serviceMongoDb.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "cirrus-service-gateway.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080/documentation to view Swagger"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+{{- end }}
