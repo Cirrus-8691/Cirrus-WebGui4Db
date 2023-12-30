@@ -13,7 +13,8 @@ webApp:
       #- host: localhost
       - host: begin-diaz.freeboxos.fr
         paths:
-          - path: /webgui4db/
+        ## SEE file: "webApp/Dockerfile", line:2 COPY build/ /usr/share/nginx/html/cirrus-webgui4db
+          - path: /cirrus-webgui4db/
             pathType: Prefix
     tls:
       - secretName: cirrus-tls
@@ -26,7 +27,8 @@ serviceGateway:
       #- host: localhost
       - host: begin-diaz.freeboxos.fr
         paths:
-          - path: /webgui4db-gateway(/|$)(.*)
+        ## SEE file: ".env.production", line:4 REACT_APP_SERVICE_ROUTE=cirrus-webgui4db-gateway/
+          - path: /cirrus-webgui4db-gateway(/|$)(.*)
             pathType: Prefix
     tls:
       - secretName: cirrus-tls

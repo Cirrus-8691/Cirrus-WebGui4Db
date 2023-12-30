@@ -129,6 +129,7 @@ webApp:
       #- host: localhost
       - host: myDomain.com
         paths:
+            ## SEE file: "webApp/Dockerfile", line:2 COPY build/ /usr/share/nginx/html/cirrus-webgui4db
           - path: /cirrus-webgui4db/
             pathType: Prefix
      tls:
@@ -142,6 +143,7 @@ serviceGateway:
       #- host: localhost
        - host: myDomain.com
         paths:
+            ## SEE file: ".env.production", line:4 REACT_APP_SERVICE_ROUTE=cirrus-webgui4db-gateway/
           - path: /cirrus-webgui4db-gateway(/|$)(.*)
             pathType: Prefix
      tls:
