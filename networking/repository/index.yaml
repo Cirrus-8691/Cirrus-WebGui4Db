@@ -3,12 +3,12 @@ entries:
   cirrus-webgui4db:
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-12-31T00:25:12.485315469+01:00"
+    created: "2023-12-31T00:47:02.208951055+01:00"
     description: Cirrus Webgui for Databases - Helm chart for Kubernetes
-    digest: 1cef97347ab84fa580057c247dba3d8bc1dd1c07b065757a1afff9fa8c40d20e
+    digest: 6fe3f1a5bda7e9edfa40895b9d3af0e64a09c9040228586cd18da20182a16cfc
     name: cirrus-webgui4db
     type: application
     urls:
     - cirrus-webgui4db-1.2.0.tgz
     version: 1.2.0
-generated: "2023-12-31T00:25:12.4828619+01:00"
+generated: "2023-12-31T00:47:02.206388809+01:00"
