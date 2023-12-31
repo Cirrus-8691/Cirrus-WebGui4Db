@@ -14,9 +14,10 @@ import MongoDatabase from "./Model/MongoDatabase";
 (async function main() {
 
     graphicArt();
+    const host = process.env.SERVICE_HOST;
     const port = process.env.SERVICE_PORT;
     await startService(
-        port,
+        "http", host, port,
         async (url: URL) => (
             new Service(
                 {

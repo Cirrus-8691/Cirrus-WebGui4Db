@@ -11,14 +11,16 @@ import MongoController from "./Controller/MongoController";
 (async function main() {
 
     graphicArt();
+    const host = process.env.SERVICE_HOST;
     const port = process.env.SERVICE_PORT;
-    const host = process.env.SERVICEGATEWAY_INGRESS_HOSTS_PATHS_PATH;
+    const gatewayHost = process.env.SERVICEGATEWAY_INGRESS_HOSTS_PATHS_PATH;
     const origin = process.env.WEBAPP_INGRESS_HOSTS_HOST;
+    const protocol = gatewayHost===undefined ? "http" : "https";
     await startService(
-        port,
+        protocol, host, port,
         async (url: URL) => (new Gateway(url, true, origin)),
         async (server: HttpFastifyServer) => {
-            await server.documentation(host);
+            await server.documentation(gatewayHost);
             new MongoController(server);
             new PostgreController(server);
         }

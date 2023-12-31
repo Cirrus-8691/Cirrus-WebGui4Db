@@ -11,7 +11,7 @@ const exitHandler = async (serviceStarted: BaseService | undefined): Promise<voi
     process.exit(0);
 }
 
-export const startService = async (port: string | undefined,
+export const startService = async (protocol: string | undefined, host: string | undefined, port: string | undefined,
     injectService: (url: URL) => Promise<BaseService>,
     createControllers?: (server: HttpFastifyServer) => Promise<void>
 ): Promise<BaseService | undefined> => {
@@ -22,12 +22,11 @@ export const startService = async (port: string | undefined,
     process.once('SIGTERM', // https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination
         async () => await exitHandler(serviceStarted));
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    const host = process.env.SERVICE_HOST;
     console.log(`🌟 env SERVICE_HOST: ${host !== undefined ? `🆗 ${host}` : '❌ undefined'}`);
     console.log(`🌟 env SERVICE_PORT: ${port ? `🆗 ${port}` : '❌ bad value'}`);
     console.log("────────────────────────────────────────────");
     if (host && port) {
-        const url = new URL("http://localhost");
+        const url = new URL(`${protocol ?? "http"}://localhost`);
         url.hostname = host;
         url.port = port;
         const hostOk = (url.hostname === host);
