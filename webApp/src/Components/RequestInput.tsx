@@ -21,12 +21,13 @@ const Operators = [
 export default function RequestInput(props: { runQuery: boolean, setRunQuery: (value: boolean) => void, setData: (data: DbEntity[]) => void }) {
 
     const mainContext = useContext(MainContext);
-    const [currentQuery, setCurrentQuery] = useState(mainContext.databaseQuery);
+
     const [loading, setLoading] = useState(false);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(DefaultLinesPerPages);
 
     const [queries] = useState<string[]>(GetQueries(mainContext.databaseConnexion.service()));
+    const [currentQuery, setCurrentQuery] = useState(queries[0]);
 
     const onRun = async () => {
         mainContext.setError(undefined);
@@ -96,17 +97,20 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
                                 : <></>
                         }
                     </Stack>
-                    <Stack direction="horizontal" gap={2}>
 
+                    <Stack direction="horizontal" gap={2}>
+                        <Form.Label>{mainContext.databaseConnexion.findLabel()}</Form.Label>
                         <Form.Control as="textarea"
                             value={currentQuery}
                             onChange={(event: any) => setCurrentQuery(event.target.value)}
                         />
+
                         {
                             loading
                                 ? <Spinner animation="border" variant="success" />
                                 : <Button onClick={onRun} variant="success" >{">"}</Button>
                         }
+
                     </Stack>
 
                     <Stack direction="horizontal" gap={2}>

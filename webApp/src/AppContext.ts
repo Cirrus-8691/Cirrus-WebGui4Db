@@ -30,13 +30,11 @@ export default class AppContext {
         this.databaseRepository = value
     };
 
-    databaseQuery: string = DefaultDbQuery;
+    databaseQuery: string = "";
     setDatabaseQuery = (value: string) => {
         this.databaseQuery = value
     };
 }
-
-export const DefaultDbQuery = "";
 
 const defaultConnection = (): MongoDbUrl => {
     if (process.env.REACT_APP_MONGO_HOST) {

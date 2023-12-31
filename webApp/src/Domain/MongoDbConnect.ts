@@ -62,6 +62,10 @@ export default class MongoDbUrl implements DbConnect {
         return "Collection";
     }
 
+    public findLabel(): string {
+        return "..find";
+    }
+
     public queryToFindAllEntities(): string {
         return "{}";
     }

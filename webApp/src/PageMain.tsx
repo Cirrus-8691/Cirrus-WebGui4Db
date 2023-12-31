@@ -10,7 +10,7 @@ import DbEntity from "./Domain/DbEntity";
 import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
 import RequestResultColumns, { DrawGrid } from "./Components/RequestResultColumns";
-import { DefaultDatabaseConnection, DefaultDbQuery } from "./AppContext";
+import { DefaultDatabaseConnection } from "./AppContext";
 
 export const Application = {
     name: process.env.REACT_APP_NAME,
@@ -34,7 +34,7 @@ export default function PageMain() {
         mainContext.setDatabaseConnexion(DefaultDatabaseConnection);
         mainContext.setDatabaseRepositories([""]);
         mainContext.setDatabaseRepository("");
-        mainContext.setDatabaseQuery(DefaultDbQuery);
+        mainContext.setDatabaseQuery("");
         mainContext.setAuth(EmptyAuth);
     };
     const [showInputConnection, setShowInputConnection] = useState<ShowConnectionInfo>("");

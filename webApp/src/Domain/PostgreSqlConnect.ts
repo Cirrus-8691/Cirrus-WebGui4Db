@@ -51,6 +51,10 @@ export default class PostgreSqlUrl implements DbConnect {
         return "Table";
     }
 
+    public findLabel(): string {
+        return "..WHERE";
+    }
+
     queryToFindAllEntities(): string {
         return "";
     }

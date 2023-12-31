@@ -1,8 +1,7 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PageMain from './PageMain';
-import AppContext, { DefaultDatabaseConnection, DefaultDbQuery } from './AppContext';
-import { ValidateConnection } from './Controllers/TestConnection';
+import AppContext, { DefaultDatabaseConnection } from './AppContext';
 import PageLogin from './PageLogin';
 import { Auth, EmptyAuth } from './Controllers/Auth';
 import { DbConnect } from './Domain/DbConnect';
@@ -16,7 +15,7 @@ export default function App() {
   const [databaseConnexion, setDatabaseConnexion] = useState<DbConnect>(DefaultDatabaseConnection);
   const [databaseRepositories, setDatabaseRepositories] = useState<string[]>([""]);
   const [databaseRepository, setDatabaseRepository] = useState<string>("");
-  const [databaseQuery, setDatabaseQuery] = useState<string>(DefaultDbQuery);
+  const [databaseQuery, setDatabaseQuery] = useState<string>("");
 
   return (
     <div className="App-main">

@@ -7,6 +7,7 @@ export interface DbConnect {
     service(): string;
     queryToFindAllEntities(): string;
     repositoriesName(): string;
+    findLabel(): string;
 
     showOperators(): boolean;
 
