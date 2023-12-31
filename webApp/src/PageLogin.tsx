@@ -7,6 +7,7 @@ import { ValidateConnection } from "./Controllers/TestConnection";
 import { Application } from "./PageMain";
 import { DatabaseConnections } from "./AppContext";
 import { DbConnect } from "./Domain/DbConnect";
+import { GetRepository } from "./Domain/GetRepository";
 
 export default function PageLogin() {
 
@@ -42,6 +43,7 @@ export default function PageLogin() {
             mainContext.setDatabaseConnexion(newDbUrl);
             mainContext.setDatabaseQuery(newDbUrl.queryToFindAllEntities());
             mainContext.setDatabaseRepositories(repositories);
+            mainContext.setDatabaseRepository(GetRepository(newDbUrl.service(), repositories))
             setInfo("");
             setLoading(false);
         }

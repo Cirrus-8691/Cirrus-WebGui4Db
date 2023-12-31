@@ -20,12 +20,12 @@ export default class AppContext {
         this.databaseConnexion = value
     };
 
-    databaseRepositories: string[] = [DefaultDbRepository];
+    databaseRepositories: string[] = [""];
     setDatabaseRepositories = (value: string[]) => {
         this.databaseRepositories = value
     };
 
-    databaseRepository: string = DefaultDbRepository;
+    databaseRepository: string = "";
     setDatabaseRepository = (value: string) => {
         this.databaseRepository = value
     };
@@ -35,7 +35,7 @@ export default class AppContext {
         this.databaseQuery = value
     };
 }
-export const DefaultDbRepository = process.env.REACT_APP_MONGO_COLLECTION ?? "payments";
+
 export const DefaultDbQuery = "";
 
 const defaultConnection = (): MongoDbUrl => {
