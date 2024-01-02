@@ -10,7 +10,7 @@ export default function GetErrorMessage(error: unknown): string {
     if (isAxiosError(error)) {
         const response = (error as AxiosError).response;
         if(response) {
-            return response.statusText + ": " + response.data;
+            return response.statusText + ": " + JSON.stringify(response.data);
         }
         return (error as Error).message;
     }
