@@ -26,11 +26,8 @@ export default class MongoDbUrl implements DbConnect {
     });
 
     public toString(): string {
-        const userPassword = this.params.username
-            ? `${this.params.username}${this.params.password
-                ? `:${this.params.password}`
-                : ""}`
-            : "";
+        const user = this.params.username ?? "";
+        const password = this.params.password ?? "";
         const port = this.params.port
             ? `:${this.params.port}`
             : "";
@@ -39,8 +36,15 @@ export default class MongoDbUrl implements DbConnect {
                 ? this.params.database
                 : `/${this.params.database}`
             : "";
-        return `${MongoDbProtocol}//${userPassword}@${this.params.hostname}${port}${path}`;
-    }
+        const url = new URL("http://localhost");
+        url.protocol = MongoDbProtocol;
+        url.hostname = this.params.hostname ?? "localhost";
+        url.username = user;
+        url.password = password;
+        url.port = port;
+        url.pathname = path;
+        return MongoDbProtocol + url.toString().substring(5);
+     }
 
     public name(): string {
         return "MongoDb";

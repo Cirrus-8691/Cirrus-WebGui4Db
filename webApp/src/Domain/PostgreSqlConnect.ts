@@ -17,15 +17,15 @@ export default class PostgreSqlUrl implements DbConnect {
 
     toString(): string {
         const userPassword = this.params.username
-            ? `Username=${this.params.username};${this.params.password
-                ? `Password=${this.params.password};`
+            ? `Username=${encodeURIComponent(this.params.username)};${this.params.password
+                ? `Password=${encodeURIComponent(this.params.password)};`
                 : ""}`
             : "";
         const port = this.params.port
             ? `Port=${this.params.port};`
             : "";
         const database = (this.params.database && this.params.database !== "")
-            ? `Database=${this.params.database};`
+            ? `Database=${encodeURIComponent(this.params.database)};`
             : "";
         return `Host=${this.params.hostname};${port}${database}${userPassword}`;
     }
