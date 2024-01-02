@@ -31,10 +31,10 @@ export default async function TestServicePostgre(): Promise<void> {
         assert.equal(response.statusCode, 200, `GET ${url} ${response.statusMessage}`);
         const auth = JSON.parse(response.body) as Auth;
         const accessToken = auth.accessToken;
-        assert.isTrue(accessToken !== "");
-        assert.isTrue(auth.userName === TestLocalPostgreDbUser);
-        assert.isTrue(auth.dbName === TestLocalPostgreDbName);
-        assert.isTrue(auth.dbProvider !== "");
+        assert.isNotEmpty(accessToken,"accessToken Empty");
+        assert.isTrue(auth.userName === TestLocalPostgreDbUser,"bad userName");
+        assert.isTrue(auth.dbName === TestLocalPostgreDbName,"bad dbName");
+        assert.isNotEmpty(auth.dbProvider,  "dbProvider Empty");
 
         url = BaseController.RouteBeginning + "repositories";
         response = await service.server.injectGET(url, accessToken);

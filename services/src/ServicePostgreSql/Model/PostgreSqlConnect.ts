@@ -58,7 +58,7 @@ export default class PostgreSqlConnect implements DbConnect {
         return `Host=${this.params.hostname};${port}${database}${userPassword}`;
     }
 
-    public get protocol() { return ""; }
+    public get protocol() { return "postgresql"; }
     public get username() { return this.params.username ?? ""; }
     public get password() { return this.params.password ?? ""; }
     public get hostname() { return this.params.hostname ?? ""; }
