@@ -16,7 +16,7 @@ export default async function TestPostgreSql() {
         const tables = await db.getRepositories();
         assert.isTrue(tables.length > 0);
 
-        const entityUser = { Id: "World", Secret: "abc", Profil: "User", Authentication:"password" };
+        const entityUser = { Id: "World", Secret: "abc", Profil: "User", Authentication: "password" };
         const findUser = `"Id"='${entityUser.Id}'`;
 
         let entities = await db.findOnRepository(
@@ -27,10 +27,10 @@ export default async function TestPostgreSql() {
                 limit: 10
             });
         assert.isEmpty(entities);
-    
+
         let ok = await db.insertEntity(
-            { collection: tables[1] },
-            entityUser
+            { repository: tables[1] },
+            { entity: entityUser }
         );
         assert.isTrue(ok);
 
@@ -47,9 +47,9 @@ export default async function TestPostgreSql() {
         const docXyz = { Id: "World", Secret: "123" };
         ok = await db.updateEntity(
             {
-                collection: tables[1],
+                repository: tables[1],
             },
-            docXyz);
+            { entity: docXyz });
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
@@ -63,7 +63,7 @@ export default async function TestPostgreSql() {
         assert.equal(docXyz.Secret, entities[0].Secret);
 
         ok = await db.deleteEntity({
-            collection: tables[1],
+            repository: tables[1],
             _id: entityUser.Id
         });
         assert.isTrue(ok);

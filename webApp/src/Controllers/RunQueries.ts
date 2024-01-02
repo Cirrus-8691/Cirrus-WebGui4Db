@@ -36,8 +36,8 @@ export async function RunQueryUpdate(service: string, parameters: QueryDocumentP
     const apiGateway = new ApiGateway();
     return await apiGateway.postAsync<boolean>(
         `api/v1/${service}/entity`
-        + "?repository=" + encodeURIComponent(parameters.repository)
-        + "&_id=" + encodeURIComponent(parameters.entity._id),
-        parameters.entity,
+        + "?repository=" + encodeURIComponent(parameters.repository),
+       // + "&_id=" + encodeURIComponent(parameters.entity._id),
+        { entity: parameters.entity },
         auth.accessToken);
 }

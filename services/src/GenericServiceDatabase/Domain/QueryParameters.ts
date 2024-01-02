@@ -9,7 +9,7 @@ export interface QueryFindParameters
 }
 export interface QueryEntityParameters
 {
-    collection: string,
+    repository: string,
     _id?: string,
 }
 

@@ -76,10 +76,10 @@ export default class PostgreSqlDatabase implements Database {
         return { values, columnsList, valuesList };
     }
 
-    async insertEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
+    async insertEntity(parameters: QueryEntityParameters, payload:{ entity: DbEntity}): Promise<boolean> {
         if (this.client) {
-            const tableName = parameters.collection;
-            const { values, columnsList, valuesList } = this.columnsData(doc);
+            const tableName = parameters.repository;
+            const { values, columnsList, valuesList } = this.columnsData(payload.entity);
             const query = `INSERT INTO "${tableName}"(${columnsList.join(",")}) VALUES (${valuesList.join(",")}) RETURNING *`;
             const result = await this.client.query(query, values);
             return result.rowCount !== null && result.rowCount >= 1;
@@ -104,16 +104,16 @@ export default class PostgreSqlDatabase implements Database {
         }
     }
 
-    async updateEntity(parameters: QueryEntityParameters, doc: DbEntity): Promise<boolean> {
+    async updateEntity(parameters: QueryEntityParameters, payload:{ entity: DbEntity}): Promise<boolean> {
         if (this.client) {
-            const tableName = parameters.collection;
+            const tableName = parameters.repository;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
-            const { values, columnsList, valuesList } = this.columnsData(doc);
+            const { values, columnsList, valuesList } = this.columnsData(payload.entity);
             const set: string[] = [];
             for (let index = 0; index < columnsList.length; index++) {
                 set.push(`${columnsList[index]}=(${valuesList[index]})`);
             }
-            values.push(doc[indexColumn]);
+            values.push(payload.entity[indexColumn]);
             const query = `UPDATE "${tableName}" SET ${set.join(",")} WHERE "${indexColumn}"=($${values.length})`;
             const result = await this.client.query(query, values);
             return result !== undefined;
@@ -125,7 +125,7 @@ export default class PostgreSqlDatabase implements Database {
 
     async deleteEntity(parameters: QueryEntityParameters): Promise<boolean> {
         if (this.client) {
-            const tableName = parameters.collection;
+            const tableName = parameters.repository;
             const indexColumn = await this.getPrimaryIndexOf(tableName);
             const values: string[] = [parameters._id ?? ""];
             const query = `DELETE FROM "${tableName}" WHERE "${indexColumn}"=($1)`;

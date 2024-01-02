@@ -29,8 +29,8 @@ export default async function TestMongoDb() {
         const docWorld = { Hello: "World" };
         const findWorld = JSON.stringify(docWorld);
         let ok = await db.insertEntity(
-            { collection: collections[0] },
-            docWorld
+            { repository: collections[0] },
+            { entity: docWorld }
         );
         assert.isTrue(ok, "insertEntity OK");
 
@@ -51,9 +51,9 @@ export default async function TestMongoDb() {
         const findXyz = JSON.stringify(docXyz);
         ok = await db.updateEntity(
             {
-                collection: collections[0]
+                repository: collections[0]
             },
-            docXyz);
+            { entity: docXyz });
         assert.isTrue(ok, "updateEntity Ok");
 
         documents = await db.findOnRepository({
@@ -67,7 +67,7 @@ export default async function TestMongoDb() {
         assert.equal(docXyz.Hello, documents[0].Hello);
 
         ok = await db.deleteEntity({
-            collection: collections[0],
+            repository: collections[0],
             _id: documents[0]._id
         });
         assert.isTrue(ok, "deleteEntity OK");
