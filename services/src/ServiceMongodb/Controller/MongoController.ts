@@ -2,7 +2,7 @@ import { FastifyRequest } from "fastify";
 import MongoDbConnect from "../Model/MongoDbConnect";
 import { JwToken } from "../Domain/JwToken";
 import HttpFastifyServer from "../../GenericServiceDatabase/HttpFastifyServer";
-import Database from "../../GenericServiceDatabase/Model/Database";
+import Database, { Repository } from "../../GenericServiceDatabase/Model/Database";
 import { BodyEntityParameters, QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import Controller from "../../GenericServiceDatabase/Controller/Controller";
@@ -65,7 +65,7 @@ export default class MongoController extends Controller {
         }
     }
 
-    public async getRepositories(request: FastifyRequest): Promise<string[]> {
+    public async getRepositories(request: FastifyRequest): Promise<Repository[]> {
         try {
             const mongoConnect = JwToken.connectTo(request);
             this.db.connect(mongoConnect);

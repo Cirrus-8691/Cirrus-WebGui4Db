@@ -18,7 +18,7 @@ export async function RunQueryDelete(service: string, parameters: QueryDeletePar
     const apiGateway = new ApiGateway();
     return await apiGateway.deleteAsync<boolean>(
         `api/v1/${service}/entity`
-        + "?repository=" + encodeURIComponent(parameters.collection)
+        + "?repository=" + encodeURIComponent(parameters.repository)
         + "&_id=" + encodeURIComponent(parameters._id),
         auth.accessToken);
 }
@@ -28,7 +28,7 @@ export async function RunQueryInsert(service: string, parameters: QueryDocumentP
     return await apiGateway.putAsync<boolean>(
         `api/v1/${service}/entity`
         + "?repository=" + encodeURIComponent(parameters.repository),
-        parameters.entity,
+        { entity: parameters.entity },
         auth.accessToken);
 }
 
@@ -37,7 +37,6 @@ export async function RunQueryUpdate(service: string, parameters: QueryDocumentP
     return await apiGateway.postAsync<boolean>(
         `api/v1/${service}/entity`
         + "?repository=" + encodeURIComponent(parameters.repository),
-       // + "&_id=" + encodeURIComponent(parameters.entity._id),
         { entity: parameters.entity },
         auth.accessToken);
 }

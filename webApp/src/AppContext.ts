@@ -1,4 +1,5 @@
 import { Auth, EmptyAuth } from "./Controllers/Auth";
+import { EmptyRepository, Repository } from "./Controllers/TestConnection";
 import { DbConnect } from "./Domain/DbConnect";
 import MongoDbUrl from "./Domain/MongoDbConnect";
 import PostgreSqlUrl from "./Domain/PostgreSqlConnect";
@@ -20,13 +21,13 @@ export default class AppContext {
         this.databaseConnexion = value
     };
 
-    databaseRepositories: string[] = [""];
-    setDatabaseRepositories = (value: string[]) => {
+    databaseRepositories: Repository[] = [];
+    setDatabaseRepositories = (value: Repository[]) => {
         this.databaseRepositories = value
     };
 
-    databaseRepository: string = "";
-    setDatabaseRepository = (value: string) => {
+    databaseRepository: Repository = EmptyRepository;
+    setDatabaseRepository = (value: Repository) => {
         this.databaseRepository = value
     };
 

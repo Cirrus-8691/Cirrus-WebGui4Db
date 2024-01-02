@@ -11,6 +11,7 @@ import { EmptyAuth } from "./Controllers/Auth";
 import DialogAbout from "./Components/DialogAbout";
 import RequestResultColumns, { DrawGrid } from "./Components/RequestResultColumns";
 import { DefaultDatabaseConnection } from "./AppContext";
+import { EmptyRepository } from "./Controllers/TestConnection";
 
 export const Application = {
     name: process.env.REACT_APP_NAME,
@@ -32,8 +33,8 @@ export default function PageMain() {
 
     const onSignOut = () => {
         mainContext.setDatabaseConnexion(DefaultDatabaseConnection);
-        mainContext.setDatabaseRepositories([""]);
-        mainContext.setDatabaseRepository("");
+        mainContext.setDatabaseRepositories([]);
+        mainContext.setDatabaseRepository(EmptyRepository);
         mainContext.setDatabaseQuery("");
         mainContext.setAuth(EmptyAuth);
     };

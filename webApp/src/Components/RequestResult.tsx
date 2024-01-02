@@ -34,8 +34,8 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbEntit
             checked.forEach(async (value: boolean, index: number) => {
                 if (value) {
                     const parameters: QueryDeleteParameters = {
-                        collection: mainContext.databaseRepository,
-                        _id: props.data[index]._id
+                        repository: mainContext.databaseRepository.name,
+                        _id: (props.data[index])[mainContext.databaseRepository.primaryKey]
                     }
                     await RunQueryDelete(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
                 }
@@ -71,7 +71,7 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbEntit
         <Container fluid style={{ marginTop: 10 }}>
             {
                 docSelected
-                    ? <DialogDbDocument document={docSelected} hide={(error:unknown) => {
+                    ? <DialogDbDocument entity={docSelected} hide={(error:unknown) => {
                         if(error) {
                             mainContext.setError(error);
                         }

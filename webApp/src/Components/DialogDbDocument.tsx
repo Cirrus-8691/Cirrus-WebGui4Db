@@ -5,12 +5,12 @@ import { MainContext } from "../App";
 import { QueryDeleteParameters, QueryDocumentParameters } from "../Domain/QueryParameters";
 import { RunQueryDelete, RunQueryInsert, RunQueryUpdate } from "../Controllers/RunQueries";
 
-export default function DialogDbDocument(props: { document: DbEntity, hide: (error?: unknown) => void }) {
+export default function DialogDbDocument(props: { entity: DbEntity, hide: (error?: unknown) => void }) {
 
     const mainContext = useContext(MainContext);
     const [loading, setLoading] = useState(false);
-    const isDocNew = JSON.stringify(props.document)==="{}";
-    const [doc, setDoc] = useState(JSON.stringify(props.document, undefined, " "));
+    const isDocNew = JSON.stringify(props.entity)==="{}";
+    const [doc, setDoc] = useState(JSON.stringify(props.entity, undefined, " "));
 
     const onClose = () => props.hide();
 
@@ -19,8 +19,8 @@ export default function DialogDbDocument(props: { document: DbEntity, hide: (err
         setLoading(true);
         try {
             const parameters: QueryDeleteParameters = {
-                collection: mainContext.databaseRepository,
-                _id: props.document._id
+                repository: mainContext.databaseRepository.name,
+                _id: props.entity[mainContext.databaseRepository.primaryKey]
             }
             await RunQueryDelete(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             setLoading(false);
@@ -36,10 +36,10 @@ export default function DialogDbDocument(props: { document: DbEntity, hide: (err
         setLoading(true);
         try {
             const parameters: QueryDocumentParameters = {
-                repository: mainContext.databaseRepository,
+                repository: mainContext.databaseRepository.name,
                 entity: JSON.parse(doc)
             }
-            if (parameters.entity._id) {
+            if (parameters.entity[mainContext.databaseRepository.primaryKey]) {
                 await RunQueryUpdate(mainContext.databaseConnexion.service(), parameters, mainContext.auth);
             }
             else {
@@ -56,7 +56,7 @@ export default function DialogDbDocument(props: { document: DbEntity, hide: (err
     };
 
     return (
-        <Modal show={props.document !== undefined}>
+        <Modal show={props.entity !== undefined}>
             <Modal.Header>
                 <Modal.Title>📝 Database document</Modal.Title>
             </Modal.Header>

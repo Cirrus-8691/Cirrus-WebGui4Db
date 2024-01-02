@@ -19,7 +19,7 @@ export default async function TestMongoDb() {
 
         let documents = await db.findOnRepository(
             {
-                repository: collections[0],
+                repository: collections[0].name,
                 what: "{}",
                 skip: 0,
                 limit: 10
@@ -29,13 +29,13 @@ export default async function TestMongoDb() {
         const docWorld = { Hello: "World" };
         const findWorld = JSON.stringify(docWorld);
         let ok = await db.insertEntity(
-            { repository: collections[0] },
+            { repository: collections[0].name },
             { entity: docWorld }
         );
         assert.isTrue(ok, "insertEntity OK");
 
         documents = await db.findOnRepository({
-            repository: collections[0],
+            repository: collections[0].name,
             what: findWorld,
             skip: 0,
             limit: 1
@@ -51,13 +51,13 @@ export default async function TestMongoDb() {
         const findXyz = JSON.stringify(docXyz);
         ok = await db.updateEntity(
             {
-                repository: collections[0]
+                repository: collections[0].name
             },
             { entity: docXyz });
         assert.isTrue(ok, "updateEntity Ok");
 
         documents = await db.findOnRepository({
-            repository: collections[0],
+            repository: collections[0].name,
             what: JSON.stringify({ Hello: docXyz.Hello }),
             skip: 0,
             limit: 1
@@ -67,13 +67,13 @@ export default async function TestMongoDb() {
         assert.equal(docXyz.Hello, documents[0].Hello);
 
         ok = await db.deleteEntity({
-            repository: collections[0],
+            repository: collections[0].name,
             _id: documents[0]._id
         });
         assert.isTrue(ok, "deleteEntity OK");
 
         documents = await db.findOnRepository({
-            repository: collections[0],
+            repository: collections[0].name,
             what: findXyz,
             skip: 0,
             limit: 1

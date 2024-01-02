@@ -1,5 +1,5 @@
 import { Collection, Filter, FindOptions, MongoClient, ObjectId } from "mongodb";
-import Database from "../../GenericServiceDatabase/Model/Database";
+import Database, { Repository } from "../../GenericServiceDatabase/Model/Database";
 import DbConnect from "../../GenericServiceDatabase/Model/DbConnect";
 import DbEntity from "../../GenericServiceDatabase/Model/DbEntity";
 import { QueryEntityParameters, QueryFindParameters } from "../../GenericServiceDatabase/Domain/QueryParameters";
@@ -24,11 +24,14 @@ export default class MongoDatabase implements Database {
         }
     }
 
-    async getRepositories(): Promise<string[]> {
+    async getRepositories(): Promise<Repository[]> {
         if (this.client) {
             const db = this.client.db(this.dbName);
             const collections = await db.collections();
-            return collections.map(c => c.collectionName);
+            return collections.map<Repository>(c => ({
+                name : c.collectionName,
+                primaryKey: "_id"
+            }));
         }
         else {
             throw new Error("Undefined MongoClient URL")

@@ -2,13 +2,18 @@ import DbEntity from "./DbEntity";
 import { QueryEntityParameters, QueryFindParameters } from "../Domain/QueryParameters";
 import DbConnect from "./DbConnect";
 
+export interface Repository {
+    name: string;
+    primaryKey: string;
+}
+
 export default interface Database {
 
     connect(dbConnect: DbConnect): Promise<void>;
 
     test(): Promise<void>;
 
-    getRepositories(): Promise<string[]>;
+    getRepositories(): Promise<Repository[]>;
 
     findOnRepository(parameters : QueryFindParameters): Promise<DbEntity[]>;
 

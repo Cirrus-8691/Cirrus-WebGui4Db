@@ -34,7 +34,7 @@ export default function RequestInput(props: { runQuery: boolean, setRunQuery: (v
         setLoading(true);
         try {
             const parameters: QueryFindParameters = {
-                repository: mainContext.databaseRepository,
+                repository: mainContext.databaseRepository.name,
                 what: currentQuery,
                 skip,
                 limit

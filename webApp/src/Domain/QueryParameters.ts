@@ -10,7 +10,7 @@ export interface QueryFindParameters
 
 export interface QueryDeleteParameters
 {
-    collection: string,
+    repository: string,
     _id: string,
 }
 

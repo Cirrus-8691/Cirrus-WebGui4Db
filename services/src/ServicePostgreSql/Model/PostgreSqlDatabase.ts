@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import Database from '../../GenericServiceDatabase/Model/Database';
+import Database, { Repository } from '../../GenericServiceDatabase/Model/Database';
 import DbConnect from '../../GenericServiceDatabase/Model/DbConnect';
 import { QueryEntityParameters, QueryFindParameters } from '../../GenericServiceDatabase/Domain/QueryParameters';
 import DbEntity from '../../GenericServiceDatabase/Model/DbEntity';
@@ -29,13 +29,23 @@ export default class PostgreSqlDatabase implements Database {
         }
     }
 
-    async getRepositories(): Promise<string[]> {
+    async getRepositories(): Promise<Repository[]> {
         if (this.client) {
-            const tablenames = await this.client.query<{ table_name: string }>(`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`);
-            return tablenames.rows.map(obj => obj?.table_name ?? "");
+            const columnNames = await this.client.query<{ column_name: string; table_name: string; }>(`SELECT c.column_name,t.table_name
+                FROM information_schema.table_constraints tc 
+                JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_name) 
+                JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema
+                    AND tc.table_name = c.table_name AND ccu.column_name = c.column_name
+                JOIN information_schema.tables AS t ON t.table_schema='public'
+                WHERE tc.constraint_type = 'PRIMARY KEY' AND tc.table_name = t.table_name`);
+            const repositories = columnNames.rows.map<Repository>(c => ({
+                name: c.table_name ?? "",
+                primaryKey: c.column_name ?? ""
+            }));
+            return repositories;
         }
         else {
-            throw new Error("Undefined MongoClient URL")
+            throw new Error("Undefined PostgreSql instance")
         }
     }
 
@@ -76,7 +86,7 @@ export default class PostgreSqlDatabase implements Database {
         return { values, columnsList, valuesList };
     }
 
-    async insertEntity(parameters: QueryEntityParameters, payload:{ entity: DbEntity}): Promise<boolean> {
+    async insertEntity(parameters: QueryEntityParameters, payload: { entity: DbEntity }): Promise<boolean> {
         if (this.client) {
             const tableName = parameters.repository;
             const { values, columnsList, valuesList } = this.columnsData(payload.entity);
@@ -104,7 +114,7 @@ export default class PostgreSqlDatabase implements Database {
         }
     }
 
-    async updateEntity(parameters: QueryEntityParameters, payload:{ entity: DbEntity}): Promise<boolean> {
+    async updateEntity(parameters: QueryEntityParameters, payload: { entity: DbEntity }): Promise<boolean> {
         if (this.client) {
             const tableName = parameters.repository;
             const indexColumn = await this.getPrimaryIndexOf(tableName);

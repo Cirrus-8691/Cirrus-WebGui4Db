@@ -21,7 +21,7 @@ export default async function TestPostgreSql() {
 
         let entities = await db.findOnRepository(
             {
-                repository: tables[1],
+                repository: tables[1].name,
                 what: findUser,
                 skip: 0,
                 limit: 10
@@ -29,13 +29,13 @@ export default async function TestPostgreSql() {
         assert.isEmpty(entities);
 
         let ok = await db.insertEntity(
-            { repository: tables[1] },
+            { repository: tables[1].name },
             { entity: entityUser }
         );
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            repository: tables[1],
+            repository: tables[1].name,
             what: findUser,
             skip: 0,
             limit: 1
@@ -47,13 +47,13 @@ export default async function TestPostgreSql() {
         const docXyz = { Id: "World", Secret: "123" };
         ok = await db.updateEntity(
             {
-                repository: tables[1],
+                repository: tables[1].name,
             },
             { entity: docXyz });
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            repository: tables[1],
+            repository: tables[1].name,
             what: findUser,
             skip: 0,
             limit: 1
@@ -63,13 +63,13 @@ export default async function TestPostgreSql() {
         assert.equal(docXyz.Secret, entities[0].Secret);
 
         ok = await db.deleteEntity({
-            repository: tables[1],
+            repository: tables[1].name,
             _id: entityUser.Id
         });
         assert.isTrue(ok);
 
         entities = await db.findOnRepository({
-            repository: tables[1],
+            repository: tables[1].name,
             what: findUser,
             skip: 0,
             limit: 1

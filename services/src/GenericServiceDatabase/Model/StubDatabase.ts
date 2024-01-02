@@ -1,4 +1,4 @@
-import Database from "./Database";
+import Database, { Repository } from "./Database";
 import DbEntity from "./DbEntity";
 import { QueryFindParameters, QueryEntityParameters, BodyEntityParameters } from "../Domain/QueryParameters";
 import DbConnect from "./DbConnect";
@@ -20,10 +20,16 @@ export default class StubDatabase implements Database {
         // nothing todo
     }
 
-    async getRepositories(): Promise<string[]> {
+    async getRepositories(): Promise<Repository[]> {
         return [
-            StubDatabase.Repository1Name,
-            "Repository-2"
+            {
+                name: StubDatabase.Repository1Name,
+                primaryKey: "id"
+            },
+            {
+                name: "Repository-2",
+                primaryKey: "id"
+            }
         ];
     }
 

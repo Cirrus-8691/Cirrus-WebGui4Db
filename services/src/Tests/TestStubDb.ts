@@ -10,7 +10,7 @@ export default async function TestStubDb() {
     await stubDb.test();
 
     const collections = await stubDb.getRepositories();
-    assert.equal(collections[0], StubDatabase.Repository1Name);
+    assert.equal(collections[0].name, StubDatabase.Repository1Name);
 
     const document = await stubDb.findOnRepository(
         {
