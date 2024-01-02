@@ -13,9 +13,9 @@ export default class PostgreSqlDatabase implements Database {
         this.client = new Client({
             host: dbConnect.hostname,
             port: dbConnect.port ? parseInt(dbConnect.port) : undefined,
-            database: dbConnect.database,
-            user: dbConnect.username,
-            password: dbConnect.password
+            database: decodeURIComponent(dbConnect.database),
+            user: decodeURIComponent(dbConnect.username),
+            password: decodeURIComponent(dbConnect.password)
         });
         await this.client.connect();
     }
