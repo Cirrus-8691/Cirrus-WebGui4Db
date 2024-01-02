@@ -71,9 +71,14 @@ export default function RequestResult(props: { drawGrid: DrawGrid, data: DbEntit
         <Container fluid style={{ marginTop: 10 }}>
             {
                 docSelected
-                    ? <DialogDbDocument document={docSelected} hide={() => {
+                    ? <DialogDbDocument document={docSelected} hide={(error:unknown) => {
+                        if(error) {
+                            mainContext.setError(error);
+                        }
+                        else {
+                            props.refreshData();
+                        }
                         setDocSelected(undefined);
-                        props.refreshData();
                     }} />
                     : <></>
             }

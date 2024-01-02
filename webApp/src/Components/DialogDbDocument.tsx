@@ -5,7 +5,7 @@ import { MainContext } from "../App";
 import { QueryDeleteParameters, QueryDocumentParameters } from "../Domain/QueryParameters";
 import { RunQueryDelete, RunQueryInsert, RunQueryUpdate } from "../Controllers/RunQueries";
 
-export default function DialogDbDocument(props: { document: DbEntity, hide: () => void }) {
+export default function DialogDbDocument(props: { document: DbEntity, hide: (error?: unknown) => void }) {
 
     const mainContext = useContext(MainContext);
     const [loading, setLoading] = useState(false);
@@ -27,9 +27,8 @@ export default function DialogDbDocument(props: { document: DbEntity, hide: () =
             props.hide();
         }
         catch (error: unknown) {
-            mainContext.setError(error);
             setLoading(false);
-            props.hide();
+            props.hide(error);
         }
     };
     const onSave = async () => {
@@ -52,7 +51,7 @@ export default function DialogDbDocument(props: { document: DbEntity, hide: () =
         catch (error: unknown) {
             mainContext.setError(error);
             setLoading(false);
-            props.hide();
+            props.hide(error);
         }
     };
 
